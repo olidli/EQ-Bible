@@ -1,0 +1,82 @@
+// pages/category/category.js
+const app = getApp()
+const TYPE_LABELS = { PDF: 'PDF', Word: '文档', Markdown: '指南', '工具': '工具', '案例': '案例', '笔记': '笔记', '微信公众号文章': '科普', '网页链接': '网页', '书籍摘要': '摘要', '文章': '文章', '技巧卡片': '技巧' }
+const TYPE_COLORS = { PDF: '#ff6b6b', Word: '#4ecdc4', Markdown: '#45b7d1', '工具': '#dda0dd', '案例': '#f7dc6f', '笔记': '#96ceb4', '微信公众号文章': '#f0a3e2', '网页链接': '#7bc96f', '书籍摘要': '#764ba2', '文章': '#667eea', '技巧卡片': '#4facfe' }
+
+const MODULES = {
+  self_aware: { name: '自我认知', emoji: '🧠', desc: '深入了解自己的优势与动机' },
+  emotion: { name: '情绪管理', emoji: '😊', desc: '学会识别、表达和调节情绪' },
+  communication: { name: '沟通技巧', emoji: '💬', desc: '掌握高情商沟通的核心方法' },
+  relation: { name: '人际关系', emoji: '🤝', desc: '建立和维护健康的人际关系' },
+  workplace: { name: '职场情商', emoji: '💼', desc: '提升职场情商和领导力' },
+  psychology: { name: '心理学常识', emoji: '📚', desc: '了解心理学基础知识与原理' },
+  growth: { name: '个人成长', emoji: '🌱', desc: '持续成长，成为更好的自己' },
+  parenting: { name: '亲子教育', emoji: '👨‍👩‍👧', desc: '培养高情商孩子的科学方法' }
+}
+
+const TAG_MAP = {
+  self_aware: ['自我认知', '自我觉察', '自我理解', '自我效能', '性格密码', '内向者'],
+  emotion: ['情绪管理', '情绪调节', '情绪识别', '焦虑', '正念', '情绪边界', '情绪劳动'],
+  communication: ['沟通技巧', '非暴力沟通', '倾听', '赞美', '批评', '冲突', '话术', '梅拉宾'],
+  relation: ['人际关系', '亲密关系', '社交商', '课题分离', '依恋', '人际边界', '故事'],
+  workplace: ['职场情商', '领导情商', '向上管理', '恢复力', '团队协作'],
+  psychology: ['心理学常识', '认知偏差', '共情', '心流', '人格障碍', '行为模型'],
+  growth: ['个人成长', '拖延', '习惯', '决策', '自我接纳', '成长型思维'],
+  parenting: ['亲子教育', '儿童情商', '积极教养', '家长情绪']
+}
+
+const TOOL_CARDS = {
+  self_aware: [{ id: 'self_reflection', emoji: '📝', name: '自我反思', desc: '深入自我探索' }],
+  emotion: [{ id: 'emotion_diary', emoji: '📝', name: '情绪日记', desc: '记录情绪变化' }, { id: 'emotion_recognition', emoji: '🎭', name: '情绪识别', desc: '识别情绪状态' }],
+  communication: [],
+  relation: [],
+  workplace: [],
+  psychology: [],
+  growth: [{ id: 'self_test', emoji: '📊', name: '能力测评', desc: '测试情商水平' }],
+  parenting: []
+}
+
+Page({
+  data: {
+    categories: Object.entries(MODULES).map(([id, m]) => ({ id, name: m.name, emoji: m.emoji })),
+    currentTab: 'emotion', currentModule: null, moduleTools: [], items: []
+  },
+
+  onLoad(options) {
+    const id = options.id || app.globalData.categoryFilter || 'emotion'
+    this.setData({ currentTab: id })
+    this.loadModule(id)
+  },
+  
+  onShow() {
+    // 检查是否有从首页传递过来的筛选参数
+    if (app.globalData.categoryFilter) {
+      const id = app.globalData.categoryFilter
+      app.globalData.categoryFilter = null // 清空，避免重复触发
+      this.setData({ currentTab: id })
+      this.loadModule(id)
+    }
+  },
+
+  switchTab(e) { this.setData({ currentTab: e.currentTarget.dataset.id }); this.loadModule(e.currentTarget.dataset.id) },
+
+  loadModule(id) {
+    this.setData({ currentModule: MODULES[id], moduleTools: TOOL_CARDS[id] || [] })
+    const tags = TAG_MAP[id] || []
+    this.setData({
+      items: app.searchByTags(tags, 20).map(item => ({
+        _id: item.id, title: item.t, type: item.tp,
+        typeLabel: TYPE_LABELS[item.tp] || '资源',
+        typeColor: TYPE_COLORS[item.tp] || '#667eea',
+        tags: (item.tg || []).slice(0, 4)
+      }))
+    })
+  },
+
+  openTool(e) { 
+    const toolId = e.currentTarget.dataset.tool
+    app.globalData.toolFilter = toolId
+    wx.switchTab({ url: '/pages/tools/tools' })
+  },
+  goDetail(e) { wx.navigateTo({ url: '/pages/detail/detail?id=' + e.currentTarget.dataset.id }) }
+})

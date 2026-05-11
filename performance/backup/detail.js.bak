@@ -1,0 +1,127 @@
+// pages/detail/detail.js - 结构化内容展示
+const app = getApp()
+const TYPE_LABELS = { 
+  '指南': '指南', '书籍摘要': '摘要', '文章': '文章', '技巧卡片': '技巧',
+  'PDF': 'PDF', 'Word': '文档', 'Markdown': '指南', '工具': '工具', 
+  '案例': '案例', '笔记': '笔记', '微信公众号文章': '科普', '网页链接': '网页'
+}
+const TYPE_COLORS = { 
+  '指南': '#667eea', '书籍摘要': '#764ba2', '文章': '#f093fb', '技巧卡片': '#4facfe',
+  'PDF': '#ff6b6b', 'Word': '#4ecdc4', 'Markdown': '#45b7d1', '工具': '#dda0dd', 
+  '案例': '#f7dc6f', '笔记': '#96ceb4', '微信公众号文章': '#f0a3e2', '网页链接': '#7bc96f'
+}
+
+Page({
+  data: { 
+    loading: true, 
+    id: '', 
+    item: null, 
+    isLearned: false, 
+    isFav: false, 
+    relatedItems: [],
+    contentType: ''
+  },
+
+  onLoad(options) {
+    this.setData({ id: options.id || '' })
+    this.loadDetail()
+    this.checkStatus()
+  },
+
+  loadDetail() {
+    const raw = app.getById(this.data.id)
+    if (!raw) { 
+      this.setData({ loading: false }); 
+      wx.showToast({ title: '内容未找到', icon: 'none' }); 
+      return 
+    }
+    
+    // 处理结构化内容
+    const content = raw.content || {}
+    const contentType = content.type || ''
+    
+    this.setData({
+      item: {
+        _id: raw.id, 
+        title: raw.t, 
+        type: raw.tp, 
+        tags: raw.tg || [], 
+        serial: raw.id,
+        typeLabel: TYPE_LABELS[raw.tp] || '资源',
+        typeColor: TYPE_COLORS[raw.tp] || '#667eea',
+        tagsStr: (raw.tg || []).join(' / '),
+        // 结构化内容字段
+        content: content,
+        contentType: contentType,
+        readTime: content.read_time || '',
+        difficulty: content.difficulty || '',
+        originalFile: content.original_file || ''
+      },
+      contentType: contentType,
+      loading: false
+    })
+    
+    wx.setNavigationBarTitle({ title: raw.t ? raw.t.slice(0, 15) : '详情' })
+    this.loadRelated(raw)
+  },
+
+  loadRelated(item) {
+    const tags = (item.tg || []).slice(0, 2)
+    if (tags.length === 0) return
+    
+    const related = app.searchByTags(tags, 5).filter(r => r.id !== this.data.id)
+    this.setData({ 
+      relatedItems: related.map(r => ({
+        id: r.id,
+        title: r.t
+      }))
+    })
+  },
+
+  checkStatus() {
+    const learned = wx.getStorageSync('learnedItems') || []
+    const favs = wx.getStorageSync('favItems') || []
+    this.setData({ 
+      isLearned: learned.includes(this.data.id), 
+      isFav: favs.includes(this.data.id) 
+    })
+  },
+
+  markLearn() {
+    const learned = wx.getStorageSync('learnedItems') || []
+    const idx = learned.indexOf(this.data.id)
+    if (idx > -1) { 
+      learned.splice(idx, 1); 
+      this.setData({ isLearned: false }); 
+      wx.showToast({ title: '已取消标记', icon: 'none' }) 
+    } else { 
+      learned.push(this.data.id); 
+      this.setData({ isLearned: true }); 
+      wx.showToast({ title: '已标记学习', icon: 'success' }) 
+    }
+    wx.setStorageSync('learnedItems', learned)
+  },
+
+  toggleFav() {
+    const favs = wx.getStorageSync('favItems') || []
+    const idx = favs.indexOf(this.data.id)
+    if (idx > -1) { 
+      favs.splice(idx, 1); 
+      this.setData({ isFav: false }); 
+      wx.showToast({ title: '已取消收藏', icon: 'none' }) 
+    } else { 
+      favs.push(this.data.id); 
+      this.setData({ isFav: true }); 
+      wx.showToast({ title: '已收藏', icon: 'success' }) 
+    }
+    wx.setStorageSync('favItems', favs)
+  },
+
+  share() { 
+    wx.showShareMenu({ withShareTicket: true }) 
+  },
+  
+  goRelated(e) { 
+    wx.navigateTo({ url: '/pages/detail/detail?id=' + e.currentTarget.dataset.id }) 
+  }
+})

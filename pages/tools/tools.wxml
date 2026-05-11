@@ -1,0 +1,264 @@
+<!-- pages/tools/tools.wxml -->
+<view class="container">
+  <!-- 工具选择区 -->
+  <view class="tool-select" wx:if="{{!currentTool}}">
+    <view class="tool-header">
+      <text class="tool-select-title">⚡ 工具箱</text>
+      <view class="view-toggle" bindtap="toggleView">
+        <text class="toggle-icon">{{viewMode === 'list' ? '▦' : '☰'}}</text>
+      </view>
+    </view>
+
+    <!-- 列表模式 -->
+    <view class="tool-list-view" wx:if="{{viewMode === 'list'}}">
+      <view class="tool-list-item {{item.id === selectedTool ? 'active' : ''}}" 
+        wx:for="{{toolList}}" wx:key="id" bindtap="selectTool" data-id="{{item.id}}">
+        <view class="tool-icon-wrap" style="background: {{item.color}};">
+          <text class="tool-icon-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="tool-list-info">
+          <text class="tool-list-name">{{item.name}}</text>
+          <text class="tool-list-desc">{{item.desc}}</text>
+        </view>
+        <text class="tool-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 网格模式 -->
+    <view class="tool-grid-view" wx:else>
+      <view class="tool-grid-card {{item.id === selectedTool ? 'active' : ''}}" 
+        wx:for="{{toolList}}" wx:key="id" bindtap="selectTool" data-id="{{item.id}}">
+        <view class="tool-grid-icon" style="background: {{item.color}};">
+          <text class="tool-grid-emoji">{{item.emoji}}</text>
+        </view>
+        <text class="tool-grid-name">{{item.name}}</text>
+        <text class="tool-grid-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情绪日记 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'emotion_diary'}}">
+    <view class="panel-header">
+      <text class="panel-title">📝 情绪日记</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <view class="form-item">
+        <text class="form-label">今天日期</text>
+        <text class="form-value">{{diary.date}}</text>
+      </view>
+      <view class="form-item">
+        <text class="form-label">情绪状态</text>
+        <view class="emotion-picker">
+          <text class="emotion-option {{diary.emotion === item.val ? 'selected' : ''}}" 
+            wx:for="{{emotionOptions}}" wx:key="*this" bindtap="selectEmotion" data-val="{{item.val}}">
+            {{item.emoji}} {{item.label}}
+          </text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">情绪强度 (1-10)</text>
+        <slider min="1" max="10" value="{{diary.intensity}}" bindchange="setIntensity" show-value/>
+      </view>
+      <view class="form-item">
+        <text class="form-label">触发事件</text>
+        <textarea class="form-textarea" placeholder="发生了什么让你产生这种情绪？" 
+          value="{{diary.trigger}}" bindinput="setTrigger" maxlength="200"/>
+      </view>
+      <view class="form-item">
+        <text class="form-label">应对方式</text>
+        <textarea class="form-textarea" placeholder="你是如何应对这种情绪的？" 
+          value="{{diary.coping}}" bindinput="setCoping" maxlength="200"/>
+      </view>
+      <button class="save-btn" bindtap="saveDiary">💾 保存日记</button>
+      
+      <!-- 历史记录 -->
+      <view class="history" wx:if="{{diaryHistory.length > 0}}">
+        <text class="history-title">📅 最近记录</text>
+        <view class="history-list">
+          <view class="history-item" wx:for="{{diaryHistory}}" wx:key="*this">
+            <text class="history-date">{{item.date}}</text>
+            <text class="history-emotion">{{item.emotion}}</text>
+            <text class="history-trigger">{{item.trigger}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情绪识别 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'emotion_recognition'}}">
+    <view class="panel-header">
+      <text class="panel-title">🎭 情绪识别练习</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="recognition-tip">描述你当前或最近感受到的情绪，我会帮你识别和分析</text>
+      <textarea class="form-textarea tall" placeholder="描述你的情绪感受..." 
+        value="{{recognitionText}}" bindinput="setRecognitionText" maxlength="500"/>
+      <button class="save-btn" bindtap="analyzeEmotion">🔍 分析情绪</button>
+      <view class="analysis-result" wx:if="{{analysisResult}}">
+        <text class="result-title">📊 分析结果</text>
+        <text class="result-text">{{analysisResult}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学习路径 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'learning_path' || paramTool === 'learning_path'}}">
+    <view class="panel-header">
+      <text class="panel-title">🗺 学习路径生成</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <view class="form-item">
+        <text class="form-label">🎯 学习目标</text>
+        <view class="goal-tags">
+          <text class="goal-tag {{pathForm.goal === item ? 'selected' : ''}}" 
+            wx:for="{{goalOptions}}" wx:key="*this" bindtap="selectGoal" data-goal="{{item}}">{{item}}</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">📅 预计时间</text>
+        <view class="time-tags">
+          <text class="time-tag {{pathForm.duration === item ? 'selected' : ''}}" 
+            wx:for="{{durationOptions}}" wx:key="*this" bindtap="selectDuration" data-dur="{{item}}">{{item}}</text>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">📖 每周可学习时间（小时）</text>
+        <slider min="1" max="10" value="{{pathForm.hoursPerWeek}}" bindchange="setHours" show-value/>
+      </view>
+      <button class="save-btn primary" bindtap="generatePath">✨ 生成学习路径</button>
+      
+      <!-- 生成结果 -->
+      <view class="path-result" wx:if="{{generatedPath}}">
+        <text class="result-title">📋 你的学习路径</text>
+        <view class="path-list">
+          <view class="path-item" wx:for="{{generatedPath.steps}}" wx:key="*this">
+            <view class="path-step">
+              <text class="step-num">{{index + 1}}</text>
+              <view class="step-content">
+                <text class="step-title">{{item.title}}</text>
+                <text class="step-desc">{{item.desc}}</text>
+                <text class="step-duration">⏱ {{item.duration}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <button class="save-btn" bindtap="savePath">💾 保存路径</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情绪调节 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'emotion_regulation'}}">
+    <view class="panel-header">
+      <text class="panel-title">⚙️ 情绪调节策略</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="tool-intro">选择适合你的情绪调节方法，坚持练习效果更好</text>
+      <view class="strategy-list">
+        <view class="strategy-item {{selectedRegulation.indexOf(item.name) > -1 ? 'selected' : ''}}" 
+          wx:for="{{regulationStrategies}}" wx:key="name" bindtap="selectRegulation" data-name="{{item.name}}">
+          <text class="strategy-emoji">{{item.emoji}}</text>
+          <view class="strategy-info">
+            <text class="strategy-name">{{item.name}}</text>
+            <text class="strategy-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+      <button class="save-btn" bindtap="applyRegulation">✅ 应用策略</button>
+    </view>
+  </view>
+
+  <!-- 自我反思日记 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'self_reflection'}}">
+    <view class="panel-header">
+      <text class="panel-title">📝 自我反思日记</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="tool-intro">每日反思，加深自我认知</text>
+      <view class="reflection-list">
+        <view class="reflection-item" wx:for="{{reflectionQuestions}}" wx:key="index">
+          <text class="reflection-q">{{item}}</text>
+          <textarea class="reflection-input" placeholder="写下你的想法..." 
+            value="{{reflectionAnswers[index]}}" bindinput="setReflection" data-idx="{{index}}" maxlength="200"/>
+        </view>
+      </view>
+      <button class="save-btn" bindtap="saveReflection">💾 保存反思</button>
+    </view>
+  </view>
+
+  <!-- 压力评估 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'stress_assess'}}">
+    <view class="panel-header">
+      <text class="panel-title">📊 压力水平评估</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="tool-intro">评估你当前的压力状态（1-10分，1=完全没有，10=非常严重）</text>
+      <view class="stress-list">
+        <view class="stress-item" wx:for="{{stressQuestions}}" wx:key="id">
+          <text class="stress-q">{{item.q}}</text>
+          <slider min="1" max="10" value="{{stressAnswers[item.id] || 5}}" 
+            bindchange="setStressAnswer" data-id="{{item.id}}" show-value/>
+        </view>
+      </view>
+      <button class="save-btn" bindtap="calcStress">📊 计算结果</button>
+      <view class="stress-result" wx:if="{{stressResult}}">
+        <text class="result-title">你的压力指数：{{stressResult.total}} / 60</text>
+        <text class="result-level">等级：{{stressResult.level}}</text>
+        <text class="result-advice">{{stressResult.advice}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 性格测试（动态渲染） -->
+  <view class="tool-panel" wx:if="{{currentTool === 'character_test'}}">
+    <view class="panel-header">
+      <text class="panel-title">🔍 性格类型测试</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="tool-intro">共{{characterQuestions.length}}题，完成后查看你的性格类型</text>
+      <view class="character-q" wx:for="{{characterQuestions}}" wx:key="id">
+        <text class="q-text">{{index + 1}}. {{item.text}}</text>
+        <radio-group bindchange="setCharacterAnswer" data-q="{{item.id}}" value="{{characterAnswers[item.id] != null ? characterAnswers[item.id] + '' : ''}}">
+          <label class="radio-label" wx:for="{{item.opts}}" wx:for-item="opt" wx:for-index="optIdx">
+            <radio value="{{optIdx}}" checked="{{characterAnswers[item.id] === optIdx}}" />
+            <text>{{opt}}</text>
+          </label>
+        </radio-group>
+      </view>
+      <button class="save-btn" bindtap="calcCharacter">🔍 查看结果</button>
+      <view class="character-result" wx:if="{{characterResult}}">
+        <text class="result-emoji">{{characterResult.emoji}}</text>
+        <text class="result-name">{{characterResult.name}}</text>
+        <text class="result-type">性格类型：{{characterResult.sub}}</text>
+        <text class="result-desc">{{characterResult.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他简单提示工具 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'emotion_energy' || currentTool === 'value_clarify' || currentTool === 'ability_assess' || currentTool === 'goal_setting'}}">
+    <view class="panel-header">
+      <text class="panel-title">{{toolMeta.emoji}} {{toolMeta.name}}</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <text class="tool-intro">{{toolMeta.desc}}</text>
+      <view class="tool-tip">
+        <text wx:if="{{currentTool === 'emotion_energy'}}">📈 功能开发中：将可视化你的情绪日记数据，显示情绪能量趋势图。</text>
+        <text wx:if="{{currentTool === 'value_clarify'}}">💎 功能开发中：将提供价值观澄清练习，帮助你明确核心价值观。</text>
+        <text wx:if="{{currentTool === 'ability_assess'}}">📊 建议使用"压力评估"工具，或前往"情商测评"进行完整测试。</text>
+        <text wx:if="{{currentTool === 'goal_setting'}}">🎯 建议使用"学习路径生成"工具，制定并追踪你的学习目标。</text>
+      </view>
+      <button class="go-btn" wx:if="{{currentTool === 'ability_assess'}}" bindtap="goTest">去情商测评</button>
+    </view>
+  </view>
+</view>

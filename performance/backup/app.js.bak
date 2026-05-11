@@ -1,0 +1,58 @@
+// app.js - 本地数据模式（结构化知识库）
+let items = []
+try {
+  // 优先使用结构化知识库
+  const knowledge = require('./data/knowledge_structured')
+  items = knowledge.K || []
+  console.log('[app] Loaded', items.length, 'structured items from knowledge_structured.js')
+} catch (e) {
+  console.error('[app] Failed to load knowledge_structured.js:', e)
+  // 降级到原始知识库
+  try {
+    const knowledge = require('./data/knowledge')
+    items = knowledge.K || []
+    console.log('[app] Fallback: Loaded', items.length, 'items from knowledge.js')
+  } catch (e2) {
+    console.error('[app] Failed to load knowledge.js:', e2)
+  }
+}
+
+App({
+  onLaunch() {
+    this.globalData = { items, userInfo: null, totalItems: items.length, categoryFilter: null, toolFilter: null }
+    console.log('[app] Global data initialized, items:', items.length)
+    if (!wx.getStorageSync('firstUseDate')) {
+      wx.setStorageSync('firstUseDate', new Date().toISOString())
+    }
+  },
+
+  search(keyword, limit) {
+    limit = limit || 50
+    if (!keyword) return []
+    const kw = keyword.toLowerCase()
+    return this.globalData.items.filter(item =>
+      (item.t && item.t.toLowerCase().includes(kw)) ||
+      (item.tg || []).some(t => t.toLowerCase().includes(kw))
+    ).slice(0, limit)
+  },
+
+  searchByTags(tags, limit) {
+    limit = limit || 20
+    return this.globalData.items.filter(item =>
+      (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
+    ).slice(0, limit)
+  },
+
+  getById(id) {
+    return this.globalData.items.find(item => item.id === String(id))
+  },
+
+  getRandom(count) {
+    const arr = [...this.globalData.items]
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    return arr.slice(0, count || 5)
+  }
+})

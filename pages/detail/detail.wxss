@@ -1,0 +1,589 @@
+/* pages/detail/detail.wxss - 详情页渐变美化版 */
+
+.container {
+  padding: 20rpx;
+  background: linear-gradient(180deg, #f8f9ff 0%, #f0f2ff 50%, #f5f5f5 100%);
+  min-height: 100vh;
+}
+
+/* 标题区 - 玻璃态卡片 */
+.header {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.08);
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #fff;
+  margin-bottom: 16rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+}
+
+.title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 16rpx;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.tag {
+  padding: 6rpx 16rpx;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  color: #667eea;
+  border: 1rpx solid rgba(102, 126, 234, 0.15);
+}
+
+.meta-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 24rpx;
+  color: #909399;
+}
+
+/* 操作按钮 - 渐变效果 */
+.actions {
+  display: flex;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.08);
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  transition: all 0.2s;
+  border-radius: 12rpx;
+}
+
+.action-btn:active {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  transform: scale(0.95);
+}
+
+.action-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 内容区 - 渐变边框效果 */
+.content-body {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.08);
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.content-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+}
+
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid rgba(102, 126, 234, 0.1);
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-text {
+  display: block;
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 书籍列表 - 渐变背景 */
+.book-list {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-radius: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.book-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.book-item:last-child {
+  border-bottom: none;
+}
+
+.book-dot {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-right: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.book-name {
+  flex: 1;
+  font-size: 26rpx;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* 核心观点 - 渐变数字圆圈 */
+.concept-list {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-radius: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.concept-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.concept-item:last-child {
+  border-bottom: none;
+}
+
+.concept-num {
+  width: 40rpx;
+  height: 40rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+}
+
+.concept-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 章节列表 */
+.chapter-list {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-radius: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.chapter-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.chapter-item:last-child {
+  border-bottom: none;
+}
+
+.chapter-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8rpx;
+}
+
+.chapter-summary {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 实践建议 - 渐变背景 */
+.tip-list {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  border-radius: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.1);
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.tip-item:last-child {
+  border-bottom: none;
+}
+
+.tip-icon {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-right: 12rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.tip-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 来源书籍标签 - 渐变按钮效果 */
+.source-badge-box {
+  margin-top: 8rpx;
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 24rpx;
+  color: #fff;
+  font-size: 26rpx;
+  box-shadow: 0 2rpx 10rpx rgba(102, 126, 234, 0.3);
+}
+
+/* 核心概念标签 - 渐变标签 */
+.concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-radius: 14rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.concept-tag {
+  padding: 8rpx 20rpx;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #667eea;
+  border: 1rpx solid rgba(102, 126, 234, 0.2);
+}
+
+/* 实践技巧场景框 */
+.tip-scenario-box {
+  margin-bottom: 8rpx;
+}
+
+.tip-scenario {
+  display: block;
+  font-size: 26rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+/* 文章段落 */
+.article-section {
+  margin-bottom: 30rpx;
+}
+
+.article-heading {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.article-text {
+  display: block;
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 技巧卡片高亮 - 渐变背景 */
+.tip-card-highlight {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  color: #fff;
+  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.3);
+}
+
+.tip-highlight-title {
+  display: block;
+  font-size: 28rpx;
+  opacity: 0.9;
+  margin-bottom: 16rpx;
+}
+
+.tip-highlight-content {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* 练习区域 - 渐变提示框 */
+.practice-section {
+  background: linear-gradient(135deg, rgba(255, 154, 68, 0.1), rgba(252, 96, 118, 0.1));
+  border-radius: 14rpx;
+  padding: 24rpx;
+  border: 1rpx solid rgba(255, 154, 68, 0.2);
+}
+
+.practice-box {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-top: 12rpx;
+}
+
+.practice-text {
+  display: block;
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 相关内容 - 渐变卡片 */
+.related-section {
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 2rpx solid rgba(102, 126, 234, 0.1);
+}
+
+.related-list {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-radius: 14rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.related-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+  transition: all 0.2s;
+  border-radius: 8rpx;
+}
+
+.related-item:last-child {
+  border-bottom: none;
+}
+
+.related-item:active {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), transparent);
+  padding-left: 12rpx;
+}
+
+.related-title {
+  flex: 1;
+  font-size: 28rpx;
+  color: #555;
+  margin-right: 16rpx;
+}
+
+.related-arrow {
+  font-size: 32rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 来源信息（弱化折叠版） */
+.source-section {
+  margin-top: 40rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.source-section-title {
+  display: block;
+  font-size: 22rpx;
+  color: #bbb;
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.source-toggle-icon {
+  font-size: 18rpx;
+  color: #ccc;
+}
+
+.source-info {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10rpx;
+  padding: 16rpx;
+  border: 1rpx solid rgba(0, 0, 0, 0.04);
+  margin-top: 8rpx;
+}
+
+.source-item {
+  display: block;
+  font-size: 22rpx;
+  color: #bbb;
+  padding: 6rpx 0;
+}
+
+/* 底部固定 ActionBar */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-top: 1rpx solid rgba(102, 126, 234, 0.1);
+  box-shadow: 0 -4rpx 20rpx rgba(102, 126, 234, 0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 100;
+}
+
+.action-bar-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+  transition: all 0.2s;
+  border-radius: 12rpx;
+  margin: 8rpx;
+}
+
+.action-bar-btn:active {
+  background: rgba(102, 126, 234, 0.08);
+  transform: scale(0.95);
+}
+
+.action-bar-btn.active-learned {
+  background: rgba(67, 233, 123, 0.1);
+}
+
+.action-bar-btn.active-fav {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.ab-icon {
+  font-size: 40rpx;
+  margin-bottom: 6rpx;
+}
+
+.ab-text {
+  font-size: 22rpx;
+  color: #606266;
+}
+
+.action-bar-divider {
+  width: 1rpx;
+  height: 48rpx;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+/* 为固定 ActionBar 留出底部空间 */
+.container {
+  padding-bottom: 160rpx !important;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
+  font-size: 28rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

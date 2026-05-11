@@ -1,0 +1,254 @@
+/* pages/tools/speech-optimize/speech-optimize.wxss */
+
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* 头部说明 */
+.header {
+  text-align: center;
+  margin-bottom: 40rpx;
+  color: white;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 输入区域 */
+.input-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.input-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.clear-btn {
+  font-size: 28rpx;
+  color: #667eea;
+}
+
+.input-area {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 优化按钮 */
+.optimize-btn {
+  width: 100%;
+  height: 100rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 34rpx;
+  font-weight: bold;
+  border-radius: 50rpx;
+  margin-bottom: 30rpx;
+  border: none;
+}
+
+.optimize-btn[disabled] {
+  background: #ccc;
+  color: white;
+}
+
+/* 结果区域 */
+.result-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+/* 评分卡片 */
+.score-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  color: white;
+  text-align: center;
+}
+
+.score-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+}
+
+.score-comparison {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.score-item {
+  text-align: center;
+}
+
+.score-value {
+  font-size: 72rpx;
+  font-weight: bold;
+}
+
+.score-value.before {
+  color: #ff6b6b;
+}
+
+.score-value.after {
+  color: #51cf66;
+}
+
+.score-label {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.score-arrow {
+  font-size: 48rpx;
+  margin: 0 40rpx;
+}
+
+.score-improvement {
+  font-size: 28rpx;
+  background: rgba(255,255,255,0.2);
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+}
+
+/* 优化后的话术 */
+.optimized-section {
+  margin-bottom: 30rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.copy-btn {
+  font-size: 28rpx;
+  color: #667eea;
+  padding: 8rpx 20rpx;
+  border: 2rpx solid #667eea;
+  border-radius: 20rpx;
+}
+
+.optimized-text {
+  font-size: 34rpx;
+  color: #667eea;
+  line-height: 1.8;
+  padding: 20rpx;
+  background: #f8f9ff;
+  border-radius: 10rpx;
+  border-left: 6rpx solid #667eea;
+}
+
+/* 分析 */
+.analysis-section {
+  margin-bottom: 30rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.analysis-text {
+  font-size: 30rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* 技巧列表 */
+.tips-section {
+  margin-bottom: 30rpx;
+}
+
+.tips-list {
+  margin-top: 20rpx;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.tip-index {
+  width: 40rpx;
+  height: 40rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* 重新优化按钮 */
+.reset-btn {
+  width: 100%;
+  height: 90rpx;
+  background: white;
+  color: #667eea;
+  font-size: 32rpx;
+  border: 2rpx solid #667eea;
+  border-radius: 50rpx;
+  margin-top: 20rpx;
+}

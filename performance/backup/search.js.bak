@@ -1,0 +1,62 @@
+// pages/search/search.js
+const app = getApp()
+const TYPE_INFO = {
+  PDF: { label: 'PDF', color: '#ff6b6b' },
+  Word: { label: '文档', color: '#4ecdc4' },
+  '工具': { label: '工具', color: '#dda0dd' },
+  '案例': { label: '案例', color: '#f7dc6f' },
+  '笔记': { label: '笔记', color: '#96ceb4' },
+  '书籍摘要': { label: '摘要', color: '#764ba2' },
+  '文章': { label: '文章', color: '#667eea' },
+  '技巧卡片': { label: '技巧', color: '#4facfe' },
+  default: { label: '资源', color: '#667eea' }
+}
+const HOT_TAGS = ['情绪管理', '自我认知', '沟通技巧', '情商', '心理学', '人际关系', '领导力', '性格分析', '认知偏差', '共情', '非暴力沟通', '正念冥想']
+
+const FILTERS = [
+  { key: 'all', label: '全部类型' },
+  { key: '文章', label: '文章' },
+  { key: '书籍摘要', label: '书籍摘要' }
+]
+
+Page({
+  data: { keyword: '', hotTags: HOT_TAGS, hasSearched: false, results: [], currentFilter: 'all', filterLabel: '全部类型' },
+
+  onLoad(options) {
+    if (options.keyword) {
+      this.setData({ keyword: options.keyword, hasSearched: true })
+      this.doSearch()
+    }
+  },
+
+  onInput(e) { this.setData({ keyword: e.detail.value }) },
+  clearKeyword() { this.setData({ keyword: '', hasSearched: false, results: [] }) },
+
+  doSearch() {
+    const kw = this.data.keyword.trim()
+    if (!kw) { wx.showToast({ title: '请输入搜索词', icon: 'none' }); return }
+    this.setData({ hasSearched: true })
+    const results = app.search(kw, 50).map(item => {
+      const ti = TYPE_INFO[item.tp] || TYPE_INFO['default']
+      return { _id: item.id, title: item.t, type: item.tp, typeLabel: ti.label, typeColor: ti.color, tags: item.tg }
+    })
+    this.setData({ results })
+    if (this.data.currentFilter !== 'all') this.filterResults()
+  },
+
+  quickSearch(e) { this.setData({ keyword: e.currentTarget.dataset.keyword }); this.doSearch() },
+
+  toggleFilter() {
+    const idx = FILTERS.findIndex(f => f.key === this.data.currentFilter)
+    const next = (idx + 1) % FILTERS.length
+    this.setData({ currentFilter: FILTERS[next].key, filterLabel: FILTERS[next].label })
+    if (this.data.hasSearched) this.filterResults()
+  },
+
+  filterResults() {
+    if (this.data.currentFilter === 'all') { this.doSearch(); return }
+    this.setData({ results: this.data.results.filter(r => r.type === this.data.currentFilter) })
+  },
+
+  goDetail(e) { wx.navigateTo({ url: '/pages/detail/detail?id=' + e.currentTarget.dataset.id }) }
+})

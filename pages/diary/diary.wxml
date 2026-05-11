@@ -1,0 +1,63 @@
+<!-- pages/diary/diary.wxml -->
+<view class="container">
+  <!-- 顶部标题 + 统计 -->
+  <view class="header">
+    <view class="header-top">
+      <view class="header-title-wrap">
+        <text class="header-title">📝 情绪日记</text>
+        <text class="header-desc">觉察情绪，感知成长</text>
+      </view>
+      <view class="new-btn" bindtap="goTools">
+        <text class="new-btn-icon">+</text>
+        <text class="new-btn-text">新建</text>
+      </view>
+    </view>
+    <!-- 统计卡片 -->
+    <view class="stats-row">
+      <view class="stat-card">
+        <text class="stat-num">{{diaryHistory.length}}</text>
+        <text class="stat-label">条记录</text>
+      </view>
+      <view class="stat-card stat-card-accent">
+        <text class="stat-num">{{streakDays || 0}}</text>
+        <text class="stat-label">连续天</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{todayCount || 0}}</text>
+        <text class="stat-label">今日记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 日记列表 -->
+  <view class="diary-list" wx:if="{{diaryHistory.length > 0}}">
+    <view
+      class="diary-item"
+      wx:for="{{diaryHistory}}"
+      wx:key="index"
+      style="--accent-color: {{item.accentColor || '#667eea'}};">
+      <!-- 顶部行：情绪 + 时间 -->
+      <view class="item-top">
+        <text class="item-emotion">{{item.emotion}}</text>
+        <text class="item-date">{{item.date}}</text>
+      </view>
+      <!-- 情绪强度进度条 -->
+      <view class="intensity-row">
+        <view class="intensity-bar-wrap">
+          <view class="intensity-bar-fill" style="width: {{(item.intensity || 5) * 10}}%; background: {{item.accentColor || '#667eea'}};"></view>
+        </view>
+        <text class="intensity-label">强度 {{item.intensity || 5}}/10</text>
+      </view>
+      <!-- 内容预览（如有） -->
+      <text class="item-preview" wx:if="{{item.note}}">{{item.note}}</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">🌱</text>
+    <text class="empty-title">还没有日记记录</text>
+    <text class="empty-desc">每天记录情绪，觉察自己的变化</text>
+    <view class="empty-btn" bindtap="goTools">开始写第一篇</view>
+  </view>
+</view>

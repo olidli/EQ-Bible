@@ -1,0 +1,288 @@
+/* pages/profile/profile.wxss - 个人中心页渐变美化版 */
+
+.container {
+  padding: 0 0 40rpx;
+  background: linear-gradient(180deg, #f8f9ff 0%, #f0f2ff 50%, #f5f5f5 100%);
+  min-height: 100vh;
+}
+
+/* ===== 用户卡片 - 动态渐变背景 ===== */
+.user-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 200% 200%;
+  animation: bgShift 6s ease infinite;
+  padding: 48rpx 32rpx 60rpx;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.user-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -30%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.user-avatar {
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar-emoji {
+  font-size: 80rpx;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  padding: 16rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.user-info {
+  margin-bottom: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.user-level {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.user-stats {
+  display: flex;
+  gap: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item .stat-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  display: block;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.stat-item .stat-label {
+  font-size: 22rpx;
+  opacity: 0.85;
+}
+
+/* ===== 学习进度卡片 - 渐变边框效果 ===== */
+.progress-card {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin: -30rpx 24rpx 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.15);
+  position: relative;
+  overflow: hidden;
+  border: 1rpx solid rgba(102, 126, 234, 0.1);
+}
+
+.progress-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #303133;
+  display: block;
+  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.progress-bar-wrap {
+  height: 16rpx;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+  border-radius: 8rpx;
+  transition: width 0.5s ease;
+  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #909399;
+  margin-bottom: 20rpx;
+}
+
+.progress-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.progress-module {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8rpx 0;
+}
+
+.module-name {
+  font-size: 26rpx;
+  color: #606266;
+}
+
+.module-pct {
+  font-size: 26rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+/* ===== 菜单列表 - 渐变效果 ===== */
+.menu-list {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  margin: 0 24rpx 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.08);
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid rgba(102, 126, 234, 0.08);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
+  transition: width 0.3s ease;
+}
+
+.menu-item:active::before {
+  width: 100%;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #303133;
+  position: relative;
+  z-index: 1;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 关于区域 - 渐变边框 ===== */
+.about-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  margin: 0 24rpx 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.08);
+  border: 1rpx solid rgba(102, 126, 234, 0.08);
+}
+
+/* ===== 版本信息 - 渐变文字 ===== */
+.version {
+  display: block;
+  text-align: center;
+  font-size: 22rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 20rpx 0 40rpx;
+}

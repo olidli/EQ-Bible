@@ -1,0 +1,9 @@
+{
+  "name": "EQMaster",
+  "version": "1.0.0",
+  "description": "情商宝典微信云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

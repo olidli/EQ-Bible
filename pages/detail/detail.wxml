@@ -1,0 +1,195 @@
+<!-- pages/detail/detail.wxml - 结构化内容展示 -->
+<view class="container">
+  <block wx:if="{{!loading}}">
+    <!-- 标题区 -->
+    <view class="header">
+      <view class="type-badge" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
+      <text class="title">{{item.title}}</text>
+      <view class="tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+      </view>
+      <view class="meta-info" wx:if="{{item.readTime}}">
+        <text class="read-time">⏱ {{item.readTime}}</text>
+        <text class="difficulty" wx:if="{{item.difficulty}}">· {{item.difficulty}}</text>
+      </view>
+    </view>
+
+
+    <!-- 内容区 -->
+    <view class="content-body">
+      
+      <!-- 分类导读 -->
+      <block wx:if="{{item.contentType === 'overview'}}">
+        <view class="section">
+          <text class="section-title">📋 内容导读</text>
+          <text class="section-text">{{item.content.description}}</text>
+        </view>
+        <view class="section" wx:if="{{item.content.book_list.length > 0}}">
+          <text class="section-title">📚 包含书籍</text>
+          <view class="book-list">
+            <view class="book-item" wx:for="{{item.content.book_list}}" wx:key="*this">
+              <text class="book-dot">•</text>
+              <text class="book-name">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 书籍摘要 -->
+      <block wx:if="{{item.contentType === 'book_summary'}}">
+        <view class="section" wx:if="{{item.content.core_concepts}}">
+          <text class="section-title">💡 核心观点</text>
+          <view class="concept-list">
+            <view class="concept-item" wx:for="{{item.content.core_concepts}}" wx:key="*this">
+              <text class="concept-num">{{index + 1}}</text>
+              <text class="concept-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="section" wx:if="{{item.content.key_chapters}}">
+          <text class="section-title">📖 关键章节</text>
+          <view class="chapter-list">
+            <view class="chapter-item" wx:for="{{item.content.key_chapters}}" wx:key="*this">
+              <text class="chapter-title">{{item.chapter}}</text>
+              <text class="chapter-summary">{{item.summary}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="section" wx:if="{{item.content.practical_tips}}">
+          <text class="section-title">🎯 实践建议</text>
+          <view class="tip-list">
+            <view class="tip-item" wx:for="{{item.content.practical_tips}}" wx:key="*this">
+              <text class="tip-icon">✓</text>
+              <text class="tip-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 普通文章 -->
+      <block wx:if="{{item.contentType === 'article'}}">
+        <view class="section" wx:if="{{item.content.summary}}">
+          <text class="section-title">📋 内容摘要</text>
+          <text class="section-text">{{item.content.summary}}</text>
+        </view>
+
+        <!-- 来源书籍 -->
+        <view class="section" wx:if="{{item.content.source}}">
+          <text class="section-title">📖 理论来源</text>
+          <view class="source-badge-box">
+            <text class="source-badge">📚 {{item.content.source}}</text>
+          </view>
+        </view>
+
+        <!-- 核心概念 -->
+        <view class="section" wx:if="{{item.content.core_concepts}}">
+          <text class="section-title">💡 核心概念</text>
+          <view class="concept-tags">
+            <text class="concept-tag" wx:for="{{item.content.core_concepts}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+        
+        <!-- 核心要点 (key_chapters) -->
+        <view class="section" wx:if="{{item.content.key_chapters}}">
+          <text class="section-title">📝 核心要点</text>
+          <view class="chapter-list">
+            <view class="chapter-item" wx:for="{{item.content.key_chapters}}" wx:key="index">
+              <text class="chapter-title">{{item.chapter}}</text>
+              <text class="chapter-summary">{{item.summary}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 实践技巧 (字符串数组格式) -->
+        <view class="section practice-section" wx:if="{{item.content.practical_tips}}">
+          <text class="section-title">🎯 实践技巧</text>
+          <view class="tip-list">
+            <view class="tip-item" wx:for="{{item.content.practical_tips}}" wx:key="index">
+              <text class="tip-icon">✓</text>
+              <text class="tip-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 原有 sections 兼容 -->
+        <view class="section" wx:if="{{item.content.sections}}">
+          <view class="article-section" wx:for="{{item.content.sections}}" wx:key="*this">
+            <text class="article-heading">{{item.heading}}</text>
+            <text class="article-text">{{item.text}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 技巧卡片 -->
+      <block wx:if="{{item.contentType === 'tip_card'}}">
+        <view class="tip-card-highlight">
+          <text class="tip-highlight-title">💡 核心技巧</text>
+          <text class="tip-highlight-content">{{item.content.quick_tip}}</text>
+        </view>
+        
+        <view class="section" wx:if="{{item.content.detailed_guide}}">
+          <text class="section-title">📖 详细指南</text>
+          <text class="section-text">{{item.content.detailed_guide}}</text>
+        </view>
+        
+        <view class="section practice-section" wx:if="{{item.content.practice_suggestion}}">
+          <text class="section-title">🎯 今日练习</text>
+          <view class="practice-box">
+            <text class="practice-text">{{item.content.practice_suggestion}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 相关内容 -->
+      <view class="related-section" wx:if="{{relatedItems.length > 0}}">
+        <text class="section-title">📚 相关内容</text>
+        <view class="related-list">
+          <view class="related-item" wx:for="{{relatedItems}}" wx:key="id" bindtap="goRelated" data-id="{{item.id}}">
+            <text class="related-title">{{item.title}}</text>
+            <text class="related-arrow">›</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 来源信息（折叠弱化） -->
+      <view class="source-section" bindtap="toggleSource">
+        <text class="source-section-title">
+          来源信息
+          <text class="source-toggle-icon">{{showSource ? '▲' : '▼'}}</text>
+        </text>
+        <block wx:if="{{showSource}}">
+          <view class="source-info">
+            <text class="source-item">类型：{{item.typeLabel}}</text>
+            <text class="source-item">编号：{{item.serial}}</text>
+            <text class="source-item" wx:if="{{item.originalFile}}">来源：{{item.originalFile}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 底部固定 ActionBar -->
+<view class="action-bar" wx:if="{{!loading}}">
+  <view class="action-bar-btn {{isLearned ? 'active-learned' : ''}}" bindtap="markLearn">
+    <text class="ab-icon">{{isLearned ? '✅' : '📝'}}</text>
+    <text class="ab-text">{{isLearned ? '已学习' : '标记学习'}}</text>
+  </view>
+  <view class="action-bar-divider"></view>
+  <view class="action-bar-btn {{isFav ? 'active-fav' : ''}}" bindtap="toggleFav">
+    <text class="ab-icon">{{isFav ? '❤️' : '🤍'}}</text>
+    <text class="ab-text">{{isFav ? '已收藏' : '收藏'}}</text>
+  </view>
+  <view class="action-bar-divider"></view>
+  <view class="action-bar-btn" bindtap="share">
+    <text class="ab-icon">🔗</text>
+    <text class="ab-text">分享</text>
+  </view>
+</view>

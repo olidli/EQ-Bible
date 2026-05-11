@@ -1,0 +1,84 @@
+// pages/profile/profile.js
+const app = getApp()
+
+Page({
+  data: {
+    userInfo: {},
+    learnedCount: 0,
+    favCount: 0,
+    diaryCount: 0,
+    progress: 0,
+    moduleProgress: [
+      { name: '情绪管理', pct: 0 },
+      { name: '自我认知', pct: 0 },
+      { name: '性格发展', pct: 0 },
+      { name: '心理韧性', pct: 0 },
+    ]
+  },
+
+  onShow() {
+    this.loadUserData()
+  },
+
+  loadUserData() {
+    const learned = wx.getStorageSync('learnedItems') || []
+    const favs = wx.getStorageSync('favItems') || []
+    const diaryHistory = wx.getStorageSync('diaryHistory') || []
+    const firstDate = wx.getStorageSync('firstUseDate')
+    
+    let learnedDays = 1
+    if (firstDate) {
+      const diff = Date.now() - new Date(firstDate).getTime()
+      learnedDays = Math.max(1, Math.floor(diff / 86400000) + 1)
+    } else {
+      wx.setStorageSync('firstUseDate', new Date().toISOString())
+    }
+
+    const progress = Math.round((learned.length / 356) * 100)
+    this.setData({
+      learnedCount: learnedDays,
+      favCount: favs.length,
+      diaryCount: diaryHistory.length,
+      progress
+    })
+  },
+
+  goPage(e) {
+    const page = e.currentTarget.dataset.page
+    switch(page) {
+      case 'favorites':
+        wx.navigateTo({ url: '/pages/search/search' })
+        break
+      case 'diary':
+        app.globalData.toolFilter = 'emotion_diary'
+        wx.switchTab({ url: '/pages/tools/tools' })
+        break
+      case 'paths':
+        app.globalData.toolFilter = 'learning_path'
+        wx.switchTab({ url: '/pages/tools/tools' })
+        break
+      case 'tests':
+        wx.navigateTo({ url: '/pages/test/test' })
+        break
+      case 'progress':
+        wx.showToast({ title: '学习记录功能开发中', icon: 'none' })
+        break
+    }
+  },
+
+  goAbout() {
+    wx.showModal({
+      title: '关于EQ情商宝典',
+      content: 'EQ情商宝典 - 356项知识库，涵盖心理学理论、情商专项、实用技能。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
+      showCancel: false
+    })
+  },
+
+  contact() {
+    wx.showToast({ title: '功能开发中', icon: 'none' })
+  },
+
+  goPrivacy() {
+    wx.navigateTo({ url: '/pages/privacy/privacy' })
+  }
+})

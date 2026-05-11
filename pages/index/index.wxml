@@ -1,0 +1,134 @@
+<!-- pages/index/index.wxml -->
+<!-- EQ情商宝典首页 -->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-bar" bindtap="goSearch">
+    <image class="search-icon" src="/images/search.png" mode="aspectFit"/>
+    <text class="search-placeholder">搜索情商知识、工具、技巧...</text>
+  </view>
+
+  <!-- 今日打卡卡片（合并原 Banner + 学习进度） -->
+  <view class="today-card">
+    <view class="today-header">
+      <view class="today-left">
+        <text class="today-greeting">📈 学习进度</text>
+        <text class="today-stats">已学 {{learnedCount}} 篇 · 共 {{totalCount}} 篇</text>
+      </view>
+      <view class="today-pct">
+        <text class="today-pct-num">{{progress}}</text>
+        <text class="today-pct-sym">%</text>
+      </view>
+    </view>
+    <view class="today-progress-wrap">
+      <view class="today-progress-fill" style="width: {{progress}}%;"></view>
+    </view>
+    <!-- 今日推荐单条 -->
+    <view class="today-recommend" wx:if="{{dailyItems.length > 0}}" bindtap="goDetail" data-id="{{dailyItems[0].id}}">
+      <view class="today-rec-label">📖 今日推荐</view>
+      <text class="today-rec-title">{{dailyItems[0].title}}</text>
+    </view>
+  </view>
+
+  <!-- 核心模块入口（3列×3行，更宽松） -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">🎯 知识模块</text>
+    </view>
+    <view class="module-grid">
+      <view class="module-item" bindtap="goCategory" data-id="self_aware" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #667eea;">🧠</view>
+        <text class="module-name">自我认知</text>
+        <text class="module-count">{{moduleCounts.self_aware}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="emotion" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #f093fb;">😊</view>
+        <text class="module-name">情绪管理</text>
+        <text class="module-count">{{moduleCounts.emotion}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="communication" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #4facfe;">💬</view>
+        <text class="module-name">沟通技巧</text>
+        <text class="module-count">{{moduleCounts.communication}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="relation" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #f5576c;">🤝</view>
+        <text class="module-name">人际关系</text>
+        <text class="module-count">{{moduleCounts.relation}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="workplace" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #dda0dd;">💼</view>
+        <text class="module-name">职场情商</text>
+        <text class="module-count">{{moduleCounts.workplace}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="psychology" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #45b7d1;">📚</view>
+        <text class="module-name">心理学</text>
+        <text class="module-count">{{moduleCounts.psychology}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="growth" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #96ceb4;">🌱</view>
+        <text class="module-name">个人成长</text>
+        <text class="module-count">{{moduleCounts.growth}}篇</text>
+      </view>
+      <view class="module-item" bindtap="goCategory" data-id="parenting" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #f7dc6f;">👨‍👩‍👧</view>
+        <text class="module-name">亲子教育</text>
+        <text class="module-count">{{moduleCounts.parenting}}篇</text>
+      </view>
+      <!-- 全部模块入口 -->
+      <view class="module-item module-item-all" bindtap="goTools" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
+        <view class="module-icon" style="background: #888;">⚡</view>
+        <text class="module-name">全部工具</text>
+        <text class="module-count">{{toolCount}}个</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷工具（横向滑动胶囊） -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">⚡ 常用工具</text>
+      <text class="section-more" bindtap="goTools">全部 ›</text>
+    </view>
+    <scroll-view class="tool-scroll" scroll-x enable-flex>
+      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_diary">
+        <text class="tool-cap-emoji">📝</text>
+        <text class="tool-cap-name">情绪日记</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_recognition">
+        <text class="tool-cap-emoji">🎭</text>
+        <text class="tool-cap-name">情绪识别</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="self_test">
+        <text class="tool-cap-emoji">📊</text>
+        <text class="tool-cap-name">能力测评</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="learning_path">
+        <text class="tool-cap-emoji">🗺</text>
+        <text class="tool-cap-name">学习路径</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 每日推荐（最多显示3条） -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">📖 更多推荐</text>
+      <text class="section-more" bindtap="goRecommend">换一批</text>
+    </view>
+    <view class="recommend-list" wx:if="{{dailyItems.length > 1}}">
+      <view class="recommend-item" wx:for="{{dailyItems}}" wx:key="id"
+        wx:if="{{index > 0 && index < 4}}"
+        bindtap="goDetail" data-id="{{item.id}}">
+        <view class="recommend-type">{{item.typeLabel}}</view>
+        <text class="recommend-title">{{item.title}}</text>
+        <view class="recommend-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+          <text class="recommend-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-tip" wx:else>
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

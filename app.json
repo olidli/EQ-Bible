@@ -1,0 +1,96 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/search/search",
+    "pages/category/category",
+    "pages/tools/tools",
+    "pages/profile/profile"
+  ],
+  "subpackages": [
+    {
+      "root": "pages/detail",
+      "name": "pkg-detail",
+      "pages": ["detail"]
+    },
+    {
+      "root": "pages/diary",
+      "name": "pkg-diary",
+      "pages": ["diary"]
+    },
+    {
+      "root": "pages/path",
+      "name": "pkg-path",
+      "pages": ["path"]
+    },
+    {
+      "root": "pages/test",
+      "name": "pkg-test",
+      "pages": ["test"]
+    },
+    {
+      "root": "pages/privacy",
+      "name": "pkg-privacy",
+      "pages": ["privacy"]
+    },
+    {
+      "root": "pages/record",
+      "name": "pkg-record",
+      "pages": ["record"]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["pkg-detail"]
+    },
+    "pages/category/category": {
+      "network": "all",
+      "packages": ["pkg-detail"]
+    },
+    "pages/search/search": {
+      "network": "all",
+      "packages": ["pkg-detail"]
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "EQ情商宝典",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f8f9ff"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png"
+      },
+      {
+        "pagePath": "pages/category/category",
+        "text": "知识库",
+        "iconPath": "images/tab_category.png",
+        "selectedIconPath": "images/tab_category_active.png"
+      },
+      {
+        "pagePath": "pages/tools/tools",
+        "text": "工具",
+        "iconPath": "images/tab_tools.png",
+        "selectedIconPath": "images/tab_tools_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab_profile.png",
+        "selectedIconPath": "images/tab_profile_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,45 @@
+<!-- pages/test/test.wxml -->
+<view class="container">
+  <!-- 测试进行中 -->
+  <view class="test-panel" wx:if="{{!finished}}">
+    <view class="progress-bar-wrap">
+      <view class="progress-bar" style="width: {{(currentIndex + 1) / totalQuestions * 100}}%;"></view>
+    </view>
+    <text class="progress-text">第 {{currentIndex + 1}} / {{totalQuestions}} 题</text>
+
+    <view class="question-card">
+      <text class="question-text">{{currentQuestion.text}}</text>
+      <view class="options">
+        <view class="option-item {{selectedOption === index ? 'selected' : ''}}" 
+          wx:for="{{currentQuestion.options}}" wx:key="index" 
+          bindtap="selectOption" data-index="{{index}}">
+          <text class="option-label">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="next-btn" bindtap="nextQuestion">
+      {{currentIndex < totalQuestions - 1 ? '下一题' : '查看结果'}}
+    </button>
+  </view>
+
+  <!-- 测试结果 -->
+  <view class="result-panel" wx:if="{{finished && result}}">
+    <view class="result-header">
+      <text class="result-emoji">{{result.emoji}}</text>
+      <text class="result-level">{{result.level}}</text>
+      <text class="result-score">得分：{{result.score}} / 40</text>
+    </view>
+    <view class="result-desc">
+      <text>{{result.desc}}</text>
+    </view>
+    <view class="result-advice">
+      <text class="advice-title">💡 学习建议</text>
+      <text>{{result.advice}}</text>
+    </view>
+    <view class="result-actions">
+      <button class="restart-btn" bindtap="restart">重新测试</button>
+      <button class="back-btn" bindtap="goBack">返回</button>
+    </view>
+  </view>
+</view>

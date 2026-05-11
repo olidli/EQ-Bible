@@ -1,0 +1,22 @@
+<!-- pages/record/record.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">📚 学习记录</text>
+    <text class="count">共 {{learnedList.length}} 条</text>
+    <text class="clear-btn" bindtap="clearRecords" wx:if="{{learnedList.length > 0}}">清空</text>
+  </view>
+
+  <view class="list" wx:if="{{learnedList.length > 0}}">
+    <view class="item" wx:for="{{learnedList}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="item-type" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
+      <text class="item-title">{{item.title}}</text>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text class="empty-emoji">📖</text>
+    <text class="empty-text">暂无学习记录</text>
+    <text class="empty-tip">去知识库浏览并标记已学内容吧</text>
+  </view>
+</view>

@@ -1,0 +1,83 @@
+<!-- pages/detail/detail.wxml -->
+<view class="container">
+  <block wx:if="{{!loading}}">
+    <!-- 标题区 -->
+    <view class="header">
+      <view class="type-badge" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
+      <text class="title">{{item.title}}</text>
+      <view class="tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <view class="action-btn" bindtap="markLearn">
+        <text class="action-icon">{{isLearned ? '✅' : '📝'}}</text>
+        <text class="action-text">{{isLearned ? '已标记学习' : '标记已学习'}}</text>
+      </view>
+      <view class="action-btn" bindtap="toggleFav">
+        <text class="action-icon">{{isFav ? '❤️' : '🤍'}}</text>
+        <text class="action-text">{{isFav ? '已收藏' : '收藏'}}</text>
+      </view>
+      <view class="action-btn" bindtap="share">
+        <text class="action-icon">🔗</text>
+        <text class="action-text">分享</text>
+      </view>
+    </view>
+
+    <!-- 内容区 -->
+    <view class="content-body">
+      <!-- 描述 -->
+      <view class="desc-section" wx:if="{{item.desc}}">
+        <text class="section-title">📋 内容简介</text>
+        <text class="desc-text">{{item.desc}}</text>
+      </view>
+
+      <!-- 工具使用（如果是工具类型） -->
+      <view class="tool-section" wx:if="{{item.type === '工具' || item.toolGuide}}">
+        <text class="section-title">🛠 使用指南</text>
+        <view class="tool-guide">
+          <text class="guide-text">{{item.toolGuide || '本工具帮助你深入理解和应用情商知识。'}}</text>
+        </view>
+        <button class="start-btn" bindtap="startTool">开始使用</button>
+      </view>
+
+      <!-- 相关内容 -->
+      <view class="related-section" wx:if="{{relatedItems.length > 0}}">
+        <text class="section-title">📚 相关内容</text>
+        <view class="related-list">
+          <view class="related-item" wx:for="{{relatedItems}}" wx:key="_id" bindtap="goRelated" data-id="{{item._id}}">
+            <text class="related-title">{{item.title}}</text>
+            <text class="related-arrow">›</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 案例（如果是案例类型） -->
+      <view class="case-section" wx:if="{{item.type === '案例' || item.cases}}">
+        <text class="section-title">📖 案例详情</text>
+        <view class="case-list">
+          <view class="case-item" wx:for="{{item.cases || []}}" wx:key="*this">
+            <text class="case-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 来源信息 -->
+      <view class="source-section">
+        <text class="section-title">📂 来源信息</text>
+        <view class="source-info">
+          <text class="source-item">类型：{{item.typeLabel}}</text>
+          <text class="source-item">序号：{{item.serial}}</text>
+          <text class="source-item">标签：{{item.tagsStr}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
