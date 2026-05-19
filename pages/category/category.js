@@ -71,6 +71,7 @@ Page({
     }
 
     const tags = MODULE_TAGS[id] || []
+    const moduleName = MODULE_NAMES[id]
     const allItems = app.globalData.items || []
 
     // 如果全局数据为空，强制从缓存或重新加载（避免初始化的时序问题）
@@ -86,9 +87,10 @@ Page({
       delete this._cache[id]
     }
 
-    console.log('[category] loadModule("' + id + '") tags=' + JSON.stringify(tags) + ' totalItems=' + allItems.length)
+    console.log('[category] loadModule("' + id + '") moduleName=' + moduleName + ' tags=' + JSON.stringify(tags) + ' totalItems=' + allItems.length)
 
     const items = allItems.filter(item =>
+      item.moduleName === moduleName ||
       (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
     ).map(item => {
       const ti = getTypeInfo(item.tp)

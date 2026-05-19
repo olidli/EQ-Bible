@@ -1,12 +1,14 @@
 // pages/index/index.js
 const app = getApp()
-const { getTypeInfo, MODULE_TAGS, TOOL_META } = require('../../utils/constants')
+const { getTypeInfo, MODULE_TAGS, MODULE_NAMES, TOOL_META } = require('../../utils/constants')
 
-// 统计各模块篇数
+// 统计各模块篇数（优先用 moduleName 精确匹配，再用 tag 兜底）
 const calcModuleCounts = (items) => {
   const counts = {}
   Object.entries(MODULE_TAGS).forEach(([id, tags]) => {
+    const moduleName = MODULE_NAMES[id]
     counts[id] = items.filter(item =>
+      item.moduleName === moduleName ||
       (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
     ).length
   })
