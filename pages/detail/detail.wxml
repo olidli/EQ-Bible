@@ -106,8 +106,8 @@
         </view>
       </block>
 
-      <!-- 普通文章 -->
-      <block wx:if="{{item.contentType === 'article'}}">
+      <!-- 普通文章 / 技巧 / 理论 / 工具 -->
+      <block wx:if="{{item.contentType === 'article' || item.contentType === 'skill' || item.contentType === 'theory' || item.contentType === 'tool'}}">
         <view class="section" wx:if="{{item.content.summary}}">
           <text class="section-title">📋 内容摘要</text>
           <text class="section-text">{{item.content.summary}}</text>
