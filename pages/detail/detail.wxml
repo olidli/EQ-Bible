@@ -121,21 +121,27 @@
           </view>
         </view>
 
-        <!-- 核心概念 -->
+        <!-- 核心概念（兼容字符串数组和对象数组 {name, explanation}） -->
         <view class="section" wx:if="{{item.content.core_concepts}}">
           <text class="section-title">💡 核心概念</text>
-          <view class="concept-tags">
-            <text class="concept-tag" wx:for="{{item.content.core_concepts}}" wx:key="*this">{{item}}</text>
+          <view class="concept-list">
+            <view class="concept-item" wx:for="{{item.content.core_concepts}}" wx:for-item="c" wx:key="index">
+              <text wx:if="{{!c.name}}" class="concept-tag">{{c}}</text>
+              <view wx:else class="concept-block">
+                <text class="concept-name">{{c.name}}</text>
+                <text class="concept-explanation">{{c.explanation}}</text>
+              </view>
+            </view>
           </view>
         </view>
         
-        <!-- 核心要点 (key_chapters) -->
+        <!-- 核心要点 (key_chapters，兼容 chapter 和 title 字段) -->
         <view class="section" wx:if="{{item.content.key_chapters}}">
           <text class="section-title">📝 核心要点</text>
           <view class="chapter-list">
-            <view class="chapter-item" wx:for="{{item.content.key_chapters}}" wx:key="index">
-              <text class="chapter-title">{{item.chapter}}</text>
-              <text class="chapter-summary">{{item.summary}}</text>
+            <view class="chapter-item" wx:for="{{item.content.key_chapters}}" wx:for-item="ch" wx:key="index">
+              <text class="chapter-title">{{ch.chapter || ch.title}}</text>
+              <text class="chapter-summary">{{ch.summary}}</text>
             </view>
           </view>
         </view>
