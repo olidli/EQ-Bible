@@ -44,8 +44,6 @@ Page({
       // 实际渲染尺寸 = CSS尺寸 × 设备像素比
       canvas.width = cssW * dpr;
       canvas.height = cssH * dpr;
-      canvas.style.width = cssW + 'px';
-      canvas.style.height = cssH + 'px';
       ctx.scale(dpr, dpr);
 
       const { score, name, emoji, shareText, color } = this.data;
