@@ -64,10 +64,13 @@ Page({
   // 加载场景
   loadScene(index) {
     const scene = this.data.sceneList[index];
+    // 打乱选项顺序，防止正确答案固定位置泄露
+    const shuffledOptions = this.shuffleArray([...scene.options]);
+    const shuffledScene = { ...scene, options: shuffledOptions };
     const progress = ((index) / this.data.totalScenes) * 100;
 
     this.setData({
-      currentScene: scene,
+      currentScene: shuffledScene,
       currentIndex: index,
       progress,
       selectedOption: -1,
