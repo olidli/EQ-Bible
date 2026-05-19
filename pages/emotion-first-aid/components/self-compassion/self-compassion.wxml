@@ -1,0 +1,99 @@
+<!-- components/self-compassion/self-compassion.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onExit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">💗 自我慈悲</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="intro-section">
+    <text class="intro-text">自我慈悲是用温柔的方式对待自己。当我们感到痛苦时，不需要批评自己，而是给予自己理解和关怀。</text>
+  </view>
+
+  <!-- 进度 -->
+  <view class="step-progress" wx:if="{{!isFinished}}">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{((currentStep + 1) / 3) * 100}}%"></view>
+    </view>
+    <text class="progress-text">步骤 {{currentStep + 1}} / 3</text>
+  </view>
+
+  <!-- 问答进行中 -->
+  <view class="question-content" wx:if="{{!isFinished}}">
+    <!-- 问题卡片 -->
+    <view class="question-card">
+      <view class="question-emoji">{{prompts[currentStep].emoji}}</view>
+      <text class="question-text">{{prompts[currentStep].prompt}}</text>
+
+      <textarea
+        class="answer-input"
+        placeholder="{{prompts[currentStep].placeholder}}"
+        value="{{answers[prompts[currentStep].key]}}"
+        bindinput="onInputChange"
+        maxlength="200"
+        auto-height
+      />
+    </view>
+
+    <!-- 已有回答预览 -->
+    <view class="answers-preview" wx:if="{{currentStep > 0}}">
+      <text class="preview-title">📝 已回答</text>
+      <view class="preview-item" wx:for="{{prompts}}" wx:key="key" wx:if="{{index < currentStep}}">
+        <text class="preview-q">{{item.prompt}}</text>
+        <text class="preview-a">{{answers[item.key]}}</text>
+      </view>
+    </view>
+
+    <!-- 下一步按钮 -->
+    <button class="next-btn {{answers[prompts[currentStep].key] ? 'ready' : ''}}" bindtap="nextStep">
+      {{currentStep < 2 ? '下一步 ›' : '完成练习'}}
+    </button>
+  </view>
+
+  <!-- 完成状态 -->
+  <view class="finished-content" wx:if="{{isFinished}}">
+    <view class="finished-card">
+      <text class="finished-emoji">🌸</text>
+      <text class="finished-title">自我慈悲练习完成</text>
+      <text class="finished-desc">
+        你已经完成了自我慈悲练习。\n\n
+        记住，善待自己不是自私，而是成长的起点。
+      </text>
+
+      <!-- 结果 -->
+      <view class="result-section">
+        <text class="result-title">📝 你的自我慈悲</text>
+
+        <view class="result-item original">
+          <text class="result-label">🫂 你的感受</text>
+          <text class="result-value">{{answers.feel}}</text>
+        </view>
+
+        <view class="result-item">
+          <text class="result-label">🤝 共通的人性</text>
+          <text class="result-value">{{answers.common}}</text>
+        </view>
+
+        <view class="result-item balanced">
+          <text class="result-label">💝 善待自己</text>
+          <text class="result-value">{{answers.kind}}</text>
+        </view>
+      </view>
+
+      <view class="tip-section">
+        <text class="tip-title">💡 小贴士</text>
+        <text class="tip-text">
+          自我慈悲包含三个要素：善待自己、共通的人性、正念觉察。当你对自己温柔时，你也会对他人更加宽容。
+        </text>
+      </view>
+
+      <view class="finished-actions">
+        <button class="action-btn secondary" bindtap="restart">再练一次</button>
+        <button class="action-btn primary" bindtap="onExit">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

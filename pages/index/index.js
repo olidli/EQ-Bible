@@ -68,17 +68,27 @@ Page({
     wx.switchTab({ url: '/pages/tools/tools' })
   },
   goRecommend() { this.loadDaily() },
+  // 跳转到情绪急救箱
+  goEmotionFirstAid() {
+    wx.navigateTo({ url: '/pages/emotion-first-aid/emotion-first-aid' })
+  },
+  // 跳转到社死模拟器游戏
+  goGame() {
+    wx.navigateTo({ url: '/pages/game/game' })
+  },
 
   onShareAppMessage() {
     return {
       title: 'EQ情商宝典 · 每天5分钟，提升情商',
       path: '/pages/index/index',
+      imageUrl: '/images/share_home.png'
     }
   },
 
   onShareTimeline() {
     return {
       title: 'EQ情商宝典 · 提升情商从这里开始',
+      imageUrl: '/images/share_home.png'
     }
   },
 })

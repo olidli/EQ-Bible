@@ -1,0 +1,42 @@
+<!-- pages/emotion-first-aid/edit-contact/edit-contact.wxml -->
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">姓名 *</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入联系人姓名"
+        value="{{name}}"
+        bindinput="onNameInput"
+        maxlength="20"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">电话号码 *</text>
+      <input 
+        class="form-input" 
+        type="number"
+        placeholder="请输入手机号码"
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+        maxlength="11"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">关系（选填）</text>
+      <input 
+        class="form-input" 
+        placeholder="例如：妈妈、爸爸、好朋友"
+        value="{{relationship}}"
+        bindinput="onRelationInput"
+        maxlength="10"
+      />
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="saveContact">保存修改</button>
+  
+  <button class="delete-btn" bindtap="deleteContact">删除联系人</button>
+</view>

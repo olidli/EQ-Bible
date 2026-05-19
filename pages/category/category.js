@@ -1,6 +1,4 @@
 // pages/category/category.js
-// 优化：统一使用 constants.js，移除硬编码的 MODULES / TOOL_CARDS
-
 const app = getApp()
 const {
   getTypeInfo, MODULE_TAGS,
@@ -19,9 +17,11 @@ Page({
     currentModule: null,
     moduleTools: [],
     items: [],
+    pageSize: 20,
+    hasMore: false,
   },
 
-  // ✅ 模块内容缓存：{ [moduleId]: items[] }
+  // 模块内容缓存：{ [moduleId]: items[] }
   _cache: {},
 
   onLoad(options) {
@@ -46,7 +46,7 @@ Page({
     this.loadModule(id)
   },
 
-  loadModule(id) {
+  loadModule(id, forceReload = false) {
     const meta = MODULE_META[id] || {}
 
     // 构建 currentModule（供页面渲染模块标题/描述）
@@ -56,24 +56,41 @@ Page({
         name: MODULE_NAMES[id] || id,
         emoji: meta.emoji || '📌',
         desc: meta.desc || '',
-        // 工具名称列表（用于展示"包含工具：xx、yy"）
         tools: (MODULE_TOOLS[id] || []).map(tid => (TOOL_META[tid] || {}).name).filter(Boolean)
       },
-      // 工具卡片列表（供页面渲染可点击的工具卡片）
       moduleTools: (MODULE_TOOLS[id] || []).map(tid => ({
         id: tid,
         ...(TOOL_META[tid] || {})
       }))
     })
 
-    // ✅ 命中缓存直接渲染
-    if (this._cache[id]) {
+    // 命中有效缓存（非空数组）才使用缓存
+    if (!forceReload && this._cache[id] && this._cache[id].length > 0) {
       this.setData({ items: this._cache[id] })
       return
     }
 
     const tags = MODULE_TAGS[id] || []
-    const items = app.searchByTags(tags, 20).map(item => {
+    const allItems = app.globalData.items || []
+
+    // 如果全局数据为空，强制从缓存或重新加载（避免初始化的时序问题）
+    if (allItems.length === 0) {
+      if (this._cache[id] && this._cache[id].length > 0) {
+        this.setData({ items: this._cache[id] })
+      }
+      return
+    }
+
+    // 如果缓存是上次遗留的空数组（污染缓存），清除它并强制刷新
+    if (this._cache[id] && this._cache[id].length === 0) {
+      delete this._cache[id]
+    }
+
+    console.log('[category] loadModule("' + id + '") tags=' + JSON.stringify(tags) + ' totalItems=' + allItems.length)
+
+    const items = allItems.filter(item =>
+      (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
+    ).map(item => {
       const ti = getTypeInfo(item.tp)
       return {
         _id: item.id,
@@ -85,9 +102,28 @@ Page({
       }
     })
 
-    // ✅ 写入缓存
+    console.log('[category] matched ' + items.length + ' items for module "' + id + '"')
     this._cache[id] = items
-    this.setData({ items })
+
+    // 分页：只显示前 pageSize 条
+    var pageSize = this.data.pageSize || 20
+    var displayItems = items.slice(0, pageSize)
+    this.setData({
+      items: displayItems,
+      hasMore: items.length > pageSize,
+    })
+  },
+
+  loadMore() {
+    var id = this.data.currentTab
+    var allItems = this._cache[id] || []
+    var currentCount = this.data.items.length
+    var pageSize = this.data.pageSize || 20
+    var newCount = Math.min(currentCount + pageSize, allItems.length)
+    this.setData({
+      items: allItems.slice(0, newCount),
+      hasMore: newCount < allItems.length,
+    })
   },
 
   openTool(e) {

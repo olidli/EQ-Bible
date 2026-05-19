@@ -1,0 +1,47 @@
+<!-- pages/emotion-first-aid/add-contact/add-contact.wxml -->
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">姓名 *</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入联系人姓名"
+        value="{{name}}"
+        bindinput="onNameInput"
+        maxlength="20"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">电话号码 *</text>
+      <input 
+        class="form-input" 
+        type="number"
+        placeholder="请输入手机号码"
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+        maxlength="11"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">关系（选填）</text>
+      <input 
+        class="form-input" 
+        placeholder="例如：妈妈、爸爸、好朋友"
+        value="{{relationship}}"
+        bindinput="onRelationInput"
+        maxlength="10"
+      />
+    </view>
+  </view>
+
+  <view class="tip-section">
+    <text class="tip-title">💡 温馨提示</text>
+    <text class="tip-text">
+      应急联系人会在你情绪低落时帮助到你。请添加你信任的亲友。
+    </text>
+  </view>
+
+  <button class="save-btn" bindtap="saveContact">保存联系人</button>
+</view>

@@ -1,0 +1,41 @@
+<view class="container">
+  <!-- 引导文案 -->
+  <view class="share-prompt">
+    <view class="prompt-text">把这道题发给TA，看看TA怎么选 👇</view>
+  </view>
+
+  <!-- 分享文案 -->
+  <view class="share-text-card">
+    <view class="share-text-label">你的专属文案</view>
+    <view class="share-text-content">"{{shareText}}"</view>
+    <view class="copy-btn" bindtap="onCopyText">复制文案</view>
+  </view>
+
+  <!-- 分享卡片（新版 Canvas 2D） -->
+  <view class="card-preview">
+    <view class="card-preview-title">分享卡片预览</view>
+    <canvas type="2d" id="shareCard" class="share-canvas"></canvas>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-btns">
+    <button class="btn-share" open-type="share">
+      考考我的室友 🚀
+    </button>
+    <view class="btn-pk" bindtap="onPKChallenge">
+      和好友PK情商 👊
+    </view>
+    <view class="btn-save" bindtap="onSaveCard">
+      保存卡片到相册
+    </view>
+    <view class="btn-retry" bindtap="onRetry">
+      再来一局 🔄
+    </view>
+  </view>
+
+  <!-- 解锁奖励提示 -->
+  <view class="unlock-hint" wx:if="{{showUnlockHint}}">
+    <view class="unlock-icon">🎉</view>
+    <view class="unlock-text">已解锁{{newUnlockCount}}个新场景！</view>
+  </view>
+</view>

@@ -1,0 +1,196 @@
+.container {
+  padding: 30rpx;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  padding: 40rpx 0 30rpx;
+}
+
+.title-emoji {
+  font-size: 80rpx;
+  margin-bottom: 10rpx;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #8892b0;
+}
+
+/* 今日挑战 */
+.daily-challenge {
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border-radius: 24rpx;
+  padding: 36rpx;
+  margin-bottom: 30rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.daily-challenge::after {
+  content: '🎯';
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 80rpx;
+  opacity: 0.3;
+}
+
+.daily-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.daily-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.daily-countdown {
+  display: inline-block;
+  background: rgba(255,255,255,0.35);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.daily-hint {
+  color: rgba(255,255,255,0.7);
+  font-size: 22rpx;
+}
+
+.daily-title {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.daily-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.daily-day, .daily-streak {
+  color: rgba(255,255,255,0.85);
+  font-size: 24rpx;
+}
+/* 分类标题 */
+.section-title {
+  color: #8892b0;
+  font-size: 28rpx;
+  margin: 30rpx 0 20rpx;
+  padding-left: 10rpx;
+}
+
+/* 分类卡片 */
+.category-card {
+  display: flex;
+  align-items: center;
+  background: #1f2940;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.category-card.campus {
+  border-left: 6rpx solid #4ecdc4;
+}
+
+.category-card.workplace {
+  border-left: 6rpx solid #ffe66d;
+}
+
+.category-icon {
+  font-size: 56rpx;
+  margin-right: 24rpx;
+}
+
+.category-info {
+  flex: 1;
+}
+
+.category-name {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 6rpx;
+}
+
+.category-desc {
+  color: #8892b0;
+  font-size: 24rpx;
+}
+
+.category-arrow {
+  color: #8892b0;
+  font-size: 40rpx;
+  margin-left: 10rpx;
+}
+
+/* 战绩 */
+.stats-row {
+  display: flex;
+  background: #1f2940;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-value {
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 6rpx;
+}
+
+.stat-label {
+  color: #8892b0;
+  font-size: 22rpx;
+}
+
+/* 排行榜入口 */
+.rank-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f2940;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  color: #fff;
+  font-size: 30rpx;
+}
+
+.rank-arrow {
+  color: #8892b0;
+  font-size: 40rpx;
+}

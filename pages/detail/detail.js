@@ -37,6 +37,9 @@ Page({
     const contentType = content.type || ''
     const ti = getTypeInfo(raw.tp)
 
+    // 是否有结构化内容
+    const hasStructuredContent = contentType && Object.keys(content).length > 0
+
     this.setData({
       item: {
         _id: raw.id,
@@ -49,9 +52,16 @@ Page({
         tagsStr: (raw.tg || []).join(' / '),
         content: content,
         contentType: contentType,
+        hasStructuredContent: hasStructuredContent,
         readTime: content.read_time || '',
         difficulty: content.difficulty || '',
         originalFile: content.original_file || '',
+        // 兼容：直接字段
+        description: raw.description || content.description || '',
+        summary: raw.summary || content.summary || '',
+        source: raw.source || content.source || '',
+        // 类型提示（无内容时显示）
+        typeHint: this._getTypeHint(raw.tp, raw.t),
       },
       contentType: contentType,
       loading: false,
@@ -59,6 +69,35 @@ Page({
 
     wx.setNavigationBarTitle({ title: raw.t ? raw.t.slice(0, 15) : '详情' })
     this.loadRelated(raw)
+  },
+
+  // 根据类型和标题给出提示
+  _getTypeHint(type, title) {
+    const hints = {
+      'PDF': '📄 PDF文档，可下载后阅读',
+      'Word': '📝 Word文档，可下载后阅读',
+      'Markdown': '📋 指南文档，内容见正文',
+      '微信公众号文章': '🔗 微信公众号文章，可点击阅读原文',
+      '网页链接': '🌐 网页内容，可点击访问',
+      '笔记': '📓 笔记内容，内容见正文',
+      '文章': '📰 文章内容，内容见正文',
+      '书籍摘要': '📚 书籍摘要，内容见正文',
+      '技巧卡片': '💡 实用技巧，内容见正文',
+      '工具': '🛠 工具介绍，内容见正文',
+      '案例': '📋 案例分析，内容见正文',
+    }
+    const hint = hints[type] || '📌 学习资源'
+    // 特殊标注
+    if (title && (title.includes('[PDF]') || title.includes('.pdf'))) {
+      return '📄 PDF文档，可点击查看或下载阅读'
+    }
+    if (title && (title.includes('微信公众号文章') || title.includes('公众号'))) {
+      return '🔗 微信公众号文章，可点击阅读原文'
+    }
+    if (title && (title.includes('网页链接') || title.includes('http'))) {
+      return '🌐 网页链接，可点击访问'
+    }
+    return hint
   },
 
   loadRelated(item) {

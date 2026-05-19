@@ -52,6 +52,14 @@
       </view>
     </view>
 
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+      <text class="load-more-text">加载更多</text>
+    </view>
+    <view class="no-more" wx:elif="{{items.length > 0}}">
+      <text class="no-more-text">— 没有更多了 —</text>
+    </view>
+
     <!-- 案例列表 -->
     <view class="section" wx:if="{{cases.length > 0}}">
       <view class="section-title">📖 案例库</view>

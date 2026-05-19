@@ -1,0 +1,154 @@
+.container {
+  padding: 30rpx;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 引导文案 */
+.share-prompt {
+  text-align: center;
+  padding: 16rpx;
+  margin-bottom: 10rpx;
+}
+
+.prompt-text {
+  color: #ffe66d;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 分享文案卡 */
+.share-text-card {
+  background: #1f2940;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  width: 100%;
+  margin-bottom: 30rpx;
+}
+
+.share-text-label {
+  color: #8892b0;
+  font-size: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.share-text-content {
+  color: #e6f1ff;
+  font-size: 30rpx;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+  font-style: italic;
+}
+
+.copy-btn {
+  display: inline-block;
+  background: rgba(78, 205, 196, 0.12);
+  color: #4ecdc4;
+  font-size: 24rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+}
+
+/* 卡片预览 */
+.card-preview {
+  width: 100%;
+  max-width: 270px;
+  margin-bottom: 30rpx;
+}
+
+.card-preview-title {
+  color: #8892b0;
+  font-size: 24rpx;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.share-canvas {
+  width: 270px;
+  height: 480px;
+  border-radius: 16rpx;
+}
+
+/* 操作按钮 */
+.action-btns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding-bottom: 60rpx;
+}
+
+.btn-share {
+  background: linear-gradient(135deg, #4ecdc4, #44a8e8) !important;
+  color: #1a1a2e !important;
+  font-size: 32rpx !important;
+  font-weight: bold !important;
+  border-radius: 50rpx !important;
+  padding: 8rpx 0 !important;
+}
+
+.btn-save {
+  background: #1f2940;
+  color: #4ecdc4;
+  font-size: 30rpx;
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 50rpx;
+  border: 2rpx solid #4ecdc4;
+}
+
+.btn-retry {
+  background: transparent;
+  color: #8892b0;
+  font-size: 28rpx;
+  text-align: center;
+  padding: 20rpx;
+}
+
+/* PK按钮 */
+.btn-pk {
+  background: linear-gradient(135deg, #e94560, #ff6b6b);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: bold;
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 50rpx;
+}
+
+.btn-pk:active {
+  opacity: 0.85;
+}
+
+/* 解锁奖励提示 */
+.unlock-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(78, 205, 196, 0.95);
+  border-radius: 24rpx;
+  padding: 40rpx 60rpx;
+  text-align: center;
+  z-index: 100;
+  animation: popIn 0.3s ease-out;
+}
+
+.unlock-icon {
+  font-size: 60rpx;
+  margin-bottom: 10rpx;
+}
+
+.unlock-text {
+  color: #1a1a2e;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+@keyframes popIn {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}

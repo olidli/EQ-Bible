@@ -17,7 +17,45 @@
 
     <!-- 内容区 -->
     <view class="content-body">
-      
+
+      <!-- 无结构化内容时，显示资源提示 -->
+      <block wx:if="{{!item.contentType || !item.hasStructuredContent}}">
+        <view class="section resource-tip">
+          <text class="resource-icon">{{item.typeLabel === 'PDF' ? '📄' : item.typeLabel === '文档' ? '📝' : item.typeLabel === '科普' ? '🔗' : '📚'}}</text>
+          <text class="resource-hint">{{item.typeHint}}</text>
+        </view>
+
+        <!-- 如果有直接 description 字段 -->
+        <view class="section" wx:if="{{item.description}}">
+          <text class="section-title">📋 内容简介</text>
+          <text class="section-text">{{item.description}}</text>
+        </view>
+
+        <!-- 如果有直接 summary 字段 -->
+        <view class="section" wx:if="{{item.summary}}">
+          <text class="section-title">📝 内容摘要</text>
+          <text class="section-text">{{item.summary}}</text>
+        </view>
+
+        <!-- 如果有 source 字段 -->
+        <view class="section" wx:if="{{item.source}}">
+          <text class="section-title">📖 来源</text>
+          <view class="source-badge-box">
+            <text class="source-badge">📚 {{item.source}}</text>
+          </view>
+        </view>
+
+        <!-- 如果以上都没有，显示通用提示 -->
+        <view class="section empty-tip" wx:if="{{!item.description && !item.summary && !item.source}}">
+          <text class="empty-icon">💡</text>
+          <text class="empty-title">知识库资源</text>
+          <text class="empty-desc">这是一份精选的学习资源，包含丰富的情商知识和实用技巧。建议收藏后在微信中使用微信文件传输助手或电脑端查阅完整内容。</text>
+          <view class="empty-tags" wx:if="{{item.tags.length > 0}}">
+            <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+      </block>
+
       <!-- 分类导读 -->
       <block wx:if="{{item.contentType === 'overview'}}">
         <view class="section">

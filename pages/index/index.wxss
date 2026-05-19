@@ -110,6 +110,76 @@
   white-space: nowrap;
 }
 
+/* 情绪急救箱入口卡片 */
+.emergency-entry {
+  margin: 0 24rpx 24rpx;
+  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 107, 0.3);
+}
+
+.emergency-entry:active {
+  transform: scale(0.98);
+}
+
+.emergency-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.emergency-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.emergency-icon {
+  font-size: 40rpx;
+}
+
+.emergency-info {
+  flex: 1;
+}
+
+.emergency-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4rpx;
+}
+
+.emergency-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.emergency-arrow {
+  font-size: 40rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.emergency-tools {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tool-tag {
+  font-size: 22rpx;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
 /* 通用区块 */
 .section {
   margin: 0 24rpx 24rpx;
@@ -282,4 +352,39 @@
   padding: 40rpx;
   color: #999;
   font-size: 26rpx;
+}
+
+/* 社死模拟器游戏入口卡片 */
+.game-entry {
+  display: flex;
+  align-items: center;
+  margin: 0 24rpx 28rpx;
+  padding: 28rpx 28rpx;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(245, 87, 108, 0.3);
+}
+.game-entry-icon {
+  font-size: 56rpx;
+  margin-right: 24rpx;
+}
+.game-entry-text {
+  flex: 1;
+}
+.game-entry-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+}
+.game-entry-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+  margin-top: 6rpx;
+}
+.game-entry-arrow {
+  color: #fff;
+  font-size: 44rpx;
+  font-weight: bold;
 }

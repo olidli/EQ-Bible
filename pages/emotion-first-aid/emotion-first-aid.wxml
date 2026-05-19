@@ -1,0 +1,159 @@
+<!-- pages/emotion-first-aid/emotion-first-aid.wxml -->
+<view class="container">
+  <!-- 顶部状态指示 -->
+  <view class="step-indicator">
+    <view class="step-dot {{currentStep >= 1 ? 'active' : ''}} {{currentStep > 1 ? 'completed' : ''}}">
+      <text wx:if="{{currentStep > 1}}">✓</text>
+      <text wx:else>1</text>
+    </view>
+    <view class="step-line {{currentStep >= 2 ? 'active' : ''}}"></view>
+    <view class="step-dot {{currentStep >= 2 ? 'active' : ''}} {{currentStep > 2 ? 'completed' : ''}}">
+      <text wx:if="{{currentStep > 2}}">✓</text>
+      <text wx:else>2</text>
+    </view>
+    <view class="step-line {{currentStep >= 3 ? 'active' : ''}}"></view>
+    <view class="step-dot {{currentStep >= 3 ? 'active' : ''}}">3</view>
+  </view>
+
+  <!-- 步骤1: 情绪识别 -->
+  <view class="step-content" wx:if="{{currentStep === 1}}">
+    <view class="step-header">
+      <text class="step-title">🌡️ 现在，你感觉怎么样？</text>
+      <text class="step-subtitle">选择你当前最主要的情绪</text>
+    </view>
+
+    <!-- 情绪选择网格 -->
+    <view class="emotion-grid">
+      <view class="emotion-btn {{selectedEmotion === item.value ? 'selected' : ''}}"
+        wx:for="{{emotions}}" wx:key="value"
+        bindtap="selectEmotion"
+        data-emotion="{{item.label}}"
+        data-value="{{item.value}}"
+        style="--emotion-color: {{item.color}}">
+        <text class="emotion-emoji">{{item.emoji}}</text>
+        <text class="emotion-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 强度选择 -->
+    <view class="intensity-section" wx:if="{{selectedEmotion}}">
+      <view class="intensity-header">
+        <text class="intensity-title">情绪强度</text>
+        <text class="intensity-value">{{intensity}} / 10</text>
+      </view>
+      <slider min="1" max="10" value="{{intensity}}" bindchange="setIntensity"
+        activeColor="#667eea" block-size="24"/>
+      <view class="intensity-labels">
+        <text>轻微</text>
+        <text>强烈</text>
+      </view>
+    </view>
+
+    <!-- 确认按钮 -->
+    <button class="confirm-btn" bindtap="confirmEmotion" wx:if="{{selectedEmotion}}">
+      确认情绪，继续
+    </button>
+  </view>
+
+  <!-- 步骤2: 选择工具 -->
+  <view class="step-content" wx:if="{{currentStep === 2}}">
+    <view class="step-header">
+      <text class="step-title">🧰 选择一个急救工具</text>
+      <text class="step-subtitle">根据当前情绪，选择适合你的方法</text>
+    </view>
+
+    <!-- 引导语显示 -->
+    <view class="guidance-panel" wx:if="{{guidance}}">
+      <view class="guidance-title">{{guidance.title}}</view>
+      <view class="guidance-desc">{{guidance.description}}</view>
+      <view class="guidance-tip">💡 {{guidance.tips}}</view>
+    </view>
+
+    <!-- 工具列表 -->
+    <view class="tool-list">
+      <view class="tool-card {{guidance && guidance.recommended.indexOf(item.id) !== -1 ? 'recommended' : ''}}"
+        wx:for="{{tools}}" wx:key="id"
+        bindtap="openTool" data-tool="{{item.id}}">
+        <view class="tool-icon" style="background: {{item.color}}">
+          <text>{{item.emoji}}</text>
+        </view>
+        <view class="tool-info">
+          <text class="tool-name">{{item.name}}</text>
+          <text class="tool-desc">{{item.desc}}</text>
+          <text class="tool-duration">⏱ {{item.duration}}</text>
+        </view>
+        <view class="recommended-badge" wx:if="{{guidance && guidance.recommended.indexOf(item.id) !== -1}}">推荐</view>
+        <text class="tool-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 应急联系人入口 -->
+    <view class="contacts-entry" bindtap="toggleContacts">
+      <text class="contacts-icon">📞</text>
+      <text class="contacts-text">应急联系人</text>
+      <text class="contacts-arrow">{{showContacts ? '∧' : '∨'}}</text>
+    </view>
+
+    <!-- 应急联系人面板 -->
+    <view class="contacts-panel" wx:if="{{showContacts}}">
+      <emergency-contacts bind:contactChanged="onContactsChanged" />
+    </view>
+
+    <!-- 返回按钮 -->
+    <view class="back-btn" bindtap="goBackToEmotions">
+      <text>‹ 重新选择情绪</text>
+    </view>
+  </view>
+
+  <!-- 步骤3: 使用工具 -->
+  <view class="step-content tool-panel" wx:if="{{currentStep === 3}}">
+    <!-- 呼吸法 -->
+    <breathing-guide
+      wx:if="{{activeTool === 'breathing'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 接地术 -->
+    <grounding-technique
+      wx:if="{{activeTool === 'grounding'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 认知重评 -->
+    <cognitive-reappraisal
+      wx:if="{{activeTool === 'cognitive'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 身体扫描 -->
+    <body-scan
+      wx:if="{{activeTool === 'bodyScan'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 正念冥想 -->
+    <mindfulness
+      wx:if="{{activeTool === 'mindfulness'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 自我慈悲 -->
+    <self-compassion
+      wx:if="{{activeTool === 'selfCompassion'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+
+    <!-- 感官安抚 -->
+    <sensory-calm
+      wx:if="{{activeTool === 'sensory'}}"
+      bind:finished="onToolFinished"
+      bind:exit="closeTool"
+    />
+  </view>
+</view>

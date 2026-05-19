@@ -1,0 +1,56 @@
+<view class="container">
+  <!-- 顶部进度 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progress}}%"></view>
+  </view>
+  <view class="progress-text">{{currentIndex + 1}} / {{totalScenes}}</view>
+
+  <!-- 场景卡片 -->
+  <view class="scene-card" wx:if="{{currentScene}}">
+    <view class="scene-tag">{{currentScene.tags[0]}}</view>
+    <view class="scene-title">{{currentScene.title}}</view>
+    <view class="scene-desc">{{currentScene.description}}</view>
+  </view>
+
+  <!-- 选项区 -->
+  <view class="options-area" wx:if="{{!showFeedback}}">
+    <view
+      class="option-item {{selectedOption === index ? 'selected' : ''}}"
+      wx:for="{{currentScene.options}}"
+      wx:key="index"
+      bindtap="onSelectOption"
+      data-index="{{index}}"
+    >
+      <view class="option-letter">{{['A','B','C'][index]}}</view>
+      <view class="option-text">{{item.text}}</view>
+    </view>
+  </view>
+
+  <!-- 反馈区 -->
+  <view class="feedback-area" wx:if="{{showFeedback}}">
+    <view class="feedback-card {{feedbackLevel}}">
+      <view class="feedback-level-badge">{{feedbackEmoji}} {{feedbackLabel}}</view>
+      <view class="feedback-text">{{feedbackText}}</view>
+    </view>
+
+    <!-- 三个选项对比 -->
+    <view class="all-options">
+      <view
+        class="option-review {{item.level === 'high' ? 'best' : ''}} {{item.level === 'low' ? 'worst' : ''}}"
+        wx:for="{{currentScene.options}}"
+        wx:key="index"
+      >
+        <view class="review-header">
+          <text class="review-letter">{{['A','B','C'][index]}}</text>
+          <text class="review-level-tag {{item.level}}">{{levelLabels[item.level]}}</text>
+          <text wx:if="{{selectedIndex === index}}" class="review-your-pick">你的选择</text>
+        </view>
+        <view class="review-text">{{item.text}}</view>
+      </view>
+    </view>
+
+    <view class="next-btn" bindtap="onNext">
+      {{isLast ? '查看结果 🎯' : '下一题 →'}}
+    </view>
+  </view>
+</view>

@@ -1,0 +1,67 @@
+<view class="container">
+  <!-- 福格·Motivation：挑战式标题，比"测情商"更有驱动力 -->
+  <view class="header">
+    <view class="title-emoji">🧠</view>
+    <view class="title">你能活过几关？</view>
+    <view class="subtitle">90%的人死在第3题</view>
+  </view>
+
+  <!-- 福格·Prompt+Motivation：限时今日挑战，制造紧迫感 -->
+  <view class="daily-challenge" bindtap="onDailyChallenge">
+    <view class="daily-top-row">
+      <view class="daily-badge">🎯 今日挑战</view>
+      <view class="daily-countdown">仅限今日</view>
+    </view>
+    <view class="daily-title">{{dailyScene.title || '快来挑战'}}</view>
+    <view class="daily-info">
+      <text class="daily-streak">🔥 连续{{streak}}天</text>
+      <text class="daily-hint">已{{dailyPlayedCount}}人挑战</text>
+    </view>
+  </view>
+
+  <!-- 场景分类 -->
+  <view class="section-title">选择场景</view>
+
+  <!-- 校园场景 -->
+  <view class="category-card campus" bindtap="onStartGame" data-category="campus">
+    <view class="category-icon">🎓</view>
+    <view class="category-info">
+      <view class="category-name">校园生存篇</view>
+      <view class="category-desc">室友、社团、课堂…你最怕哪个？</view>
+    </view>
+    <view class="category-arrow">›</view>
+  </view>
+
+  <!-- 职场场景 -->
+  <view class="category-card workplace" bindtap="onStartGame" data-category="workplace">
+    <view class="category-icon">💼</view>
+    <view class="category-info">
+      <view class="category-name">职场新人篇</view>
+      <view class="category-desc">领导、同事、饭局…处处是坑</view>
+    </view>
+    <view class="category-arrow">›</view>
+  </view>
+
+  <!-- 我的战绩 -->
+  <view class="section-title">我的战绩</view>
+  <view class="stats-row">
+    <view class="stat-item">
+      <view class="stat-value">{{playedCount}}</view>
+      <view class="stat-label">已挑战</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{avgScore}}</view>
+      <view class="stat-label">平均分</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{bestLevel}}</view>
+      <view class="stat-label">最佳段位</view>
+    </view>
+  </view>
+
+  <!-- 排行榜入口 -->
+  <view class="rank-entry" bindtap="goRank">
+    <text>🏆 好友排行榜</text>
+    <text class="rank-arrow">›</text>
+  </view>
+</view>

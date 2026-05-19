@@ -1,0 +1,15 @@
+{
+  "usingComponents": {
+    "breathing-guide": "./components/breathing-guide/breathing-guide",
+    "grounding-technique": "./components/grounding-technique/grounding-technique",
+    "cognitive-reappraisal": "./components/cognitive-reappraisal/cognitive-reappraisal",
+    "emergency-contacts": "./components/emergency-contacts/emergency-contacts",
+    "body-scan": "./components/body-scan/body-scan",
+    "mindfulness": "./components/mindfulness/mindfulness",
+    "self-compassion": "./components/self-compassion/self-compassion",
+    "sensory-calm": "./components/sensory-calm/sensory-calm"
+  },
+  "navigationBarTitleText": "情绪急救箱",
+  "navigationBarBackgroundColor": "#ff6b6b",
+  "navigationBarTextStyle": "white"
+}

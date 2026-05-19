@@ -282,3 +282,38 @@
   color: #C0C4CC;
   font-size: 28rpx;
 }
+
+/* ===== 加载更多 ===== */
+.load-more {
+  text-align: center;
+  padding: 24rpx 0 40rpx;
+  margin-top: 10rpx;
+}
+
+.load-more-text {
+  display: inline-block;
+  font-size: 28rpx;
+  color: #667eea;
+  font-weight: 600;
+  background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+  padding: 16rpx 60rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid rgba(102,126,234,0.2);
+  transition: all 0.3s ease;
+}
+
+.load-more-text:active {
+  background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
+  transform: scale(0.98);
+}
+
+.no-more {
+  text-align: center;
+  padding: 24rpx 0 40rpx;
+  margin-top: 10rpx;
+}
+
+.no-more-text {
+  font-size: 24rpx;
+  color: #C0C4CC;
+}

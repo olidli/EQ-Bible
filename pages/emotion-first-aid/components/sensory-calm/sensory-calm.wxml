@@ -1,0 +1,69 @@
+<!-- components/sensory-calm/sensory-calm.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onExit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">🌸 感官安抚</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="intro-section">
+    <text class="intro-text">通过感官刺激快速平复情绪。选择一种你现在可以尝试的方法，让感官帮你回到当下。</text>
+  </view>
+
+  <!-- 进行中 -->
+  <view class="method-content" wx:if="{{!isFinished}}">
+    <!-- 方法列表 -->
+    <view class="method-list">
+      <view class="method-card {{item.selected ? 'selected' : ''}}"
+        wx:for="{{methods}}" wx:key="type"
+        bindtap="selectMethod" data-index="{{index}}">
+        <view class="method-emoji">{{item.emoji}}</view>
+        <view class="method-info">
+          <text class="method-type">{{item.type}}</text>
+          <text class="method-instruction">{{item.instruction}}</text>
+          <text class="method-effect">✨ {{item.effect}}</text>
+        </view>
+        <view class="method-check" wx:if="{{item.selected}}">✓</view>
+      </view>
+    </view>
+
+    <!-- 完成按钮 -->
+    <button class="finish-btn {{selectedMethod ? 'ready' : ''}}" bindtap="finishMethod">
+      我试过了，感觉好些了
+    </button>
+  </view>
+
+  <!-- 完成 -->
+  <view class="completed-content" wx:if="{{isFinished}}">
+    <view class="completed-card">
+      <text class="completed-emoji">🌿</text>
+      <text class="completed-title">很好！</text>
+      <text class="completed-desc">
+        你已经尝试了感官安抚方法。\n\n
+        通过调动感官，你可以快速地将注意力从情绪中转移到当下。
+      </text>
+
+      <view class="result-section" wx:if="{{selectedMethod}}">
+        <view class="result-item">
+          <text class="result-label">你尝试的方法</text>
+          <text class="result-value">{{selectedMethod.emoji}} {{selectedMethod.type}}：{{selectedMethod.instruction}}</text>
+        </view>
+      </view>
+
+      <view class="tip-section">
+        <text class="tip-title">💡 小贴士</text>
+        <text class="tip-text">
+          感官安抚是一种快速有效的情绪调节方法。当你感到情绪激动时，冷水、柔软的触感或温和的味道都能帮助你迅速平复。
+        </text>
+      </view>
+
+      <view class="finished-actions">
+        <button class="action-btn secondary" bindtap="restart">再试一次</button>
+        <button class="action-btn primary" bindtap="onExit">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

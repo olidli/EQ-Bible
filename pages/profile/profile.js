@@ -9,12 +9,7 @@ Page({
     favCount: 0,
     diaryCount: 0,
     progress: 0,
-    moduleProgress: [
-      { name: '情绪管理', pct: 0 },
-      { name: '自我认知', pct: 0 },
-      { name: '性格发展', pct: 0 },
-      { name: '心理韧性', pct: 0 },
-    ]
+    moduleProgress: []
   },
 
   onShow() {
@@ -22,7 +17,6 @@ Page({
   },
 
   loadUserData() {
-    // ✅ 优先从 globalData 内存读取（app_optimized.js 已在启动时加载）
     const app = getApp()
     const learnedSet = app.globalData && app.globalData.learnedSet
     const favSet = app.globalData && app.globalData.favSet
@@ -31,19 +25,14 @@ Page({
     const favArr = favSet ? [...favSet] : (wx.getStorageSync('favItems') || [])
     const diaryHistory = wx.getStorageSync('diaryHistory') || []
 
-    const firstDate = wx.getStorageSync('firstUseDate')
-    if (!firstDate) {
+    if (!wx.getStorageSync('firstUseDate')) {
       wx.setStorageSync('firstUseDate', new Date().toISOString())
     }
 
-    // ✅ Bug修复：learnedCount 显示已学篇数（原逻辑错误地赋值为使用天数）
-    const progress = Math.round((learnedArr.length / 356) * 100)
-
-    // ✅ 修复：定义 items 和 learnedIds
+    const progress = Math.round((learnedArr.length / 357) * 100)
     const items = app.globalData.items || []
     const learnedIds = learnedSet || new Set(learnedArr)
 
-    // ✅ 使用统一的 MODULE_TAGS，支持全部 8 个模块（模糊匹配，与 index.js 一致）
     const moduleProgress = Object.entries(MODULE_TAGS).map(([moduleId, tags]) => {
       const moduleItems = items.filter(item =>
         (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
@@ -52,7 +41,12 @@ Page({
       const pct = moduleItems.length > 0
         ? Math.round(learnedModuleItems.length / moduleItems.length * 100)
         : 0
-      return { name: MODULE_NAMES[moduleId] || moduleId, pct, total: moduleItems.length, learned: learnedModuleItems.length }
+      return {
+        name: MODULE_NAMES[moduleId] || moduleId,
+        pct,
+        total: moduleItems.length,
+        learned: learnedModuleItems.length
+      }
     })
 
     this.setData({
@@ -68,7 +62,6 @@ Page({
     const page = e.currentTarget.dataset.page
     switch(page) {
       case 'favorites':
-        // ✅ 跳转搜索页并激活「只看收藏」筛选
         app.globalData.searchFilter = { onlyFav: true }
         wx.navigateTo({ url: '/pages/search/search' })
         break
@@ -92,7 +85,7 @@ Page({
   goAbout() {
     wx.showModal({
       title: '关于EQ情商宝典',
-      content: 'EQ情商宝典 - 356项知识库，涵盖心理学理论、情商专项、实用技能。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
+      content: 'EQ情商宝典 - 357项知识库，涵盖心理学理论、情商专项、实用技能。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
       showCancel: false
     })
   },
@@ -111,8 +104,6 @@ Page({
               })
             }
           })
-          // 用 webview 打开问卷（如果有 web-view 页面）
-          // 也可以直接用剪贴板方式
           wx.setClipboardData({
             data: 'https://wj.qq.com/s2/eq-bible-feedback',
             success() {

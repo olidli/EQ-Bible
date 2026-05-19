@@ -84,6 +84,30 @@
     </view>
   </view>
 
+  <!-- 社死模拟器游戏入口卡片 -->
+  <view class="game-entry" bindtap="goGame">
+    <view class="game-entry-icon">🎮</view>
+    <view class="game-entry-text">
+      <text class="game-entry-title">社死模拟器</text>
+      <text class="game-entry-desc">你能活过几关？90%的人死在第3题</text>
+    </view>
+    <text class="game-entry-arrow">›</text>
+  </view>
+
+  <!-- 情绪急救箱入口卡片 -->
+  <view class="emergency-entry" bindtap="goEmotionFirstAid">
+    <view class="emergency-header">
+      <view class="emergency-icon-wrap">
+        <text class="emergency-icon">🆘</text>
+      </view>
+      <view class="emergency-info">
+        <text class="emergency-title">情绪急救箱</text>
+        <text class="emergency-desc">快速缓解负面情绪</text>
+      </view>
+      <text class="emergency-arrow">›</text>
+    </view>
+  </view>
+
   <!-- 快捷工具（横向滑动胶囊） -->
   <view class="section">
     <view class="section-header">

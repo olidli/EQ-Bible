@@ -1,0 +1,66 @@
+<view class="container">
+  <view class="rank-title">🏆 情商排行榜</view>
+
+  <!-- 前三名 -->
+  <view class="top-three" wx:if="{{topList.length > 0}}">
+    <!-- 第二名 -->
+    <view class="top-item second" wx:if="{{topList.length >= 2}}">
+      <view class="top-avatar-wrap">
+        <image class="top-avatar" src="{{topList[1].avatarUrl || '/images/default-avatar.png'}}" />
+        <view class="top-crown">🥈</view>
+      </view>
+      <view class="top-name">{{topList[1].nickName || '匿名'}}</view>
+      <view class="top-score">{{topList[1].score}}分</view>
+    </view>
+
+    <!-- 第一名 -->
+    <view class="top-item first">
+      <view class="top-avatar-wrap">
+        <image class="top-avatar big" src="{{topList[0].avatarUrl || '/images/default-avatar.png'}}" />
+        <view class="top-crown">🥇</view>
+      </view>
+      <view class="top-name">{{topList[0].nickName || '匿名'}}</view>
+      <view class="top-score">{{topList[0].score}}分</view>
+    </view>
+
+    <!-- 第三名 -->
+    <view class="top-item third" wx:if="{{topList.length >= 3}}">
+      <view class="top-avatar-wrap">
+        <image class="top-avatar" src="{{topList[2].avatarUrl || '/images/default-avatar.png'}}" />
+        <view class="top-crown">🥉</view>
+      </view>
+      <view class="top-name">{{topList[2].nickName || '匿名'}}</view>
+      <view class="top-score">{{topList[2].score}}分</view>
+    </view>
+  </view>
+
+  <!-- 完整列表 -->
+  <view class="rank-list">
+    <view class="rank-item" wx:for="{{rankList}}" wx:key="_id" wx:if="{{index >= 3}}">
+      <view class="rank-num">{{index + 1}}</view>
+      <image class="rank-avatar" src="{{item.avatarUrl || '/images/default-avatar.png'}}" />
+      <view class="rank-info">
+        <view class="rank-name">{{item.nickName || '匿名'}}</view>
+        <view class="rank-level">{{item.levelName || ''}}</view>
+      </view>
+      <view class="rank-score">{{item.score}}分</view>
+    </view>
+  </view>
+
+  <!-- 我的排名 -->
+  <view class="my-rank" wx:if="{{myRank}}">
+    <view class="my-rank-num">第{{myRank}}名</view>
+    <view class="my-rank-info">
+      <text class="my-rank-name">我</text>
+      <text class="my-rank-level">{{myLevelName}}</text>
+    </view>
+    <view class="my-rank-score">{{myScore}}分</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{rankList.length === 0}}">
+    <view class="empty-emoji">🎮</view>
+    <view class="empty-text">还没有人上榜</view>
+    <view class="empty-btn" bindtap="goPlay">去挑战</view>
+  </view>
+</view>

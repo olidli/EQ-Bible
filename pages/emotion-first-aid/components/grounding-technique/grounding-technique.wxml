@@ -1,0 +1,92 @@
+<!-- components/grounding-technique/grounding-technique.wxml -->
+<view class="grounding-container">
+  <!-- 顶部操作栏 -->
+  <view class="grounding-header">
+    <view class="header-left" bindtap="exit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">🎯 5-4-3-2-1 接地术</text>
+    <view class="header-right"></view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="intro-section">
+    <text class="intro-text">
+      这个练习通过引导你关注周围的感官体验，帮助你从焦虑的想法中脱离，回到当下。
+    </text>
+  </view>
+
+  <!-- 步骤进度 -->
+  <view class="step-progress">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentStep / 5) * 100}}%"></view>
+    </view>
+    <text class="progress-text">步骤 {{currentStep + 1}} / 5</text>
+  </view>
+
+  <!-- 进行中状态 -->
+  <view class="step-content" wx:if="{{!isFinished}}">
+    <!-- 步骤指示器 -->
+    <view class="step-indicators">
+      <view class="step-dot {{0 <= currentStep ? 'active' : ''}}">5</view>
+      <view class="step-dot {{1 <= currentStep ? 'active' : ''}}">4</view>
+      <view class="step-dot {{2 <= currentStep ? 'active' : ''}}">3</view>
+      <view class="step-dot {{3 <= currentStep ? 'active' : ''}}">2</view>
+      <view class="step-dot {{4 <= currentStep ? 'active' : ''}}">1</view>
+    </view>
+
+    <!-- 当前步骤 -->
+    <view class="current-step-card">
+      <view class="step-emoji">{{steps[currentStep].emoji}}</view>
+      <text class="step-number">{{steps[currentStep].number}}</text>
+      <text class="step-sense">{{steps[currentStep].sense}}</text>
+      <text class="step-prompt">{{steps[currentStep].prompt}}</text>
+      
+      <textarea 
+        class="step-input"
+        placeholder="{{steps[currentStep].placeholder}}"
+        value="{{userInputs[currentStep]}}"
+        bindinput="onInputChange"
+        maxlength="100"
+        auto-height
+      />
+      
+      <view class="input-hint" wx:if="{{!userInputs[currentStep]}}">
+        <text>请输入内容后点击下一步</text>
+      </view>
+    </view>
+
+    <!-- 下一步按钮 -->
+    <button class="next-btn {{userInputs[currentStep] ? 'ready' : ''}}" bindtap="nextStep">
+      {{currentStep < 4 ? '下一步 ›' : '完成练习'}}
+    </button>
+  </view>
+
+  <!-- 完成状态 -->
+  <view class="finished-content" wx:if="{{isFinished}}">
+    <view class="finished-card">
+      <text class="finished-emoji">🌟</text>
+      <text class="finished-title">太棒了！</text>
+      <text class="finished-desc">
+        你完成了5-4-3-2-1接地术练习。\n\n
+        现在感觉如何？\n
+        你的双脚是否更稳地踏在地上？
+      </text>
+      
+      <!-- 回顾输入 -->
+      <view class="review-section">
+        <text class="review-title">📝 你的记录</text>
+        <view class="review-item" wx:for="{{steps}}" wx:key="index">
+          <text class="review-label">{{item.emoji}} {{item.sense}}</text>
+          <text class="review-value">{{userInputs[index]}}</text>
+        </view>
+      </view>
+
+      <view class="finished-actions">
+        <button class="action-btn secondary" bindtap="restart">再练一次</button>
+        <button class="action-btn primary" bindtap="exit">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

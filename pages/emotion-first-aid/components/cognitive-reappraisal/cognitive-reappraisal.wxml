@@ -1,0 +1,98 @@
+<!-- components/cognitive-reappraisal/cognitive-reappraisal.wxml -->
+<view class="cognitive-container">
+  <!-- 顶部操作栏 -->
+  <view class="cognitive-header">
+    <view class="header-left" bindtap="exit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">💭 认知重评</text>
+    <view class="header-right"></view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="intro-section">
+    <text class="intro-text">
+      认知重评是一种通过改变思维方式来调节情绪的方法。它不是否认你的感受，而是帮助你用更平衡的视角看待问题。
+    </text>
+  </view>
+
+  <!-- 进度 -->
+  <view class="step-progress" wx:if="{{!isFinished}}">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentQuestionIdx / 4) * 100}}%"></view>
+    </view>
+    <text class="progress-text">问题 {{currentQuestionIdx + 1}} / 4</text>
+  </view>
+
+  <!-- 问答进行中 -->
+  <view class="question-content" wx:if="{{!isFinished}}">
+    <!-- 问题卡片 -->
+    <view class="question-card">
+      <view class="question-emoji">{{questions[currentQuestionIdx].emoji}}</view>
+      <text class="question-text">{{questions[currentQuestionIdx].question}}</text>
+      
+      <textarea 
+        class="answer-input"
+        placeholder="{{questions[currentQuestionIdx].placeholder}}"
+        value="{{answers[questions[currentQuestionIdx].key]}}"
+        bindinput="onInputChange"
+        maxlength="200"
+        auto-height
+      />
+    </view>
+
+    <!-- 已有回答预览 -->
+    <view class="answers-preview" wx:if="{{currentQuestionIdx > 0}}">
+      <text class="preview-title">📝 已回答</text>
+      <view class="preview-item" wx:for="{{questions}}" wx:key="key" wx:if="{{index < currentQuestionIdx}}">
+        <text class="preview-q">{{item.question}}</text>
+        <text class="preview-a">{{answers[item.key]}}</text>
+      </view>
+    </view>
+
+    <!-- 下一步按钮 -->
+    <button class="next-btn {{answers[questions[currentQuestionIdx].key] ? 'ready' : ''}}" bindtap="nextStep">
+      {{currentQuestionIdx < 3 ? '下一步 ›' : '完成重评'}}
+    </button>
+  </view>
+
+  <!-- 完成状态 -->
+  <view class="finished-content" wx:if="{{isFinished}}">
+    <view class="finished-card">
+      <text class="finished-emoji">🌟</text>
+      <text class="finished-title">重评完成</text>
+      <text class="finished-desc">
+        你已经完成了认知重评练习。\n\n
+        通过重新审视你的想法，你是否有了新的认识？
+      </text>
+      
+      <!-- 重评结果 -->
+      <view class="result-section">
+        <text class="result-title">📝 你的认知重评</text>
+        
+        <view class="result-item original">
+          <text class="result-label">💭 原始想法</text>
+          <text class="result-value">{{answers.negative}}</text>
+        </view>
+        
+        <view class="result-item balanced">
+          <text class="result-label">⚖️ 平衡想法</text>
+          <text class="result-value">{{answers.balanced}}</text>
+        </view>
+      </view>
+
+      <view class="tip-section">
+        <text class="tip-title">💡 小贴士</text>
+        <text class="tip-text">
+          认知重评是一项技能，练习越多越熟练。当下次遇到类似情况时，试着提醒自己：这个想法是唯一的解释吗？
+        </text>
+      </view>
+
+      <view class="finished-actions">
+        <button class="action-btn secondary" bindtap="restart">再练一次</button>
+        <button class="action-btn primary" bindtap="exit">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

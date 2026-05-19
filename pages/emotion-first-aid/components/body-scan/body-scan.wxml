@@ -1,0 +1,51 @@
+<!-- components/body-scan/body-scan.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onExit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">🔍 身体扫描</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="intro-section">
+    <text class="intro-text">从头顶到脚尖，逐一放松身体每个部位。先收紧，再放松，感受紧张与放松之间的对比。</text>
+  </view>
+
+  <!-- 进度 -->
+  <view class="progress" wx:if="{{isActive && !completed}}">
+    <progress percent="{{(currentStep / totalSteps) * 100}}" stroke-width="8" activeColor="#a29bfe" backgroundColor="#eee" />
+    <text class="progress-text">步骤 {{currentStep + 1}} / {{totalSteps}}</text>
+  </view>
+
+  <!-- 开始前 -->
+  <view class="start-card" wx:if="{{!isActive && !completed}}">
+    <text class="start-emoji">🔍</text>
+    <text class="start-title">准备好了吗？</text>
+    <text class="start-desc">找一个舒适的姿势，我们将从头部到脚部逐一扫描放松</text>
+    <button class="start-btn" bindtap="startScan">开始扫描</button>
+  </view>
+
+  <!-- 进行中 -->
+  <view class="instruction-card" wx:if="{{isActive && !completed}}">
+    <view class="part">{{currentPart}}</view>
+    <view class="instruction">{{currentInstruction}}</view>
+    <view class="timer">{{remaining}}秒</view>
+  </view>
+
+  <!-- 完成 -->
+  <view class="completed-card" wx:if="{{completed}}">
+    <text class="completed-emoji">✨</text>
+    <text class="completed-title">身体扫描完成</text>
+    <text class="completed-desc">你的身体现在感觉如何？花一点时间感受放松后的变化。</text>
+    <view class="tip-section">
+      <text class="tip-title">💡 小贴士</text>
+      <text class="tip-text">每天练习身体扫描，可以帮助你更好地觉察身体的紧张信号，及时放松。</text>
+    </view>
+    <view class="finished-actions">
+      <button class="action-btn secondary" bindtap="restart">再练一次</button>
+      <button class="action-btn primary" bindtap="onFinish">完成</button>
+    </view>
+  </view>
+</view>

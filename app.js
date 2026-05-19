@@ -1,181 +1,136 @@
-// app.js - 搜索修复版
-// 改动：
-//   1. search() 还原为线性过滤（原版已知可用），加上倒排索引备选逻辑
-//   2. 启动时打印日志，方便排查数据加载状态
-//   3. 保留 learnedSet/favSet 内存缓存、错误监控等其他优化
+// app.js - 情商宝典小程序核心逻辑
 
-// ============ 知识库加载 ============
-let items = []
+var items = []
 
-const loadKnowledge = () => {
-  // 只加载 knowledge.js（knowledge_structured.js 已删除）
+// 加载知识库
+function loadKnowledge() {
+  // 优先结构化知识库
   try {
-    const knowledge = require('./data/knowledge')
-    let arr = null
-    if (knowledge && knowledge.K && knowledge.K.length > 0) {
-      arr = knowledge.K
-    } else if (Array.isArray(knowledge) && knowledge.length > 0) {
-      arr = knowledge
-    }
+    var s = require('./data/knowledge_structured.js')
+    var arr = null
+    if (s && s.K && s.K.length > 0) arr = s.K
+    else if (Array.isArray(s) && s.length > 0) arr = s
     if (arr) {
       items = arr
-      console.log('[app] ✅ Loaded knowledge.js:', items.length, 'items')
+      console.log('[app] Loaded knowledge_structured:', items.length)
       return
     }
   } catch (e) {
-    console.error('[app] ❌ knowledge.js load failed:', e.message || e)
+    console.log('[app] knowledge_structured load failed:', e.message || e)
   }
-
-  console.warn('[app] ⚠️ No knowledge data loaded — items array is empty')
+  // 降级到普通知识库
+  try {
+    var s = require('./data/knowledge.js')
+    var arr = null
+    if (s && s.K && s.K.length > 0) arr = s.K
+    else if (Array.isArray(s) && s.length > 0) arr = s
+    if (arr) {
+      items = arr
+      console.log('[app] Loaded knowledge.js:', items.length)
+    }
+  } catch (e) {
+    console.log('[app] knowledge.js failed:', e.message || e)
+  }
 }
 
 loadKnowledge()
 
-// ============ 倒排索引（供 searchByTags 等使用） ============
-let _searchIndex = new Map()
-
-const buildSearchIndex = (items) => {
-  if (!items || items.length === 0) return new Map()
-  const index = new Map()
-  items.forEach(item => {
-    const titleChars = (item.t || '').split('')
-    const titleFull = (item.t || '').toLowerCase()
-    const tags = (item.tg || []).map(t => t.toLowerCase())
-    const words = [...new Set([titleFull, ...tags])]
-    // 按单字符索引（支持任意字匹配）
-    ;[...new Set(titleChars)].forEach(ch => {
-      if (!ch.trim()) return
-      if (!index.has(ch)) index.set(ch, [])
-      const arr = index.get(ch)
-      if (!arr.includes(item)) arr.push(item)
-    })
-    // 全标题（支持整词匹配）
-    if (titleFull && !index.has(titleFull)) {
-      index.set(titleFull, [item])
-    } else if (titleFull && index.has(titleFull) && !index.get(titleFull).includes(item)) {
-      index.get(titleFull).push(item)
-    }
-    // 标签
-    tags.forEach(tag => {
-      if (!tag.trim()) return
-      if (!index.has(tag)) index.set(tag, [])
-      const arr = index.get(tag)
-      if (!arr.includes(item)) arr.push(item)
-    })
-  })
-  return index
-}
-
-// ============ App 主体 ============
 App({
-  onLaunch() {
-    // 初始化云开发环境
-    if (!wx.cloud) {
-      console.error('[app] ❌ 请使用 2.2.3 或以上的基础库')
-    } else {
-      wx.cloud.init({
-        env: 'cloud1-d2gg6a0fq4e6bba8f', // 你的云开发环境 ID
-        traceUser: true,
-      })
-      console.log('[app] ✅ Cloud init success, env:', 'cloud1-d2gg6a0fq4e6bba8f')
-    }
+  globalData: {
+    items: items,
+    totalItems: items.length,
+    learnedSet: null,
+    favSet: null
+  },
 
-    // 全局错误监控
-    wx.onError && wx.onError(errMsg => {
-      console.error('[GlobalError]', errMsg)
-    })
-    wx.onUnhandledRejection && wx.onUnhandledRejection(({ reason }) => {
-      console.error('[UnhandledPromise]', reason)
-    })
-
-    // 构建搜索索引
-    _searchIndex = buildSearchIndex(items)
-    console.log('[app] Index built, size:', _searchIndex.size, 'keys')
-
-    // 从 Storage 读取用户状态到内存
-    const learnedArr = wx.getStorageSync('learnedItems') || []
-    const favArr = wx.getStorageSync('favItems') || []
-
-    this.globalData = {
-      items,
-      _searchIndex,
-      totalItems: items.length,
-      categoryFilter: null,
-      toolFilter: null,
-      learnedSet: new Set(learnedArr),
-      favSet: new Set(favArr),
-    }
-
+  onLaunch: function() {
+    var la = wx.getStorageSync('learnedItems') || []
+    var fa = wx.getStorageSync('favItems') || []
+    this.globalData.learnedSet = new Set(la)
+    this.globalData.favSet = new Set(fa)
     if (!wx.getStorageSync('firstUseDate')) {
       wx.setStorageSync('firstUseDate', new Date().toISOString())
     }
-
-    console.log('[app] ✅ Init complete. globalData.items:', this.globalData.items.length)
+    console.log('[app] Init, items:', items.length)
   },
 
-  /**
-   * 关键字搜索 — 线性过滤（最可靠）
-   * 对 356 条数据毫秒级完成，无需索引优化
-   */
-  search(keyword, limit = 50) {
-    if (!keyword) return []
-    const kw = keyword.toLowerCase().trim()
+  // 搜索
+  search: function(kw, limit) {
+    limit = limit || 50
     if (!kw) return []
-
-    const results = this.globalData.items.filter(item => {
-      // 匹配标题（包含即命中）
-      if (item.t && item.t.toLowerCase().includes(kw)) return true
-      // 匹配标签（包含即命中）
-      if (item.tg && item.tg.some(tag => tag.toLowerCase().includes(kw))) return true
+    kw = kw.toLowerCase().trim()
+    var self = this
+    var r = this.globalData.items.filter(function(item) {
+      var t = item.t || ''
+      var tg = item.tg || []
+      if (t.toLowerCase().indexOf(kw) !== -1) return true
+      for (var i = 0; i < tg.length; i++) {
+        if (tg[i].toLowerCase().indexOf(kw) !== -1) return true
+      }
       return false
     })
-
-    console.log('[app] search("' + kw + '") =>', results.length, 'results (total:', this.globalData.items.length, ')')
-    return results.slice(0, limit)
+    return r.slice(0, limit)
   },
 
-  /**
-   * 按标签搜索（倒排索引加速）
-   */
-  searchByTags(tags, limit = 20) {
-    return this.globalData.items.filter(item =>
-      (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
-    ).slice(0, limit)
+  // 按标签搜索
+  searchByTags: function(tags, limit) {
+    limit = limit || 20
+    var self = this
+    return this.globalData.items.filter(function(item) {
+      var tg = item.tg || []
+      for (var i = 0; i < tg.length; i++) {
+        for (var j = 0; j < tags.length; j++) {
+          if (tg[i].indexOf(tags[j]) !== -1 || tags[j].indexOf(tg[i]) !== -1) return true
+        }
+      }
+      return false
+    }).slice(0, limit)
   },
 
-  getById(id) {
-    return this.globalData.items.find(item => item.id === String(id))
+  getById: function(id) {
+    var self = this
+    return this.globalData.items.find(function(item) {
+      return item.id === String(id)
+    })
   },
 
-  getRandom(count = 5) {
-    const arr = [...this.globalData.items]
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  getRandom: function(n) {
+    n = n || 5
+    var arr = [].concat(this.globalData.items)
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1))
+      var tmp = arr[i]
+      arr[i] = arr[j]
+      arr[j] = tmp
     }
-    return arr.slice(0, count)
+    return arr.slice(0, n)
   },
 
-  // ============ 用户状态（内存 + 异步持久化） ============
-  toggleLearned(id) {
-    const set = this.globalData.learnedSet
-    set.has(id) ? set.delete(id) : set.add(id)
-    wx.setStorage({ key: 'learnedItems', data: [...set] })
+  toggleLearned: function(id) {
+    var set = this.globalData.learnedSet
+    if (set.has(id)) set.delete(id)
+    else set.add(id)
+    var a = []
+    set.forEach(function(v) { a.push(v) })
+    wx.setStorage({ key: 'learnedItems', data: a })
     return set.has(id)
   },
 
-  toggleFav(id) {
-    const set = this.globalData.favSet
-    set.has(id) ? set.delete(id) : set.add(id)
-    wx.setStorage({ key: 'favItems', data: [...set] })
+  toggleFav: function(id) {
+    var set = this.globalData.favSet
+    if (set.has(id)) set.delete(id)
+    else set.add(id)
+    var a = []
+    set.forEach(function(v) { a.push(v) })
+    wx.setStorage({ key: 'favItems', data: a })
     return set.has(id)
   },
 
-  isLearned(id) {
-    return this.globalData.learnedSet.has(id)
+  isLearned: function(id) {
+    return this.globalData.learnedSet && this.globalData.learnedSet.has(id)
   },
 
-  isFav(id) {
-    return this.globalData.favSet.has(id)
-  },
+  isFav: function(id) {
+    return this.globalData.favSet && this.globalData.favSet.has(id)
+  }
 })

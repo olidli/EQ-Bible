@@ -1,0 +1,91 @@
+<!-- components/breathing-guide/breathing-guide.wxml -->
+<view class="breathing-container">
+  <!-- 顶部操作栏 -->
+  <view class="breathing-header">
+    <view class="header-left" bindtap="exit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">🫁 4-7-8 呼吸法</text>
+    <view class="header-right"></view>
+  </view>
+
+  <!-- 准备状态 -->
+  <view class="breathing-content" wx:if="{{phase === 'ready'}}">
+    <view class="ready-section">
+      <text class="ready-emoji">🧘</text>
+      <text class="ready-title">放松，准备开始</text>
+      <text class="ready-desc">
+        4-7-8呼吸法是一种简单有效的放松技巧：\n
+        • 吸气4秒\n
+        • 屏气7秒\n
+        • 呼气8秒\n\n
+        共3个循环，约1分钟
+      </text>
+      <button class="start-btn" bindtap="startBreathing">开始练习</button>
+    </view>
+  </view>
+
+  <!-- 呼吸进行中 -->
+  <view class="breathing-content active" wx:if="{{phase === 'inhale' || phase === 'hold' || phase === 'exhale'}}">
+    <!-- 循环进度 -->
+    <view class="cycle-progress">
+      <text class="cycle-text">第 {{cycleCount}} / {{totalCycles}} 循环</text>
+      <view class="cycle-dots">
+        <view class="cycle-dot {{0 < cycleCount ? 'completed' : ''}}"></view>
+        <view class="cycle-dot {{1 < cycleCount ? 'completed' : ''}}"></view>
+        <view class="cycle-dot {{2 < cycleCount ? 'completed' : ''}}"></view>
+      </view>
+    </view>
+
+    <!-- 呼吸动画圆 -->
+    <view class="breathing-circle-wrapper">
+      <view class="breathing-circle {{phase}}">
+        <view class="circle-inner">
+          <text class="phase-emoji">
+            {{phase === 'inhale' ? '🌬️' : phase === 'hold' ? '⏸️' : '💨'}}
+          </text>
+          <text class="phase-label">{{phases[phaseIndex].label}}</text>
+          <text class="countdown-num">{{countdown}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 指导语 -->
+    <view class="instruction-section">
+      <text class="instruction-text">{{phases[phaseIndex].instruction}}</text>
+    </view>
+
+    <!-- 阶段指示 -->
+    <view class="phase-indicator">
+      <view class="phase-item {{phaseIndex >= 0 ? 'active' : ''}}">
+        <text>吸气 4秒</text>
+      </view>
+      <view class="phase-item {{phaseIndex >= 1 ? 'active' : ''}}">
+        <text>屏气 7秒</text>
+      </view>
+      <view class="phase-item {{phaseIndex >= 2 ? 'active' : ''}}">
+        <text>呼气 8秒</text>
+      </view>
+    </view>
+
+    <!-- 停止按钮 -->
+    <button class="stop-btn" bindtap="exit">提前结束</button>
+  </view>
+
+  <!-- 完成状态 -->
+  <view class="breathing-content finished" wx:if="{{phase === 'finished'}}">
+    <view class="finished-section">
+      <text class="finished-emoji">🎉</text>
+      <text class="finished-title">太棒了！</text>
+      <text class="finished-desc">
+        你完成了 {{totalCycles}} 个循环的4-7-8呼吸练习。\n\n
+        感受一下，现在是否比开始时更平静一些？
+      </text>
+      <view class="finished-actions">
+        <button class="action-btn secondary" bindtap="restart">再练一次</button>
+        <button class="action-btn primary" bindtap="exit">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

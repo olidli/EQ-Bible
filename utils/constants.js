@@ -1,4 +1,4 @@
-// utils/constants.js - 公共常量（原先 4 个文件各自定义，现统一到此）
+// utils/constants.js - 公共常量（新增情绪急救箱相关常量）
 // 使用方式：const { getTypeInfo, MODULE_TAGS, MODULE_NAMES } = require('../../utils/constants')
 
 // ========== 内容类型标签 ==========
@@ -55,14 +55,14 @@ const MODULE_NAMES = {
 }
 
 const MODULE_TAGS = {
-  self_aware:    ['自我认知', '自我觉察', '自我理解', '自我效能', '性格密码', '内向者'],
-  emotion:       ['情绪管理', '情绪调节', '情绪识别', '焦虑', '正念', '情绪边界', '情绪劳动'],
-  communication: ['沟通技巧', '非暴力沟通', '倾听', '赞美', '批评', '冲突', '话术', '梅拉宾'],
-  relation:      ['人际关系', '亲密关系', '社交商', '课题分离', '依恋', '人际边界', '故事'],
-  workplace:     ['职场情商', '领导情商', '向上管理', '恢复力', '团队协作'],
-  psychology:    ['心理学常识', '认知偏差', '共情', '心流', '人格障碍', '行为模型'],
-  growth:        ['个人成长', '拖延', '习惯', '决策', '自我接纳', '成长型思维'],
-  parenting:     ['亲子教育', '儿童情商', '积极教养', '家长情绪'],
+  self_aware:    ['自我发展', '自我实现', '自我认知', '自我'],
+  emotion:       ['情商'],
+  communication: ['人际沟通', '社交技巧', '表达技巧', '沟通技能'],
+  relation:      ['社交能力', '社交'],
+  workplace:     ['职场发展', '职业成长', '领导情商'],
+  psychology:    ['心理学'],
+  growth:        ['个人成长'],
+  parenting:     [],
 }
 
 // ========== 模块元数据（emoji + 描述，供 category 页面使用）==========
@@ -153,7 +153,6 @@ const STRESS_QUESTIONS = [
 ]
 
 // ========== 性格测试题目（9题，3维度 × 3题）==========
-// 维度分组：q1/q4/q7=E/I外向内向 | q2/q5/q8=S/N分析直觉 | q3/q6/q9=T/F理性感性
 const CHARACTER_QUESTIONS = [
   { id: 'q1', q: '在社交场合，你通常…', options: ['主动认识新朋友', '视情况而定', '等待别人来认识我'] },
   { id: 'q2', q: '你更关注…', options: ['实际经验和细节', '未来可能性和大局', '当下的感受'] },
@@ -191,6 +190,175 @@ const SEARCH_TAG_COLORS = [
   { bg: 'rgba(255,154,68,0.12)',  color: '#d4711a', border: 'rgba(255,154,68,0.2)' },
 ]
 
+// ========== 情绪急救箱 - 核心情绪列表 ==========
+const FIRST_AID_EMOTIONS = [
+  { label: '焦虑', emoji: '😰', value: 'anxiety', color: '#ff9f43' },
+  { label: '愤怒', emoji: '😠', value: 'anger', color: '#ee5a24' },
+  { label: '悲伤', emoji: '😢', value: 'sadness', color: '#54a0ff' },
+  { label: '恐惧', emoji: '😨', value: 'fear', color: '#9c88ff' },
+  { label: '羞愧', emoji: '😳', value: 'shame', color: '#ff6b6b' },
+  { label: '内疚', emoji: '😔', value: 'guilt', color: '#786fa6' },
+]
+
+// ========== 情绪急救箱 - 情绪引导语映射 ==========
+const FIRST_AID_GUIDANCE = {
+  anxiety: {
+    title: '🌊 焦虑来袭时，先让身体安静下来',
+    description: '试试先用呼吸把紧绷的身体松开，然后我们一起做接地练习',
+    recommended: ['breathing', 'grounding'],
+    tips: '焦虑常常让我们感到未来失控，通过呼吸和接地，可以把你带回当下'
+  },
+  anger: {
+    title: '💢 愤怒是一种能量，让它流动起来',
+    description: '先让身体冷静下来，然后把注意力转向内在感受',
+    recommended: ['grounding', 'bodyScan'],
+    tips: '愤怒背后往往藏着未被满足的需求'
+  },
+  sadness: {
+    title: '🌧️ 悲伤是可以的，允许自己感受',
+    description: '让自己慢慢平静下来，然后试着换个角度看看',
+    recommended: ['breathing', 'selfCompassion'],
+    tips: '悲伤是疗愈的信号，不要压抑它'
+  },
+  fear: {
+    title: '⚡ 恐惧是大脑在保护你',
+    description: '先做几个深呼吸，让身体放松，恐惧就没那么可怕了',
+    recommended: ['breathing', 'grounding'],
+    tips: '面对恐惧，最好的方式是靠近它而不是逃避'
+  },
+  shame: {
+    title: '💜 羞愧是成长的信号',
+    description: '试着理解自己的感受，然后用更温柔的方式对待自己',
+    recommended: ['selfCompassion', 'cognitive'],
+    tips: '羞愧是人性的一部分，每个人都会经历'
+  },
+  guilt: {
+    title: '🔄 内疚告诉你什么对你重要',
+    description: '承认自己的感受，然后想想如何弥补或成长',
+    recommended: ['selfCompassion', 'cognitive'],
+    tips: '从内疚中学习，而不是被它困住'
+  }
+}
+
+// ========== 情绪急救箱 - 工具元数据 ==========
+const FIRST_AID_TOOLS = {
+  breathing: {
+    id: 'breathing',
+    name: '4-7-8 呼吸法',
+    emoji: '🫁',
+    desc: '通过特定的呼吸节奏快速平复情绪',
+    duration: '1分钟',
+    color: '#667eea',
+    steps: [
+      { phase: 'inhale', duration: 4, instruction: '用鼻子缓慢吸气' },
+      { phase: 'hold', duration: 7, instruction: '屏住呼吸' },
+      { phase: 'exhale', duration: 8, instruction: '用嘴巴缓慢呼气' },
+    ]
+  },
+  grounding: {
+    id: 'grounding',
+    name: '5-4-3-2-1 接地术',
+    emoji: '🎯',
+    desc: '通过感官聚焦带你回到当下',
+    duration: '2-3分钟',
+    color: '#f093fb',
+    steps: [
+      { number: 5, sense: '看到', prompt: '说出你能看到的5样东西', placeholder: '例如：桌子、树木、杯子...' },
+      { number: 4, sense: '触摸', prompt: '说出你能触摸到的4样东西', placeholder: '例如：衣服的质感、桌面的温度...' },
+      { number: 3, sense: '听到', prompt: '说出你能听到的3样声音', placeholder: '例如：鸟叫声、车流声、空调声...' },
+      { number: 2, sense: '闻到', prompt: '说出你能闻到的2样气味', placeholder: '例如：咖啡香、花香...' },
+      { number: 1, sense: '尝到', prompt: '说出你能尝到的1样味道', placeholder: '例如：薄荷糖的清凉...' },
+    ]
+  },
+  cognitive: {
+    id: 'cognitive',
+    name: '认知重评',
+    emoji: '💭',
+    desc: '换个角度看问题，调节负面情绪',
+    duration: '2-3分钟',
+    color: '#4ecdc4',
+    questions: [
+      { key: 'negative', question: '你现在在想什么？', placeholder: '描述你当前的负面想法...' },
+      { key: 'evidence', question: '支持这个想法的证据是什么？', placeholder: '写下支持这个想法的事实...' },
+      { key: 'alternative', question: '有其他可能的解释吗？', placeholder: '还有哪些可能的解释？' },
+      { key: 'balanced', question: '现在，更平衡的想法是什么？', placeholder: '综合以上，你的感受是什么？' },
+    ]
+  },
+  bodyScan: {
+    id: 'bodyScan',
+    name: '身体扫描',
+    emoji: '🔍',
+    desc: '渐进式肌肉放松，从头到脚释放紧张',
+    duration: '3-5分钟',
+    color: '#a29bfe',
+    steps: [
+      { part: '头部', instruction: '皱紧眉头，然后放松，感受额头的舒展', duration: 20 },
+      { part: '眼部', instruction: '紧闭双眼，然后轻轻睁开', duration: 15 },
+      { part: '下颌', instruction: '咬紧牙关，然后让下巴自然下垂', duration: 20 },
+      { part: '颈部', instruction: '耸肩贴近耳朵，然后完全放下', duration: 20 },
+      { part: '肩膀', instruction: '双肩向后绕圈，然后完全放松', duration: 20 },
+      { part: '手臂', instruction: '握紧拳头，然后五指张开，彻底放松', duration: 20 },
+      { part: '胸部', instruction: '深吸一口气，保持，然后缓慢呼出', duration: 30 },
+      { part: '腹部', instruction: '收紧腹部，然后完全放松', duration: 20 },
+      { part: '腿部', instruction: '双腿用力，然后让它们完全放松', duration: 30 },
+      { part: '脚部', instruction: '脚趾蜷缩，然后完全伸展放松', duration: 20 },
+    ]
+  },
+  mindfulness: {
+    id: 'mindfulness',
+    name: '正念冥想',
+    emoji: '🧘',
+    desc: '专注呼吸，回到当下',
+    duration: '2-3分钟',
+    color: '#74b9ff',
+    steps: [
+      { instruction: '找一个舒适的姿势，背部挺直但放松', duration: 10 },
+      { instruction: '轻轻闭上眼睛（或垂视前方）', duration: 5 },
+      { instruction: '将注意力放在呼吸上', duration: 5 },
+      { instruction: '吸气...（感受空气进入身体）', duration: 15 },
+      { instruction: '呼气...（让所有紧张离开）', duration: 15 },
+      { instruction: '继续呼吸，吸气...呼气...', duration: 60 },
+      { instruction: '如果走神了，温柔地把注意力带回呼吸', duration: 30 },
+      { instruction: '现在，慢慢睁开眼睛', duration: 5 },
+    ]
+  },
+  selfCompassion: {
+    id: 'selfCompassion',
+    name: '自我慈悲',
+    emoji: '💗',
+    desc: '用温柔的方式对待自己',
+    duration: '2-3分钟',
+    color: '#fd79a8',
+    prompts: [
+      { key: 'feel', prompt: '你现在正在经历什么？', placeholder: '描述你的感受...' },
+      { key: 'common', prompt: '很多人都会经历类似的感受', placeholder: '这很正常...' },
+      { key: 'kind', prompt: '对自己说一句话', placeholder: '我希望自己知道...' },
+    ]
+  },
+  sensory: {
+    id: 'sensory',
+    name: '感官安抚',
+    emoji: '🌸',
+    desc: '用感官刺激快速平复情绪',
+    duration: '1-2分钟',
+    color: '#55efc4',
+    methods: [
+      { type: '温度', instruction: '用冷水洗脸或握一个冰块', effect: '快速激活副交感神经' },
+      { type: '触感', instruction: '握住一个毛绒玩具或柔软的物品', effect: '提供安全感' },
+      { type: '视觉', instruction: '看一张让你感到平静的图片', effect: '转移注意力' },
+      { type: '味觉', instruction: '慢慢品尝一颗糖果或喝一口温水', effect: '用味觉锚定当下' },
+    ]
+  }
+}
+
+// ========== 情绪急救箱 - 分享配置 ==========
+const FIRST_AID_SHARE = {
+  title: '情绪急救箱 | EQ情商宝典',
+  desc: '快速缓解负面情绪，4-7-8呼吸法、接地术、认知重评',
+  path: '/pages/emotion-first-aid/emotion-first-aid',
+  timelineTitle: '快速缓解负面情绪，试试这个情绪急救箱！'
+}
+
 module.exports = {
   TYPE_LABELS, TYPE_COLORS, getTypeInfo,
   MODULE_NAMES, MODULE_TAGS, MODULE_META, MODULE_TOOLS,
@@ -199,4 +367,9 @@ module.exports = {
   REGULATION_STRATEGIES, REFLECTION_QUESTIONS,
   STRESS_QUESTIONS, CHARACTER_QUESTIONS, CHARACTER_TYPES,
   SEARCH_HOT_TAGS, SEARCH_TAG_COLORS,
+  // 新增：情绪急救箱常量
+  FIRST_AID_EMOTIONS,
+  FIRST_AID_TOOLS,
+  FIRST_AID_GUIDANCE,
+  FIRST_AID_SHARE,
 }

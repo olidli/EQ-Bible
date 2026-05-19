@@ -1,0 +1,53 @@
+<!-- components/mindfulness/mindfulness.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="header-left" bindtap="onExit">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="header-title">🧘 正念冥想</text>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="intro-section">
+    <text class="intro-text">专注呼吸，回到当下。正念冥想不是清空大脑，而是觉察自己的思绪，温柔地带回当下。</text>
+  </view>
+
+  <!-- 进度 -->
+  <view class="progress" wx:if="{{isActive && !completed}}">
+    <progress percent="{{(currentStep / totalSteps) * 100}}" stroke-width="8" activeColor="#74b9ff" backgroundColor="#eee" />
+    <text class="progress-text">步骤 {{currentStep + 1}} / {{totalSteps}}</text>
+  </view>
+
+  <!-- 开始前 -->
+  <view class="start-card" wx:if="{{!isActive && !completed}}">
+    <text class="start-emoji">🧘</text>
+    <text class="start-title">准备好了吗？</text>
+    <text class="start-desc">找一个安静的地方，让我们通过呼吸回到当下</text>
+    <button class="start-btn" bindtap="startMeditation">开始冥想</button>
+  </view>
+
+  <!-- 进行中 -->
+  <view class="meditation-card" wx:if="{{isActive && !completed}}">
+    <view class="breath-circle">
+      <text class="breath-icon">🧘</text>
+    </view>
+    <view class="instruction">{{currentInstruction}}</view>
+    <view class="timer">{{remaining}}秒</view>
+  </view>
+
+  <!-- 完成 -->
+  <view class="completed-card" wx:if="{{completed}}">
+    <text class="completed-emoji">🙏</text>
+    <text class="completed-title">冥想完成</text>
+    <text class="completed-desc">你已经完成了正念冥想练习。现在，感受一下自己的状态有什么不同？</text>
+    <view class="tip-section">
+      <text class="tip-title">💡 小贴士</text>
+      <text class="tip-text">正念是一种可以练习的能力。走神是正常的，每次把注意力带回来，都是一次正念的练习。</text>
+    </view>
+    <view class="finished-actions">
+      <button class="action-btn secondary" bindtap="restart">再练一次</button>
+      <button class="action-btn primary" bindtap="onFinish">完成</button>
+    </view>
+  </view>
+</view>

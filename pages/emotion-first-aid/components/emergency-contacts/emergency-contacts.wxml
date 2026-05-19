@@ -1,0 +1,43 @@
+<!-- components/emergency-contacts/emergency-contacts.wxml -->
+<view class="contacts-container">
+  <!-- 标题栏 -->
+  <view class="contacts-header">
+    <text class="contacts-title">📞 应急联系人</text>
+    <text class="contacts-count">{{contacts.length}} / {{maxContacts}}</text>
+  </view>
+
+  <!-- 联系人列表 -->
+  <view class="contacts-list" wx:if="{{contacts.length > 0}}">
+    <view class="contact-item" wx:for="{{contacts}}" wx:key="id">
+      <view class="contact-info">
+        <text class="contact-name">{{item.name}}</text>
+        <text class="contact-relation" wx:if="{{item.relationship}}">{{item.relationship}}</text>
+        <text class="contact-phone">{{item.phone}}</text>
+      </view>
+      <view class="contact-actions">
+        <view class="action-btn call" bindtap="callContact" data-phone="{{item.phone}}">
+          <text>拨打电话</text>
+        </view>
+        <view class="action-btn edit" bindtap="editContact" data-id="{{item.id}}">
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete" bindtap="deleteContact" data-id="{{item.id}}">
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{contacts.length === 0}}">
+    <text class="empty-icon">📱</text>
+    <text class="empty-text">还没有设置应急联系人</text>
+    <text class="empty-desc">添加信任的亲友，在需要时快速拨打</text>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-contact-btn" bindtap="addContact" wx:if="{{contacts.length < maxContacts}}">
+    <text class="add-icon">+</text>
+    <text class="add-text">添加联系人</text>
+  </view>
+</view>

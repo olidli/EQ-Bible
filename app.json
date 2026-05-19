@@ -4,7 +4,11 @@
     "pages/search/search",
     "pages/category/category",
     "pages/tools/tools",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/game/game",
+    "pages/game-play/game-play",
+    "pages/game-result/game-result",
+    "pages/game-rank/game-rank"
   ],
   "subpackages": [
     {
@@ -36,12 +40,21 @@
       "root": "pages/record",
       "name": "pkg-record",
       "pages": ["record"]
+    },
+    {
+      "root": "pages/emotion-first-aid",
+      "name": "pkg-emotion-first-aid",
+      "pages": [
+        "emotion-first-aid",
+        "add-contact/add-contact",
+        "edit-contact/edit-contact"
+      ]
     }
   ],
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["pkg-detail"]
+      "packages": ["pkg-detail", "pkg-emotion-first-aid"]
     },
     "pages/category/category": {
       "network": "all",
