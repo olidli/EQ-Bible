@@ -60,20 +60,6 @@
     </view>
   </view>
 
-  <!-- 案例库 -->
-  <view class="case-section" wx:if="{{cases.length > 0}}">
-    <view class="content-header">
-      <text class="content-title">案例库</text>
-      <text class="content-total">{{cases.length}} 个案例</text>
-    </view>
-    <view class="case-list">
-      <view class="case-item" wx:for="{{cases}}" wx:key="*this" bindtap="goCase" data-id="{{item.id}}">
-        <text class="case-title">{{item.title}}</text>
-        <text class="case-arrow">›</text>
-      </view>
-    </view>
-  </view>
-
   <!-- 工具条 - 横向滚动 -->
   <view class="tools-strip" wx:if="{{moduleTools.length > 0}}">
     <view class="content-header">
