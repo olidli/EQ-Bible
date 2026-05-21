@@ -17,6 +17,7 @@ Page({
     currentModule: null,
     moduleTools: [],
     items: [],
+    itemCount: 0,
     pageSize: 20,
     hasMore: false,
   },
@@ -66,7 +67,13 @@ Page({
 
     // 命中有效缓存（非空数组）才使用缓存
     if (!forceReload && this._cache[id] && this._cache[id].length > 0) {
-      this.setData({ items: this._cache[id] })
+      var pSize = this.data.pageSize || 20
+      var cachedItems = this._cache[id]
+      this.setData({
+        items: cachedItems.slice(0, pSize),
+        itemCount: cachedItems.length,
+        hasMore: cachedItems.length > pSize,
+      })
       return
     }
 
@@ -77,7 +84,13 @@ Page({
     // 如果全局数据为空，强制从缓存或重新加载（避免初始化的时序问题）
     if (allItems.length === 0) {
       if (this._cache[id] && this._cache[id].length > 0) {
-        this.setData({ items: this._cache[id] })
+        var psz = this.data.pageSize || 20
+        var cached = this._cache[id]
+        this.setData({
+          items: cached.slice(0, psz),
+          itemCount: cached.length,
+          hasMore: cached.length > psz,
+        })
       }
       return
     }
@@ -94,13 +107,17 @@ Page({
       (item.tg || []).some(t => tags.some(tag => t.includes(tag) || tag.includes(t)))
     ).map(item => {
       const ti = getTypeInfo(item.tp)
+      const content = item.content || {}
       return {
         _id: item.id,
         title: item.t,
+        description: (item.description || content.summary || '').substring(0, 60),
         type: item.tp,
         typeLabel: ti.label,
         typeColor: ti.color,
-        tags: (item.tg || []).slice(0, 4),
+        readTime: content.read_time || '',
+        tags: (item.tg || []).slice(0, 3),
+        hasLearned: app.isLearned(item.id),
       }
     })
 
@@ -112,6 +129,7 @@ Page({
     var displayItems = items.slice(0, pageSize)
     this.setData({
       items: displayItems,
+      itemCount: items.length,
       hasMore: items.length > pageSize,
     })
   },
@@ -124,6 +142,7 @@ Page({
     var newCount = Math.min(currentCount + pageSize, allItems.length)
     this.setData({
       items: allItems.slice(0, newCount),
+      itemCount: allItems.length,
       hasMore: newCount < allItems.length,
     })
   },
