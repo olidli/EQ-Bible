@@ -12,6 +12,7 @@ Page({
     sceneCount: 0,
     failReason: '',
     failScene: '',
+    category: 'campus',
     levelRange: '',
     showUnlockHint: false,
     newUnlockCount: 0
@@ -27,11 +28,12 @@ Page({
     const sceneCount = parseInt(options.sceneCount) || 5;
     const failReason = decodeURIComponent(options.failReason || '');
     const failScene = decodeURIComponent(options.failScene || '');
+    const category = decodeURIComponent(options.category || 'campus');
 
     // 计算段位区间描述
     const levelRange = this.getLevelRange(score);
 
-    this.setData({ score, name, emoji, shareText, color, totalScore, sceneCount, failReason, failScene, levelRange });
+    this.setData({ score, name, emoji, shareText, color, totalScore, sceneCount, failReason, failScene, category, levelRange });
 
     // 等 canvas 渲染完再绘制
     setTimeout(() => this.drawShareCard(), 150);
@@ -207,26 +209,23 @@ Page({
     });
   },
 
-  // 再刷一次（同场景重玩）
+  // 再刷一次（同分类重玩）
   onRetry() {
-    wx.redirectTo({ url: '/pages/game/game' });
+    wx.redirectTo({
+      url: `/pages/game-play/game-play?mode=category&category=${this.data.category}`
+    });
   },
 
-  // 换个场景挑战
+  // 换个场景挑战（跳到分类选择页）
   onChangeScene() {
-    const scenes = require('../../data/scenes');
-    const categories = [...new Set(scenes.map(s => s.category))];
-    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    wx.redirectTo({
-      url: `/pages/game-play/game-play?mode=category&category=${randomCategory}`
-    });
+    wx.redirectTo({ url: '/pages/game/game' });
   },
 
   // PK挑战
   onPKChallenge() {
     const scenes = require('../../data/scenes');
     const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
-    wx.navigateTo({
+    wx.redirectTo({
       url: `/pages/game-play/game-play?mode=pk&pkSceneId=${randomScene.id}`
     });
   },

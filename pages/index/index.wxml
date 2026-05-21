@@ -29,6 +29,39 @@
     </view>
   </view>
 
+  <!-- 社死模拟器 Hero Banner -->
+  <view class="game-hero" bindtap="goGame">
+    <view class="game-hero-top">
+      <view class="game-hero-badge">HOT</view>
+      <text class="game-hero-title">社死模拟器</text>
+      <text class="game-hero-sub">100个名场面 · 你能活过几关？</text>
+    </view>
+    <view class="game-hero-tags">
+      <text class="game-hero-tag tag-campus">校园</text>
+      <text class="game-hero-tag tag-family">家庭</text>
+      <text class="game-hero-tag tag-dating">恋爱</text>
+      <text class="game-hero-tag tag-wechat">群聊</text>
+      <text class="game-hero-tag tag-relative">亲戚</text>
+    </view>
+    <view class="game-hero-cta">
+      <text class="game-hero-btn">立即挑战 ›</text>
+    </view>
+  </view>
+
+  <!-- 情绪急救箱入口卡片 -->
+  <view class="emergency-entry" bindtap="goEmotionFirstAid">
+    <view class="emergency-header">
+      <view class="emergency-icon-wrap">
+        <text class="emergency-icon">🆘</text>
+      </view>
+      <view class="emergency-info">
+        <text class="emergency-title">情绪急救箱</text>
+        <text class="emergency-desc">快速缓解负面情绪</text>
+      </view>
+      <text class="emergency-arrow">›</text>
+    </view>
+  </view>
+
   <!-- 核心模块入口（3列×3行，更宽松） -->
   <view class="section">
     <view class="section-header">
@@ -84,29 +117,6 @@
     </view>
   </view>
 
-  <!-- 社死模拟器游戏入口卡片 -->
-  <view class="game-entry" bindtap="goGame">
-    <view class="game-entry-icon">🎮</view>
-    <view class="game-entry-text">
-      <text class="game-entry-title">社死模拟器</text>
-      <text class="game-entry-desc">你能活过几关？90%的人死在第3题</text>
-    </view>
-    <text class="game-entry-arrow">›</text>
-  </view>
-
-  <!-- 情绪急救箱入口卡片 -->
-  <view class="emergency-entry" bindtap="goEmotionFirstAid">
-    <view class="emergency-header">
-      <view class="emergency-icon-wrap">
-        <text class="emergency-icon">🆘</text>
-      </view>
-      <view class="emergency-info">
-        <text class="emergency-title">情绪急救箱</text>
-        <text class="emergency-desc">快速缓解负面情绪</text>
-      </view>
-      <text class="emergency-arrow">›</text>
-    </view>
-  </view>
 
   <!-- 快捷工具（横向滑动胶囊） -->
   <view class="section">

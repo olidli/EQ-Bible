@@ -138,7 +138,7 @@ Page({
       wx.setStorageSync('game_history', history);
 
       wx.redirectTo({
-        url: `/pages/game-result/game-result?score=${levelInfo.score}&name=${encodeURIComponent(levelInfo.name)}&emoji=${encodeURIComponent(levelInfo.emoji)}&shareText=${encodeURIComponent(levelInfo.shareText)}&color=${encodeURIComponent(levelInfo.color)}&totalScore=${totalScore}&sceneCount=${sceneCount}&failReason=${encodeURIComponent(failReason)}&failScene=${encodeURIComponent(failScene ? failScene.title : '')}`
+        url: `/pages/game-result/game-result?score=${levelInfo.score}&name=${encodeURIComponent(levelInfo.name)}&emoji=${encodeURIComponent(levelInfo.emoji)}&shareText=${encodeURIComponent(levelInfo.shareText)}&color=${encodeURIComponent(levelInfo.color)}&totalScore=${totalScore}&sceneCount=${sceneCount}&failReason=${encodeURIComponent(failReason)}&failScene=${encodeURIComponent(failScene ? failScene.title : '')}&category=${encodeURIComponent(this.data.sceneList[0] ? this.data.sceneList[0].category : 'campus')}`
       });
     } else {
       this.loadScene(nextIndex);
