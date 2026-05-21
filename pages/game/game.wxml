@@ -29,17 +29,47 @@
       <view class="category-name">校园生存篇</view>
       <view class="category-desc">室友、社团、课堂…你最怕哪个？</view>
     </view>
-    <view class="category-arrow">›</view>
+    <view class="category-count">56题</view>
   </view>
 
-  <!-- 职场场景 -->
-  <view class="category-card workplace" bindtap="onStartGame" data-category="workplace">
-    <view class="category-icon">💼</view>
+  <!-- 家庭聚会 -->
+  <view class="category-card family" bindtap="onStartGame" data-category="family">
+    <view class="category-icon">🏠</view>
     <view class="category-info">
-      <view class="category-name">职场新人篇</view>
-      <view class="category-desc">领导、同事、饭局…处处是坑</view>
+      <view class="category-name">家庭聚会篇</view>
+      <view class="category-desc">爸妈吵架、催婚、翻手机…夹在中间难做人</view>
     </view>
-    <view class="category-arrow">›</view>
+    <view class="category-count">12题</view>
+  </view>
+
+  <!-- 约会恋爱 -->
+  <view class="category-card dating" bindtap="onStartGame" data-category="dating">
+    <view class="category-icon">💕</view>
+    <view class="category-info">
+      <view class="category-name">约会恋爱篇</view>
+      <view class="category-desc">AA还是请客？冷战谁先低头？心动也是社死</view>
+    </view>
+    <view class="category-count">12题</view>
+  </view>
+
+  <!-- 微信群聊 -->
+  <view class="category-card wechat" bindtap="onStartGame" data-category="wechat">
+    <view class="category-icon">📱</view>
+    <view class="category-info">
+      <view class="category-name">微信群聊篇</view>
+      <view class="category-desc">发错消息、被@、老板在群里…每条都是地雷</view>
+    </view>
+    <view class="category-count">11题</view>
+  </view>
+
+  <!-- 亲戚过年 -->
+  <view class="category-card relative" bindtap="onStartGame" data-category="relative">
+    <view class="category-icon">🧧</view>
+    <view class="category-info">
+      <view class="category-name">亲戚过年篇</view>
+      <view class="category-desc">催婚、比工资、敬酒…过年回家的社死战场</view>
+    </view>
+    <view class="category-count">9题</view>
   </view>
 
   <!-- 我的战绩 -->

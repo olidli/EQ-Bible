@@ -98,6 +98,11 @@ Page({
   // 开始游戏
   onStartGame(e) {
     const category = e.currentTarget.dataset.category;
+    const categoryScenes = scenes.filter(s => s.category === category);
+    if (categoryScenes.length === 0) {
+      wx.showToast({ title: '该分类暂无场景', icon: 'none' });
+      return;
+    }
     wx.navigateTo({
       url: `/pages/game-play/game-play?mode=category&category=${category}`
     });

@@ -121,8 +121,20 @@
   border-left: 6rpx solid #4ecdc4;
 }
 
-.category-card.workplace {
-  border-left: 6rpx solid #ffe66d;
+.category-card.family {
+  border-left: 6rpx solid #ff6b6b;
+}
+
+.category-card.dating {
+  border-left: 6rpx solid #f7797d;
+}
+
+.category-card.wechat {
+  border-left: 6rpx solid #6c5ce7;
+}
+
+.category-card.relative {
+  border-left: 6rpx solid #fdcb6e;
 }
 
 .category-icon {
@@ -146,10 +158,13 @@
   font-size: 24rpx;
 }
 
-.category-arrow {
+.category-count {
   color: #8892b0;
-  font-size: 40rpx;
+  font-size: 24rpx;
   margin-left: 10rpx;
+  background: rgba(255,255,255,0.08);
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
 }
 
 /* 战绩 */
