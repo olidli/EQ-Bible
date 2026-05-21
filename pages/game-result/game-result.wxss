@@ -1,5 +1,5 @@
 .container {
-  padding: 30rpx;
+  padding: 0 30rpx 60rpx;
   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
   min-height: 100vh;
   display: flex;
@@ -7,115 +7,177 @@
   align-items: center;
 }
 
-/* 引导文案 */
-.share-prompt {
+/* === 顶部钩子 === */
+.hook-bar {
+  width: 100%;
   text-align: center;
-  padding: 16rpx;
-  margin-bottom: 10rpx;
+  padding: 28rpx 0 12rpx;
 }
 
-.prompt-text {
+.hook-text {
   color: #ffe66d;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+/* === 翻车原因卡 === */
+.fail-reason-card {
+  width: 100%;
+  background: rgba(233, 69, 96, 0.08);
+  border: 2rpx solid rgba(233, 69, 96, 0.25);
+  border-radius: 20rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.fail-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.fail-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+}
+
+.fail-label {
+  font-size: 26rpx;
+  color: #e94560;
+  font-weight: bold;
+}
+
+.fail-scene {
+  font-size: 28rpx;
+  color: #e6f1ff;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.fail-choice {
+  font-size: 24rpx;
+  color: #a8b2d1;
+  line-height: 1.5;
+}
+
+/* === 主卡片区 === */
+.card-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.share-canvas {
+  width: 280px;
+  height: 420px;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.4);
+  display: block;
+}
+
+.card-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.save-card-btn {
+  color: #4ecdc4;
+  font-size: 24rpx;
+  padding: 12rpx 28rpx;
+  border: 2rpx solid #4ecdc4;
+  border-radius: 24rpx;
+}
+
+.save-card-btn:active {
+  opacity: 0.8;
+}
+
+.copy-btn-inline {
+  background: rgba(78, 205, 196, 0.12);
+  color: #4ecdc4;
+  font-size: 24rpx;
+  padding: 12rpx 28rpx;
+  border-radius: 24rpx;
+}
+
+.copy-btn-inline:active {
+  opacity: 0.8;
+}
+
+/* === 核心双按钮（最重要的两个行动） === */
+.dual-btns {
+  width: 100%;
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.btn-retry-main,
+.btn-change-scene {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 0;
+  border-radius: 20rpx;
+}
+
+.btn-retry-main {
+  background: linear-gradient(135deg, #4ecdc4, #44a8e8);
+  color: #1a1a2e;
+}
+
+.btn-retry-main:active {
+  opacity: 0.85;
+}
+
+.btn-change-scene {
+  background: linear-gradient(135deg, #e94560, #ff6b6b);
+  color: #ffffff;
+}
+
+.btn-change-scene:active {
+  opacity: 0.85;
+}
+
+.btn-icon {
+  font-size: 40rpx;
+  margin-bottom: 6rpx;
+}
+
+.btn-label {
   font-size: 28rpx;
   font-weight: bold;
 }
 
-/* 分享文案卡 */
-.share-text-card {
-  background: #1f2940;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  width: 100%;
-  margin-bottom: 30rpx;
-}
-
-.share-text-label {
-  color: #8892b0;
-  font-size: 24rpx;
-  margin-bottom: 12rpx;
-}
-
-.share-text-content {
-  color: #e6f1ff;
-  font-size: 30rpx;
-  line-height: 1.6;
-  margin-bottom: 16rpx;
-  font-style: italic;
-}
-
-.copy-btn {
-  display: inline-block;
-  background: rgba(78, 205, 196, 0.12);
-  color: #4ecdc4;
-  font-size: 24rpx;
-  padding: 8rpx 24rpx;
-  border-radius: 20rpx;
-}
-
-/* 卡片预览 */
-.card-preview {
-  width: 100%;
-  max-width: 270px;
-  margin-bottom: 30rpx;
-}
-
-.card-preview-title {
-  color: #8892b0;
-  font-size: 24rpx;
-  margin-bottom: 16rpx;
-  text-align: center;
-}
-
-.share-canvas {
-  width: 270px;
-  height: 480px;
-  border-radius: 16rpx;
-}
-
-/* 操作按钮 */
-.action-btns {
+/* === 次要按钮 === */
+.sub-btns {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
-  padding-bottom: 60rpx;
+  gap: 16rpx;
 }
 
 .btn-share {
-  background: linear-gradient(135deg, #4ecdc4, #44a8e8) !important;
-  color: #1a1a2e !important;
-  font-size: 32rpx !important;
+  background: #1f2940 !important;
+  color: #4ecdc4 !important;
+  font-size: 30rpx !important;
   font-weight: bold !important;
   border-radius: 50rpx !important;
-  padding: 8rpx 0 !important;
+  padding: 20rpx 0 !important;
+  border: 2rpx solid #4ecdc4 !important;
 }
 
-.btn-save {
+.btn-pk {
   background: #1f2940;
-  color: #4ecdc4;
-  font-size: 30rpx;
-  text-align: center;
-  padding: 24rpx;
-  border-radius: 50rpx;
-  border: 2rpx solid #4ecdc4;
-}
-
-.btn-retry {
-  background: transparent;
   color: #8892b0;
   font-size: 28rpx;
   text-align: center;
   padding: 20rpx;
-}
-
-/* PK按钮 */
-.btn-pk {
-  background: linear-gradient(135deg, #e94560, #ff6b6b);
-  color: #fff;
-  font-size: 30rpx;
-  font-weight: bold;
-  text-align: center;
-  padding: 24rpx;
   border-radius: 50rpx;
 }
 
@@ -123,7 +185,7 @@
   opacity: 0.85;
 }
 
-/* 解锁奖励提示 */
+/* === 解锁奖励提示 === */
 .unlock-hint {
   position: fixed;
   top: 50%;

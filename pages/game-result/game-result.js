@@ -10,6 +10,9 @@ Page({
     color: '#4ecdc4',
     totalScore: 0,
     sceneCount: 0,
+    failReason: '',
+    failScene: '',
+    levelRange: '',
     showUnlockHint: false,
     newUnlockCount: 0
   },
@@ -22,14 +25,28 @@ Page({
     const color = decodeURIComponent(options.color || '#4ecdc4');
     const totalScore = parseInt(options.totalScore) || 0;
     const sceneCount = parseInt(options.sceneCount) || 5;
+    const failReason = decodeURIComponent(options.failReason || '');
+    const failScene = decodeURIComponent(options.failScene || '');
 
-    this.setData({ score, name, emoji, shareText, color, totalScore, sceneCount });
+    // 计算段位区间描述
+    const levelRange = this.getLevelRange(score);
+
+    this.setData({ score, name, emoji, shareText, color, totalScore, sceneCount, failReason, failScene, levelRange });
 
     // 等 canvas 渲染完再绘制
-    setTimeout(() => this.drawShareCard(), 100);
+    setTimeout(() => this.drawShareCard(), 150);
   },
 
-  // 绘制分享卡片（Canvas 2D API）
+  // 根据分数返回段位区间描述
+  getLevelRange(score) {
+    if (score <= 20) return '0-20 · 社恐本恐';
+    if (score <= 40) return '21-40 · 话题终结者';
+    if (score <= 60) return '41-60 · 佛系社交';
+    if (score <= 80) return '61-80 · 人间清醒';
+    return '81-100 · 社交天花板';
+  },
+
+  // 绘制分享卡片（Canvas 2D API）—— 重制版
   drawShareCard() {
     const query = this.createSelectorQuery();
     query.select('#shareCard').fields({ node: true, size: true }).exec((res) => {
@@ -38,68 +55,107 @@ Page({
       const canvas = res[0].node;
       const ctx = canvas.getContext('2d');
       const dpr = wx.getSystemInfoSync().pixelRatio;
-      const cssW = 270;   // CSS 像素（屏幕宽度的一半）
-      const cssH = 480;   // CSS 像素（按 9:16 比例）
+      const cssW = 280;
+      const cssH = 420;
 
-      // 实际渲染尺寸 = CSS尺寸 × 设备像素比
       canvas.width = cssW * dpr;
       canvas.height = cssH * dpr;
       ctx.scale(dpr, dpr);
 
-      const { score, name, emoji, shareText, color } = this.data;
+      const { score, name, emoji, shareText, color, levelRange, failScene } = this.data;
 
-      // 背景渐变
+      // === 1. 背景 ===
       const grd = ctx.createLinearGradient(0, 0, cssW, cssH);
       grd.addColorStop(0, '#1a1a2e');
       grd.addColorStop(1, '#16213e');
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, cssW, cssH);
 
-      // 装饰圆
+      // === 2. 装饰圆 ===
       ctx.beginPath();
-      ctx.arc(cssW - 70, 70, 120, 0, 2 * Math.PI);
+      ctx.arc(cssW - 40, 50, 120, 0, 2 * Math.PI);
       ctx.fillStyle = 'rgba(78, 205, 196, 0.06)';
       ctx.fill();
 
-      // Emoji（改用文字 emoji 无需特殊字体）
-      ctx.font = 'bold 80px sans-serif';
-      ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
-      ctx.fillText(emoji, cssW / 2, 190);
 
-      // 段位名称
-      ctx.font = 'bold 38px sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(name, cssW / 2, 250);
-
-      // 分数
-      ctx.font = '28px sans-serif';
-      ctx.fillStyle = '#8892b0';
-      ctx.fillText(score + ' 分', cssW / 2, 295);
-
-      // 分数条背景
-      ctx.fillStyle = '#2a3a5a';
-      ctx.fillRect(35, 315, cssW - 70, 8);
-
-      // 分数条
-      const barWidth = Math.max(4, (score / 100) * (cssW - 70));
+      // === 3. 段位名称 ===
+      ctx.font = 'bold 32px sans-serif';
       ctx.fillStyle = color;
-      ctx.fillRect(35, 315, barWidth, 8);
+      ctx.fillText(name, cssW / 2, 120);
 
-      // 分享文案（自动换行）
-      ctx.font = '22px sans-serif';
-      ctx.fillStyle = '#a8b2d1';
-      this.wrapText(ctx, shareText, cssW / 2, 370, cssW - 70, 36);
+      // === 4. 分数 ===
+      const scoreStr = score + '';
+      ctx.font = 'bold 52px sans-serif';
+      ctx.fillStyle = '#ffffff';
+      const scoreW = ctx.measureText(scoreStr).width;
+      ctx.fillText(scoreStr, cssW / 2 - 16, 185);
 
-      // 底部文案
       ctx.font = '18px sans-serif';
-      ctx.fillStyle = '#5a6380';
-      ctx.fillText('长按识别小程序码 来测测你的情商段位', cssW / 2, 430);
+      ctx.fillStyle = '#8892b0';
+      ctx.fillText('分', cssW / 2 + 28, 185);
 
-      ctx.font = '20px sans-serif';
+      // === 5. 段位区间 ===
+      ctx.font = '14px sans-serif';
+      ctx.fillStyle = '#5a6380';
+      ctx.fillText(levelRange, cssW / 2, 218);
+
+      // === 6. 分数条 ===
+      const barX = 30;
+      const barY = 240;
+      const barW = cssW - 60;
+      const barH = 8;
+
+      ctx.fillStyle = '#2a3a5a';
+      this.roundRect(ctx, barX, barY, barW, barH, 4);
+      ctx.fill();
+
+      const barGrd = ctx.createLinearGradient(barX, barY, barX + barW, barY);
+      barGrd.addColorStop(0, '#4ecdc4');
+      barGrd.addColorStop(1, color);
+      const fillW = Math.max(10, (score / 100) * barW);
+      ctx.fillStyle = barGrd;
+      this.roundRect(ctx, barX, barY, fillW, barH, 4);
+      ctx.fill();
+
+      // === 7. 翻车场景 ===
+      if (failScene) {
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#e94560';
+        ctx.fillText('翻车场景', cssW / 2, 280);
+
+        ctx.font = '13px sans-serif';
+        ctx.fillStyle = '#a8b2d1';
+        this.wrapText(ctx, failScene, cssW / 2, 300, cssW - 40, 20);
+      }
+
+      // === 8. 分享文案（去 emoji） ===
+      const cleanText = shareText.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+      const textStartY = failScene ? 350 : 295;
+      ctx.font = '16px sans-serif';
+      ctx.fillStyle = '#e6f1ff';
+      this.wrapText(ctx, '"' + cleanText + '"', cssW / 2, textStartY, cssW - 40, 22);
+
+      // === 9. 底部品牌 ===
+      ctx.font = '13px sans-serif';
       ctx.fillStyle = '#4ecdc4';
-      ctx.fillText('情商宝典·社交尴尬场景模拟器', cssW / 2, 460);
+      ctx.fillText('情商宝典 · 社死模拟器', cssW / 2, 400);
     });
+  },
+
+  // 绘制圆角矩形
+  roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
   },
 
   // 自动换行文字
@@ -151,6 +207,21 @@ Page({
     });
   },
 
+  // 再刷一次（同场景重玩）
+  onRetry() {
+    wx.redirectTo({ url: '/pages/game/game' });
+  },
+
+  // 换个场景挑战
+  onChangeScene() {
+    const scenes = require('../../data/scenes');
+    const categories = [...new Set(scenes.map(s => s.category))];
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+    wx.redirectTo({
+      url: `/pages/game-play/game-play?mode=category&category=${randomCategory}`
+    });
+  },
+
   // PK挑战
   onPKChallenge() {
     const scenes = require('../../data/scenes');
@@ -160,17 +231,11 @@ Page({
     });
   },
 
-  // 再来一局
-  onRetry() {
-    wx.redirectTo({ url: '/pages/game/game' });
-  },
-
   // 分享
   onShareAppMessage() {
     const viral = require('../../utils/viral');
     viral.recordShare('result_share', '');
     const unlocked = viral.unlockByShare('share');
-    const unlockMsg = unlocked.length > 0 ? `（已解锁${unlocked.length}个新场景！）` : '';
     return {
       title: `我的情商段位是【${this.data.name}】${this.data.emoji}，你敢来挑战吗？`,
       path: '/pages/game/game',

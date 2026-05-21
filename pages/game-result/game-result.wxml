@@ -1,39 +1,47 @@
 <view class="container">
-  <!-- 引导文案 -->
-  <view class="share-prompt">
-    <view class="prompt-text">把这道题发给TA，看看TA怎么选 👇</view>
+  <!-- 顶部钩子 -->
+  <view class="hook-bar">
+    <text class="hook-text">测完了？把结果甩给TA，看看TA能不能比你高 👇</text>
   </view>
 
-  <!-- 分享文案 -->
-  <view class="share-text-card">
-    <view class="share-text-label">你的专属文案</view>
-    <view class="share-text-content">"{{shareText}}"</view>
-    <view class="copy-btn" bindtap="onCopyText">复制文案</view>
+  <!-- 翻车原因（紧跟钩子，醒目） -->
+  <view class="fail-reason-card" wx:if="{{failScene}}">
+    <view class="fail-header">
+      <text class="fail-icon">💀</text>
+      <text class="fail-label">最大翻车现场</text>
+    </view>
+    <view class="fail-scene">{{failScene}}</view>
+    <view class="fail-choice" wx:if="{{failReason}}">你选了：「{{failReason}}」</view>
   </view>
 
-  <!-- 分享卡片（新版 Canvas 2D） -->
-  <view class="card-preview">
-    <view class="card-preview-title">分享卡片预览</view>
+  <!-- 主卡片：Canvas 结果图（唯一展示） -->
+  <view class="card-main">
     <canvas type="2d" id="shareCard" class="share-canvas"></canvas>
-  </view>
-
-  <!-- 操作按钮 -->
-  <view class="action-btns">
-    <button class="btn-share" open-type="share">
-      考考我的室友 🚀
-    </button>
-    <view class="btn-pk" bindtap="onPKChallenge">
-      和好友PK情商 👊
-    </view>
-    <view class="btn-save" bindtap="onSaveCard">
-      保存卡片到相册
-    </view>
-    <view class="btn-retry" bindtap="onRetry">
-      再来一局 🔄
+    <view class="card-actions">
+      <view class="save-card-btn" bindtap="onSaveCard">📸 保存到相册</view>
+      <view class="copy-btn-inline" bindtap="onCopyText">📋 复制文案</view>
     </view>
   </view>
 
-  <!-- 解锁奖励提示 -->
+  <!-- 核心双按钮 -->
+  <view class="dual-btns">
+    <view class="btn-retry-main" bindtap="onRetry">
+      <text class="btn-icon">🔄</text>
+      <text class="btn-label">再刷一次</text>
+    </view>
+    <view class="btn-change-scene" bindtap="onChangeScene">
+      <text class="btn-icon">🎯</text>
+      <text class="btn-label">换个场景</text>
+    </view>
+  </view>
+
+  <!-- 次要按钮 -->
+  <view class="sub-btns">
+    <button class="btn-share" open-type="share">考考我的室友 🚀</button>
+    <view class="btn-pk" bindtap="onPKChallenge">和好友PK情商 👊</view>
+  </view>
+
+  <!-- 解锁奖励 -->
   <view class="unlock-hint" wx:if="{{showUnlockHint}}">
     <view class="unlock-icon">🎉</view>
     <view class="unlock-text">已解锁{{newUnlockCount}}个新场景！</view>

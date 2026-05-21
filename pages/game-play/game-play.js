@@ -111,6 +111,21 @@ Page({
       const sceneCount = this.data.totalScenes;
       const levelInfo = eqCalc.getLevel(totalScore, sceneCount);
 
+      // 收集翻车信息：找出得分最低的那一题
+      const minScore = Math.min(...this.data.scores);
+      const failIndex = this.data.scores.indexOf(minScore);
+      const failScene = this.data.sceneList[failIndex];
+      let failReason = '';
+      if (failScene) {
+        // 找到用户选的那个选项
+        // scores里存的是每题得分，需要重新匹配
+        const failOption = failScene.options.find(o => o.score === minScore) ||
+                           failScene.options.find(o => o.level === 'low');
+        if (failOption) {
+          failReason = failOption.text;
+        }
+      }
+
       // 保存游戏记录
       const history = wx.getStorageSync('game_history') || [];
       history.push({
@@ -123,7 +138,7 @@ Page({
       wx.setStorageSync('game_history', history);
 
       wx.redirectTo({
-        url: `/pages/game-result/game-result?score=${levelInfo.score}&name=${encodeURIComponent(levelInfo.name)}&emoji=${encodeURIComponent(levelInfo.emoji)}&shareText=${encodeURIComponent(levelInfo.shareText)}&color=${encodeURIComponent(levelInfo.color)}&totalScore=${totalScore}&sceneCount=${sceneCount}`
+        url: `/pages/game-result/game-result?score=${levelInfo.score}&name=${encodeURIComponent(levelInfo.name)}&emoji=${encodeURIComponent(levelInfo.emoji)}&shareText=${encodeURIComponent(levelInfo.shareText)}&color=${encodeURIComponent(levelInfo.color)}&totalScore=${totalScore}&sceneCount=${sceneCount}&failReason=${encodeURIComponent(failReason)}&failScene=${encodeURIComponent(failScene ? failScene.title : '')}`
       });
     } else {
       this.loadScene(nextIndex);
