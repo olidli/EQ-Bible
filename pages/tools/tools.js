@@ -42,6 +42,9 @@ Page({
     characterQuestions: CHARACTER_QUESTIONS,
     characterAnswers: {},
     selectedRegulation: [],
+    energyData: [],
+    energyStats: null,
+    energyDist: [],
   },
 
   onLoad(options) {
@@ -79,6 +82,11 @@ Page({
     }
     
     this.setData({ currentTool: id, selectedTool: id, toolMeta: tool || {} })
+    
+    // 情绪能量图谱：加载数据
+    if (id === 'emotion_energy') {
+      this.loadEnergyChart()
+    }
   },
 
   closeTool() {
@@ -296,6 +304,78 @@ Page({
   // 查看情绪日记完整统计
   goDiaryStats() {
     wx.navigateTo({ url: '/pages/diary/diary' })
+  },
+
+  // ===== 情绪能量图谱 =====
+  EMOTION_COLORS: {
+    '愉悦': '#43e97b', '快乐': '#43e97b', '开心': '#43e97b',
+    '平静': '#4facfe', '满足': '#4facfe',
+    '焦虑': '#ff9a44', '紧张': '#ff9a44', '担忧': '#ff9a44',
+    '愤怒': '#f5576c',
+    '悲伤': '#667eea', '难过': '#667eea', '低落': '#667eea',
+    '恐惧': '#764ba2', '惊讶': '#f093fb', '无聊': '#909399',
+  },
+
+  getEmotionColor(emotion) {
+    if (!emotion) return '#667eea'
+    for (const key of Object.keys(this.EMOTION_COLORS)) {
+      if (emotion.includes(key)) return this.EMOTION_COLORS[key]
+    }
+    return '#667eea'
+  },
+
+  loadEnergyChart() {
+    const raw = wx.getStorageSync('diaryHistory') || []
+    if (raw.length === 0) {
+      this.setData({ energyData: [], energyStats: null })
+      return
+    }
+
+    // 最近14条，按日期排序
+    const sorted = [...raw].sort((a, b) => (a.date || '').localeCompare(b.date || '')).slice(-14)
+    
+    // 统计摘要
+    const emotionCount = {}
+    let totalIntensity = 0
+    sorted.forEach(item => {
+      const e = item.emotion || '未知'
+      emotionCount[e] = (emotionCount[e] || 0) + 1
+      totalIntensity += item.intensity || 5
+    })
+    const topEmotion = Object.keys(emotionCount).sort((a, b) => emotionCount[b] - emotionCount[a])[0] || '无'
+    const avgIntensity = (totalIntensity / sorted.length).toFixed(1)
+    const dates = [...new Set(sorted.map(i => (i.date || '').slice(0, 10)))].length
+
+    // 构建图表数据
+    const chartData = sorted.map(item => ({
+      date: (item.date || '').slice(5, 10),
+      fullDate: item.date || '',
+      emotion: item.emotion || '未知',
+      intensity: item.intensity || 5,
+      color: this.getEmotionColor(item.emotion),
+    }))
+
+    // 情绪分布
+    const distList = Object.entries(emotionCount)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, count]) => ({
+        name,
+        count,
+        color: this.getEmotionColor(name),
+        percent: Math.round(count / sorted.length * 100),
+      }))
+
+    this.setData({
+      energyData: chartData,
+      energyStats: {
+        total: sorted.length,
+        dates,
+        topEmotion,
+        topEmotionCount: emotionCount[topEmotion] || 0,
+        avgIntensity,
+      },
+      energyDist: distList,
+    })
   },
 })
 

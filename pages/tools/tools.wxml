@@ -249,6 +249,75 @@
     </view>
   </view>
 
+  <!-- 情绪能量图谱 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'emotion_energy'}}">
+    <view class="panel-header">
+      <text class="panel-title">📈 情绪能量图谱</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <!-- 无数据 -->
+      <view class="empty-state" wx:if="{{!energyStats}}">
+        <text class="empty-icon">🌱</text>
+        <text class="empty-title">还没有足够的数据</text>
+        <text class="empty-desc">先去写几篇情绪日记吧</text>
+      </view>
+
+      <!-- 统计摘要 -->
+      <view class="energy-stats" wx:if="{{energyStats}}">
+        <view class="energy-stat-card">
+          <text class="energy-stat-num">{{energyStats.total}}</text>
+          <text class="energy-stat-label">总记录</text>
+        </view>
+        <view class="energy-stat-card accent">
+          <text class="energy-stat-num">{{energyStats.dates}}</text>
+          <text class="energy-stat-label">记录天数</text>
+        </view>
+        <view class="energy-stat-card">
+          <text class="energy-stat-num">{{energyStats.avgIntensity}}</text>
+          <text class="energy-stat-label">平均强度</text>
+        </view>
+        <view class="energy-stat-card">
+          <text class="energy-stat-num energy-stat-top">{{energyStats.topEmotion}}</text>
+          <text class="energy-stat-label">最常出现</text>
+        </view>
+      </view>
+
+      <!-- 条形趋势图 -->
+      <view class="chart-section" wx:if="{{energyData && energyData.length > 0}}">
+        <text class="chart-section-title">情绪趋势</text>
+        <scroll-view class="chart-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="chart-inner" style="width: {{energyData.length * 80 + 40}}rpx;">
+            <view class="chart-column" wx:for="{{energyData}}" wx:key="*this" style="left: {{index * 80 + 20}}rpx;">
+              <view class="chart-bar" style="height: {{item.intensity * 26}}rpx; background: {{item.color}};"></view>
+              <text class="chart-bar-label">{{item.emotion}}</text>
+              <text class="chart-date-label">{{item.date}}</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 情绪分布 -->
+      <view class="dist-section" wx:if="{{energyDist && energyDist.length > 0}}">
+        <text class="chart-section-title">情绪分布</text>
+        <view class="dist-list">
+          <view class="dist-item" wx:for="{{energyDist}}" wx:key="name">
+            <view class="dist-left">
+              <view class="dist-dot" style="background: {{item.color}};"></view>
+              <text class="dist-name">{{item.name}}</text>
+            </view>
+            <view class="dist-right">
+              <view class="dist-bar-wrap">
+                <view class="dist-bar-fill" style="width: {{item.percent}}%; background: {{item.color}};"></view>
+              </view>
+              <text class="dist-count">{{item.count}}次</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- 其他简单提示工具 -->
   <view class="tool-panel" wx:if="{{currentTool === 'emotion_energy' || currentTool === 'value_clarify' || currentTool === 'ability_assess' || currentTool === 'goal_setting'}}">
     <view class="panel-header">

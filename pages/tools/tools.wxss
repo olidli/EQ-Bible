@@ -729,3 +729,165 @@ radio {
   font-size: 36rpx;
   color: rgba(255,255,255,0.8);
 }
+
+/* ===== 情绪能量图谱 ===== */
+.energy-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+.energy-stat-card {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  text-align: center;
+}
+.energy-stat-card.accent {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+.energy-stat-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #fff;
+  display: block;
+}
+.energy-stat-top {
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.energy-stat-label {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.85);
+  display: block;
+  margin-top: 4rpx;
+}
+
+/* 趋势图 */
+.chart-section {
+  margin-bottom: 28rpx;
+}
+.chart-section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #303133;
+  display: block;
+  margin-bottom: 16rpx;
+}
+.chart-scroll {
+  width: 100%;
+  height: 360rpx;
+  white-space: nowrap;
+}
+.chart-inner {
+  position: relative;
+  height: 350rpx;
+}
+.chart-column {
+  position: absolute;
+  bottom: 0;
+  width: 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chart-bar {
+  width: 40rpx;
+  min-height: 8rpx;
+  border-radius: 8rpx 8rpx 0 0;
+  transition: height 0.3s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+.chart-bar-label {
+  font-size: 20rpx;
+  color: #606266;
+  margin-top: 6rpx;
+  max-width: 60rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.chart-date-label {
+  font-size: 18rpx;
+  color: #C0C4CC;
+  text-align: center;
+}
+
+/* 分布图 */
+.dist-section {
+  margin-top: 8rpx;
+}
+.dist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+.dist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dist-left {
+  display: flex;
+  align-items: center;
+  width: 140rpx;
+}
+.dist-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  margin-right: 10rpx;
+  flex-shrink: 0;
+}
+.dist-name {
+  font-size: 26rpx;
+  color: #606266;
+}
+.dist-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.dist-bar-wrap {
+  flex: 1;
+  height: 14rpx;
+  background: #f0f0f0;
+  border-radius: 7rpx;
+  overflow: hidden;
+}
+.dist-bar-fill {
+  height: 100%;
+  border-radius: 7rpx;
+  transition: width 0.5s ease;
+}
+.dist-count {
+  font-size: 24rpx;
+  color: #909399;
+  width: 50rpx;
+  text-align: right;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60rpx 0;
+}
+.empty-icon {
+  font-size: 64rpx;
+  display: block;
+  margin-bottom: 16rpx;
+}
+.empty-title {
+  font-size: 30rpx;
+  color: #303133;
+  display: block;
+  margin-bottom: 8rpx;
+}
+.empty-desc {
+  font-size: 26rpx;
+  color: #909399;
+}
