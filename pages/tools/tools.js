@@ -292,5 +292,10 @@ Page({
   goTest() {
     wx.switchTab({ url: '/pages/test/test' })
   },
+
+  // 查看情绪日记完整统计
+  goDiaryStats() {
+    wx.navigateTo({ url: '/pages/diary/diary' })
+  },
 })
 

@@ -84,6 +84,11 @@
           </view>
         </view>
       </view>
+      <!-- 查看完整统计 -->
+      <view class="go-diary-stats" bindtap="goDiaryStats">
+        <text class="go-diary-stats-text">📊 查看完整统计</text>
+        <text class="go-diary-stats-arrow">›</text>
+      </view>
     </view>
   </view>
 

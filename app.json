@@ -63,6 +63,10 @@
     "pages/search/search": {
       "network": "all",
       "packages": ["pkg-detail"]
+    },
+    "pages/tools/tools": {
+      "network": "all",
+      "packages": ["pkg-diary"]
     }
   },
   "window": {
