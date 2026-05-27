@@ -330,7 +330,7 @@
         <text class="tool-intro">选出对你最重要的价值观（最多10个）</text>
         <view class="value-grid">
           <view class="value-chip {{valueSelected.indexOf(item.name) > -1 ? 'selected' : ''}}"
-            wx:for="{{valueOptions}}" wx:key="name" bindtap="toggleValue" data-name="{{item.name}}">
+            wx:for="{{valueOptions}}" wx:for-item="item" bindtap="toggleValue" data-name="{{item.name}}">
             <text class="value-chip-emoji">{{item.emoji}}</text>
             <text class="value-chip-name">{{item.name}}</text>
             <text class="value-chip-check" wx:if="{{valueSelected.indexOf(item.name) > -1}}">✓</text>

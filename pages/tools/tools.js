@@ -27,6 +27,16 @@ const VALUE_OPTIONS = [
   { name: '信仰', emoji: '🕯️' },  { name: '挑战', emoji: '⛰️' },
 ]
 
+// 打乱数组（Fisher-Yates）
+function shuffleArray(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 Page({
   data: {
     paramTool: '',
@@ -110,6 +120,16 @@ Page({
     // 情绪能量图谱：加载数据
     if (id === 'emotion_energy') {
       this.loadEnergyChart()
+    }
+    
+    // 价值观澄清：每次打开随机打乱选项顺序
+    if (id === 'value_clarify') {
+      this.setData({
+        valueOptions: shuffleArray(VALUE_OPTIONS),
+        valueStep: 1,
+        valueSelected: [],
+        valueResult: null,
+      })
     }
   },
 
