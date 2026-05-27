@@ -337,6 +337,7 @@
           </view>
         </view>
         <view class="value-counter">已选 {{valueSelected.length}}/10</view>
+        <text style="font-size:20rpx;color:#999;display:block;text-align:center;margin-bottom:12rpx;">{{valueSelected.join('、') || '（空）'}}</text>
         <button class="save-btn primary" bindtap="nextValueStep">
           {{valueSelected.length >= 3 ? '下一步：排序 ›' : '至少选3个继续'}}
         </button>
