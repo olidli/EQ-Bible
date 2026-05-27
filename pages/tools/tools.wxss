@@ -902,36 +902,42 @@ radio {
 .value-chip {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: #f8f9fa;
   border-radius: 30rpx;
   padding: 10rpx 20rpx;
-  gap: 8rpx;
-  border: 2rpx solid #dcdfe6;
-  transition: all 0.2s;
+  gap: 6rpx;
+  border: 2rpx solid #e4e7ed;
+  transition: all 0.25s;
   position: relative;
+  opacity: 0.55;
 }
 .value-chip.selected {
+  opacity: 1;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: #fff;
   border-color: #667eea;
-  box-shadow: 0 4rpx 16rpx rgba(102,126,234,0.3);
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.4);
+  transform: scale(1.05);
 }
 .value-chip:active { transform: scale(0.95); }
-.value-chip-emoji { font-size: 28rpx; }
-.value-chip-name { font-size: 26rpx; font-weight: 500; color: #303133; }
-.value-chip.selected .value-chip-name { color: #fff; }
+.value-chip.selected:active { transform: scale(1); }
+.value-chip-emoji { font-size: 28rpx; opacity: 0.6; }
+.value-chip.selected .value-chip-emoji { opacity: 1; }
+.value-chip-name { font-size: 26rpx; font-weight: 500; color: #909399; }
+.value-chip.selected .value-chip-name { color: #fff; font-weight: 600; }
 .value-chip-check {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28rpx;
-  height: 28rpx;
-  background: rgba(255,255,255,0.25);
+  width: 32rpx;
+  height: 32rpx;
+  background: rgba(255,255,255,0.3);
   border-radius: 50%;
-  font-size: 18rpx;
+  font-size: 20rpx;
   font-weight: bold;
   color: #fff;
   line-height: 1;
+  flex-shrink: 0;
 }
 .value-counter {
   font-size: 24rpx; color: #909399;
