@@ -333,6 +333,7 @@
             wx:for="{{valueOptions}}" wx:key="name" bindtap="toggleValue" data-name="{{item.name}}">
             <text class="value-chip-emoji">{{item.emoji}}</text>
             <text class="value-chip-name">{{item.name}}</text>
+            <text class="value-chip-check" wx:if="{{valueSelected.indexOf(item.name) > -1}}">✓</text>
           </view>
         </view>
         <view class="value-counter">已选 {{valueSelected.length}}/10</view>

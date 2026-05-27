@@ -902,23 +902,37 @@ radio {
 .value-chip {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08));
+  background: #fff;
   border-radius: 30rpx;
   padding: 10rpx 20rpx;
   gap: 8rpx;
-  border: 2rpx solid transparent;
+  border: 2rpx solid #dcdfe6;
   transition: all 0.2s;
+  position: relative;
 }
 .value-chip.selected {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: #fff;
-  border-color: transparent;
+  border-color: #667eea;
   box-shadow: 0 4rpx 16rpx rgba(102,126,234,0.3);
 }
 .value-chip:active { transform: scale(0.95); }
 .value-chip-emoji { font-size: 28rpx; }
-.value-chip-name { font-size: 26rpx; font-weight: 500; }
+.value-chip-name { font-size: 26rpx; font-weight: 500; color: #303133; }
 .value-chip.selected .value-chip-name { color: #fff; }
+.value-chip-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28rpx;
+  height: 28rpx;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  font-size: 18rpx;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+}
 .value-counter {
   font-size: 24rpx; color: #909399;
   text-align: center; margin-bottom: 16rpx;
