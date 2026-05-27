@@ -318,6 +318,79 @@
     </view>
   </view>
 
+  <!-- 价值观澄清练习 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'value_clarify'}}">
+    <view class="panel-header">
+      <text class="panel-title">💎 价值观澄清</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+      <!-- 第1步：选择 -->
+      <view wx:if="{{valueStep === 1}}">
+        <text class="tool-intro">选出对你最重要的价值观（最多10个）</text>
+        <view class="value-grid">
+          <view class="value-chip {{valueSelected.indexOf(item.name) > -1 ? 'selected' : ''}}"
+            wx:for="{{valueOptions}}" wx:key="name" bindtap="toggleValue" data-name="{{item.name}}">
+            <text class="value-chip-emoji">{{item.emoji}}</text>
+            <text class="value-chip-name">{{item.name}}</text>
+          </view>
+        </view>
+        <view class="value-counter">已选 {{valueSelected.length}}/10</view>
+        <button class="save-btn primary" bindtap="nextValueStep">
+          {{valueSelected.length >= 3 ? '下一步：排序 ›' : '至少选3个继续'}}
+        </button>
+      </view>
+
+      <!-- 第2步：排序 -->
+      <view wx:if="{{valueStep === 2}}">
+        <text class="tool-intro">按重要性排序（越重要的越靠上）</text>
+        <view class="value-rank-list">
+          <view class="value-rank-item" wx:for="{{valueSelected}}" wx:key="*this">
+            <text class="value-rank-num">{{index + 1}}</text>
+            <text class="value-rank-name">{{item}}</text>
+            <view class="value-rank-actions">
+              <text class="rank-btn" bindtap="moveValueUp" data-idx="{{index}}" wx:if="{{index > 0}}">▲</text>
+              <text class="rank-btn" bindtap="moveValueDown" data-idx="{{index}}" wx:if="{{index < valueSelected.length - 1}}">▼</text>
+            </view>
+          </view>
+        </view>
+        <button class="save-btn primary" bindtap="nextValueStep">✨ 生成分析</button>
+        <button class="save-btn reset-btn" bindtap="resetValue">重新选择</button>
+      </view>
+
+      <!-- 第3步：结果 -->
+      <view wx:if="{{valueStep === 3 && valueResult}}">
+        <view class="value-result-card">
+          <text class="value-result-title">你的核心价值观</text>
+          <view class="value-podium">
+            <view class="podium-item gold">
+              <text class="podium-num">🥇</text>
+              <text class="podium-name">{{valueResult.top1}}</text>
+            </view>
+            <view class="podium-row">
+              <view class="podium-item silver">
+                <text class="podium-num">🥈</text>
+                <text class="podium-name">{{valueResult.top2}}</text>
+              </view>
+              <view class="podium-item bronze">
+                <text class="podium-num">🥉</text>
+                <text class="podium-name">{{valueResult.top3}}</text>
+              </view>
+            </view>
+          </view>
+          <text class="value-result-summary">{{valueResult.summary}}</text>
+          <view class="value-insight-list">
+            <view class="value-insight-item" wx:for="{{valueResult.insights}}" wx:key="*this">
+              <text class="value-insight-text">{{item}}</text>
+            </view>
+          </view>
+          <text class="value-result-advice">{{valueResult.advice}}</text>
+        </view>
+        <button class="save-btn" bindtap="resetValue">重新做一次</button>
+      </view>
+    </view>
+  </view>
+
   <!-- 其他简单提示工具（未开发的功能） -->
   <view class="tool-panel" wx:if="{{currentTool === 'value_clarify' || currentTool === 'ability_assess' || currentTool === 'goal_setting'}}">
     <view class="panel-header">

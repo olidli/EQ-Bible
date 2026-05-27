@@ -8,6 +8,25 @@ const {
   REGULATION_STRATEGIES, REFLECTION_QUESTIONS, STRESS_QUESTIONS
 } = require('../../utils/constants')
 
+// 价值观澄清 - 30个核心价值
+const VALUE_OPTIONS = [
+  { name: '家庭', emoji: '👨‍👩‍👧‍👦' }, { name: '健康', emoji: '💪' },
+  { name: '财富', emoji: '💰' },   { name: '自由', emoji: '🕊️' },
+  { name: '安全', emoji: '🛡️' },  { name: '成就感', emoji: '🏆' },
+  { name: '友谊', emoji: '🤝' },  { name: '爱情', emoji: '💕' },
+  { name: '知识', emoji: '📚' },  { name: '创造', emoji: '🎨' },
+  { name: '诚信', emoji: '⭐' },   { name: '责任', emoji: '📋' },
+  { name: '尊重', emoji: '🙏' },  { name: '同理心', emoji: '💗' },
+  { name: '合作', emoji: '🤲' },  { name: '独立', emoji: '🌿' },
+  { name: '成长', emoji: '🌱' },  { name: '挑战', emoji: '⛰️' },
+  { name: '稳定', emoji: '🏠' },  { name: '自然', emoji: '🌳' },
+  { name: '信仰', emoji: '🕯️' }, { name: '幽默', emoji: '😄' },
+  { name: '美丽', emoji: '🌸' },  { name: '真理', emoji: '🔍' },
+  { name: '智慧', emoji: '🧠' },  { name: '公平', emoji: '⚖️' },
+  { name: '传统', emoji: '🏮' },  { name: '冒险', emoji: '🚀' },
+  { name: '秩序', emoji: '📐' },  { name: '权力', emoji: '👑' },
+]
+
 Page({
   data: {
     paramTool: '',
@@ -45,6 +64,11 @@ Page({
     energyData: [],
     energyStats: null,
     energyDist: [],
+    // 价值观澄清
+    valueOptions: VALUE_OPTIONS,
+    valueStep: 1,
+    valueSelected: [],
+    valueResult: null,
   },
 
   onLoad(options) {
@@ -376,6 +400,97 @@ Page({
       },
       energyDist: distList,
     })
+  },
+
+  // ===== 价值观澄清练习 =====
+  toggleValue(e) {
+    const name = e.currentTarget.dataset.name
+    const selected = [...this.data.valueSelected]
+    const idx = selected.indexOf(name)
+    if (idx > -1) {
+      selected.splice(idx, 1)
+    } else {
+      if (selected.length >= 10) {
+        wx.showToast({ title: '最多选择10个价值观', icon: 'none' })
+        return
+      }
+      selected.push(name)
+    }
+    this.setData({ valueSelected: selected })
+  },
+
+  nextValueStep() {
+    if (this.data.valueStep === 1 && this.data.valueSelected.length < 3) {
+      wx.showToast({ title: '请至少选择3个价值观', icon: 'none' })
+      return
+    }
+    if (this.data.valueStep === 2 && this.data.valueSelected.length < 3) {
+      this.setData({ valueStep: 1 })
+      return
+    }
+    if (this.data.valueStep === 2) {
+      this.generateValueAnalysis()
+      return
+    }
+    this.setData({ valueStep: 2 })
+  },
+
+  moveValueUp(e) {
+    const idx = e.currentTarget.dataset.idx
+    if (idx === 0) return
+    const s = [...this.data.valueSelected]
+    ;[s[idx - 1], s[idx]] = [s[idx], s[idx - 1]]
+    this.setData({ valueSelected: s })
+  },
+
+  moveValueDown(e) {
+    const idx = e.currentTarget.dataset.idx
+    const s = [...this.data.valueSelected]
+    if (idx >= s.length - 1) return
+    ;[s[idx], s[idx + 1]] = [s[idx + 1], s[idx]]
+    this.setData({ valueSelected: s })
+  },
+
+  generateValueAnalysis() {
+    const selected = this.data.valueSelected
+    if (selected.length < 3) {
+      wx.showToast({ title: '请至少选择3个价值观', icon: 'none' })
+      return
+    }
+    const top3 = selected.slice(0, 3)
+    const insightMap = {
+      '家庭': '你把家庭放在首位，意味着亲密关系和归属感对你至关重要。', '健康': '你重视健康，说明你明白身体是一切的基础。',
+      '财富': '你追求财富，说明你看重物质保障和生活品质。', '自由': '你渴望自由，说明你讨厌被束缚，向往自主掌控人生。',
+      '安全': '你重视安全感，说明稳定和可预测的环境对你很重要。', '成就感': '你追求成就感，说明你享受通过努力达成目标的过程。',
+      '友谊': '你重视友谊，说明真诚的人际连接是你幸福的重要来源。', '爱情': '你重视爱情，说明亲密的情感关系是你生命中的重要支柱。',
+      '知识': '你追求知识，说明你相信学习和思考能带来成长。', '创造': '你有创造欲，说明你喜欢用新想法和新方式表达自己。',
+      '诚信': '你重视诚信，说明正直和可信是你做人的底线。', '责任': '你有责任感，说明你是一个可靠、值得信赖的人。',
+      '尊重': '你渴望尊重，说明你希望被公平对待，也愿意尊重他人。', '同理心': '你有很强的同理心，说明你能理解他人的感受和处境。',
+      '合作': '你重视合作，说明你相信众人拾柴火焰高。', '独立': '你追求独立，说明你希望依靠自己的力量走自己的路。',
+      '成长': '你重视成长，说明你相信终身学习和自我提升的价值。', '挑战': '你喜欢挑战，说明你渴望突破舒适圈、不断超越自己。',
+      '稳定': '你追求稳定，说明有序和可预测的生活让你感到安心。', '自然': '你热爱自然，说明你在自然中找到平静和力量。',
+      '信仰': '你有坚定的信仰，说明你有精神支柱和价值指引。', '幽默': '你有幽默感，说明你能用轻松的方式面对生活。',
+      '美丽': '你追求美，说明你有敏锐的审美和对品质的追求。', '真理': '你追求真理，说明你渴望真实和深度理解。',
+      '智慧': '你追求智慧，说明你不仅想要知识，更想理解生命的本质。', '公平': '你重视公平，说明正义和平等是你心中的准则。',
+      '传统': '你尊重传统，说明你重视传承和文化根基。', '冒险': '你喜欢冒险，说明你享受未知带来的刺激和可能性。',
+      '秩序': '你重视秩序，说明条理和规则让你的生活更高效。', '权力': '你追求权力，说明你渴望影响力和掌控力。',
+    }
+    const insights = top3.map(v => insightMap[v] || `${v}是你重要的价值取向。`)
+    const result = {
+      top1: top3[0], top2: top3[1], top3: top3[2],
+      insights,
+      summary: `你的核心价值是「${top3[0]}」、「${top3[1]}」和「${top3[2]}」。它反映了你内心真正在意什么、什么驱动你做决定。`,
+      advice: '建议：\n1. 定期回顾你的核心价值，确保生活和工作与它们一致\n2. 在做重要决定时，用核心价值观作为衡量标准\n3. 如果感到迷茫，回到你的价值观清单上重新对齐',
+    }
+    this.setData({ valueResult: result, valueStep: 3 })
+    // 保存历史
+    const history = wx.getStorageSync('valueHistory') || []
+    history.unshift({ date: new Date().toLocaleDateString(), top3, all: selected })
+    wx.setStorageSync('valueHistory', history.slice(0, 10))
+  },
+
+  resetValue() {
+    this.setData({ valueStep: 1, valueSelected: [], valueResult: null })
   },
 })
 
