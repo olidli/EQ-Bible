@@ -10,21 +10,21 @@ const {
 
 // 价值观澄清 - 30个核心价值
 const VALUE_OPTIONS = [
-  { name: '家庭', emoji: '👨‍👩‍👧‍👦' }, { name: '健康', emoji: '💪' },
-  { name: '财富', emoji: '💰' },   { name: '自由', emoji: '🕊️' },
-  { name: '安全', emoji: '🛡️' },  { name: '成就感', emoji: '🏆' },
-  { name: '友谊', emoji: '🤝' },  { name: '爱情', emoji: '💕' },
-  { name: '知识', emoji: '📚' },  { name: '创造', emoji: '🎨' },
-  { name: '诚信', emoji: '⭐' },   { name: '责任', emoji: '📋' },
-  { name: '尊重', emoji: '🙏' },  { name: '同理心', emoji: '💗' },
-  { name: '合作', emoji: '🤲' },  { name: '独立', emoji: '🌿' },
-  { name: '成长', emoji: '🌱' },  { name: '挑战', emoji: '⛰️' },
-  { name: '稳定', emoji: '🏠' },  { name: '自然', emoji: '🌳' },
-  { name: '信仰', emoji: '🕯️' }, { name: '幽默', emoji: '😄' },
-  { name: '美丽', emoji: '🌸' },  { name: '真理', emoji: '🔍' },
-  { name: '智慧', emoji: '🧠' },  { name: '公平', emoji: '⚖️' },
-  { name: '传统', emoji: '🏮' },  { name: '冒险', emoji: '🚀' },
-  { name: '秩序', emoji: '📐' },  { name: '权力', emoji: '👑' },
+  { name: '创造', emoji: '🎨' },   { name: '安全', emoji: '🛡️' },
+  { name: '友谊', emoji: '🤝' },   { name: '秩序', emoji: '📐' },
+  { name: '健康', emoji: '💪' },   { name: '公平', emoji: '⚖️' },
+  { name: '幽默', emoji: '😄' },   { name: '成就感', emoji: '🏆' },
+  { name: '家庭', emoji: '👨‍👩‍👧‍👦' }, { name: '真理', emoji: '🔍' },
+  { name: '美丽', emoji: '🌸' },   { name: '独立', emoji: '🌿' },
+  { name: '责任', emoji: '📋' },   { name: '自由', emoji: '🕊️' },
+  { name: '合作', emoji: '🤲' },   { name: '权力', emoji: '👑' },
+  { name: '财富', emoji: '💰' },   { name: '尊重', emoji: '🙏' },
+  { name: '成长', emoji: '🌱' },   { name: '传统', emoji: '🏮' },
+  { name: '冒险', emoji: '🚀' },   { name: '爱情', emoji: '💕' },
+  { name: '知识', emoji: '📚' },   { name: '同理心', emoji: '💗' },
+  { name: '稳定', emoji: '🏠' },   { name: '诚信', emoji: '⭐' },
+  { name: '自然', emoji: '🌳' },   { name: '智慧', emoji: '🧠' },
+  { name: '信仰', emoji: '🕯️' },  { name: '挑战', emoji: '⛰️' },
 ]
 
 Page({
