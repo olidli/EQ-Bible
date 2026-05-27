@@ -37,6 +37,70 @@ function shuffleArray(arr) {
   return a
 }
 
+// 价值观 → 推荐关键词映射
+const VALUE_KEYWORDS = {
+  '家庭': ['家庭', '亲子', '父母', '亲情', '家人'],
+  '健康': ['健康', '压力', '情绪', '身心'],
+  '财富': ['职场', '职业', '工作', '财富'],
+  '自由': ['自由', '独立', '自主', '自我'],
+  '安全': ['安全感', '焦虑', '安全', '情绪管理'],
+  '成就感': ['成就', '目标', '成长', '成功'],
+  '友谊': ['友谊', '朋友', '人际', '社交'],
+  '爱情': ['爱情', '亲密关系', '伴侣', '恋爱'],
+  '知识': ['学习', '知识', '成长', '读书'],
+  '创造': ['创造', '创意', '创新', '想象'],
+  '诚信': ['诚信', '信任', '正直', '品格'],
+  '责任': ['责任', '担当', '承诺', '靠谱'],
+  '尊重': ['尊重', '礼貌', '沟通', '倾听'],
+  '同理心': ['同理心', '共情', '倾听', '理解'],
+  '合作': ['合作', '团队', '沟通', '协作'],
+  '独立': ['独立', '自主', '自我', '成长'],
+  '成长': ['成长', '进步', '学习', '提升'],
+  '挑战': ['挑战', '突破', '勇气', '走出'],
+  '稳定': ['稳定', '安全感', '情绪管理', '平静'],
+  '自然': ['自然', '放松', '平静', '正念'],
+  '信仰': ['信仰', '信念', '价值观', '意义'],
+  '幽默': ['幽默', '轻松', '沟通', '乐观'],
+  '美丽': ['美', '审美', '品质', '生活'],
+  '真理': ['真理', '真实', '思考', '本质'],
+  '智慧': ['智慧', '思考', '成长', '人生'],
+  '公平': ['公平', '公正', '尊重', '原则'],
+  '传统': ['传统', '家庭', '文化', '传承'],
+  '冒险': ['冒险', '挑战', '勇气', '探索'],
+  '秩序': ['秩序', '规则', '效率', '条理'],
+  '权力': ['权力', '领导', '影响', '管理'],
+}
+
+// 在知识库中搜索与价值观相关的文章
+function searchValueArticles(top3) {
+  const items = getApp().globalData.items || []
+  if (!items.length) return []
+  const matched = new Set()
+  const result = []
+  // 遍历前三名价值观的关键词
+  for (const value of top3) {
+    const kws = VALUE_KEYWORDS[value] || [value]
+    for (const item of items) {
+      if (matched.has(item.id)) continue
+      const searchText = (item.t + ' ' + (item.tg || []).join(' ') + ' ' + (item.moduleName || '')).toLowerCase()
+      for (const kw of kws) {
+        if (searchText.includes(kw.toLowerCase())) {
+          matched.add(item.id)
+          result.push({
+            id: item.id,
+            title: item.t,
+            module: item.moduleName || '',
+            tag: value,  // 匹配的价值观名称
+          })
+          break
+        }
+      }
+    }
+    if (result.length >= 6) break  // 最多推荐6条
+  }
+  return result.slice(0, 6)
+}
+
 Page({
   data: {
     paramTool: '',
@@ -501,6 +565,7 @@ Page({
       insights,
       summary: `你的核心价值是「${top3[0]}」、「${top3[1]}」和「${top3[2]}」。它反映了你内心真正在意什么、什么驱动你做决定。`,
       advice: '建议：\n1. 定期回顾你的核心价值，确保生活和工作与它们一致\n2. 在做重要决定时，用核心价值观作为衡量标准\n3. 如果感到迷茫，回到你的价值观清单上重新对齐',
+      articles: searchValueArticles(top3),
     }
     this.setData({ valueResult: result, valueStep: 3 })
     // 保存历史
@@ -511,6 +576,14 @@ Page({
 
   resetValue() {
     this.setData({ valueStep: 1, valueSelected: [], valueResult: null })
+  },
+
+  // 跳转知识详情
+  goArticle(e) {
+    const id = e.currentTarget.dataset.id
+    if (id) {
+      wx.navigateTo({ url: `/pages/detail/detail?id=${id}` })
+    }
   },
 })
 

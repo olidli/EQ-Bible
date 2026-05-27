@@ -337,7 +337,6 @@
           </view>
         </view>
         <view class="value-counter">已选 {{valueSelected.length}}/10</view>
-        <text style="font-size:20rpx;color:#999;display:block;text-align:center;margin-bottom:12rpx;">{{valueSelected.join('、') || '（空）'}}</text>
         <button class="save-btn primary" bindtap="nextValueStep">
           {{valueSelected.length >= 3 ? '下一步：排序 ›' : '至少选3个继续'}}
         </button>
@@ -389,6 +388,24 @@
           <text class="value-result-advice">{{valueResult.advice}}</text>
         </view>
         <button class="save-btn" bindtap="resetValue">重新做一次</button>
+
+        <!-- 基于价值观的推荐内容 -->
+        <view class="value-recommend" wx:if="{{valueResult.articles && valueResult.articles.length > 0}}">
+          <view class="value-recommend-header">
+            <text class="value-recommend-icon">📖</text>
+            <text class="value-recommend-title">基于你的价值观推荐</text>
+          </view>
+          <view class="value-recommend-list">
+            <view class="value-recommend-item" wx:for="{{valueResult.articles}}" wx:for-item="art" wx:key="id" bindtap="goArticle" data-id="{{art.id}}">
+              <view class="value-recommend-tag">{{art.tag}}</view>
+              <view class="value-recommend-text">
+                <text class="value-recommend-name">{{art.title}}</text>
+                <text class="value-recommend-module">{{art.module}}</text>
+              </view>
+              <text class="value-recommend-arrow">›</text>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
