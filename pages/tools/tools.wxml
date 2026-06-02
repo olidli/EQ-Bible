@@ -473,7 +473,7 @@
             </view>
             <text class="ability-q-text">{{q.text}}</text>
             <view class="ability-q-options">
-              <view class="ability-q-option {{abilityAnswers.find(a => a.qid === q.id)?.score === opt.score ? 'selected' : ''}}"
+              <view class="ability-q-option {{abilitySelectedMap[q.id] === opt.score ? 'selected' : ''}}"
                 wx:for="{{q.options}}" wx:for-item="opt" wx:key="opt.text"
                 bindtap="selectAbilityOption" data-qid="{{q.id}}" data-score="{{opt.score}}" data-dim="{{q.dim}}">
                 <text class="ability-opt-text">{{opt.text}}</text>

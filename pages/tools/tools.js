@@ -298,6 +298,7 @@ Page({
     abilityQuestions: [],
     abilityQIndex: 0,
     abilityAnswers: [],
+    abilitySelectedMap: {},
     abilityResult: null,
     abilityPrevResult: null,  // 上次评测结果，用于对比
     abilityHistory: [],
@@ -761,11 +762,14 @@ Page({
       dimEmoji: ABILITY_DIMS[q.dim].emoji,
       dimName: ABILITY_DIMS[q.dim].name,
     }))
+    // 初始化选中态映射表 { qid: score }
+    const selectedMap = {}
     this.setData({
       abilityStep: 0,
       abilityQuestions: questions,
       abilityQIndex: 0,
       abilityAnswers: [],
+      abilitySelectedMap: {},
       abilityResult: null,
       abilityPrevResult: prevResult,
       abilityHistory: history,
@@ -773,7 +777,7 @@ Page({
   },
 
   startAbility() {
-    this.setData({ abilityStep: 1, abilityQIndex: 0, abilityAnswers: [] })
+    this.setData({ abilityStep: 1, abilityQIndex: 0, abilityAnswers: [], abilitySelectedMap: {} })
   },
 
   selectAbilityOption(e) {
@@ -783,7 +787,9 @@ Page({
     const item = { qid, dim, score: parseInt(score) }
     if (idx > -1) answers[idx] = item
     else answers.push(item)
-    this.setData({ abilityAnswers: answers })
+    // 更新选中态映射表（WXML用）
+    const sm = { ...this.data.abilitySelectedMap, [qid]: parseInt(score) }
+    this.setData({ abilityAnswers: answers, abilitySelectedMap: sm })
   },
 
   nextAbilityQ() {
