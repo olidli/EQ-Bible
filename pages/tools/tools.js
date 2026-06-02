@@ -101,6 +101,156 @@ function searchValueArticles(top3) {
   return result.slice(0, 6)
 }
 
+
+// ===== 能力评估表 =====
+// 6维度 × 3题 = 18道情景题
+// 每题3选项：高分(3分)、中分(2分)、低分(1分)
+const ABILITY_QUESTIONS = [
+  // ── 情绪觉察力 ──
+  { id: 'a1', dim: 'awareness', dimName: '情绪觉察力', text: '同事小李今天一直沉默、皱着眉头，你路过时他勉强笑了一下。你会？',
+    options: [
+      { text: '主动问他"你还好吗？看起来你不太开心"', score: 3 },
+      { text: '觉得他可能心情不好，但不过问，给他空间', score: 2 },
+      { text: '没注意到异常，正常跟他说话', score: 1 }
+    ] },
+  { id: 'a2', dim: 'awareness', dimName: '情绪觉察力', text: '你在发言时，发现台下有人频繁看表、有人开始刷手机。你第一反应是？',
+    options: [
+      { text: '意识到大家注意力散了，调整内容或互动方式', score: 3 },
+      { text: '有点紧张但继续按原计划讲完', score: 2 },
+      { text: '没注意到，继续讲自己的', score: 1 }
+    ] },
+  { id: 'a3', dim: 'awareness', dimName: '情绪觉察力', text: '早上起床你感到莫名的烦躁，没什么具体原因。你会？',
+    options: [
+      { text: '停下来问问自己：是没睡好？还是有件事压在心上？', score: 3 },
+      { text: '告诉自己别想太多，该干嘛干嘛', score: 2 },
+      { text: '带着烦躁过一天，对身边的人没好气', score: 1 }
+    ] },
+  // ── 情绪管理力 ──
+  { id: 'm1', dim: 'management', dimName: '情绪管理力', text: '你辛苦准备了三天的工作方案，被领导当众批评"不够用心"。你会？',
+    options: [
+      { text: '深呼吸，说"谢谢指正，我记下来会后修改"', score: 3 },
+      { text: '心里不舒服，但忍着不说话', score: 2 },
+      { text: '当场反驳"我准备了三天，哪里不用心了"', score: 1 }
+    ] },
+  { id: 'm2', dim: 'management', dimName: '情绪管理力', text: '排队时有人插队到你前面。你会？',
+    options: [
+      { text: '礼貌地说"您好，现在是我在排队"', score: 3 },
+      { text: '心里很不爽，但算了不想惹事', score: 2 },
+      { text: '直接发火"没看见排队吗"', score: 1 }
+    ] },
+  { id: 'm3', dim: 'management', dimName: '情绪管理力', text: '回到家后，因为工作上的事还在生气。家人跟你说话，你会？',
+    options: [
+      { text: '主动说"我今天心情不太好，不想把情绪带到家里"', score: 3 },
+      { text: '尽量装作没事，但说话语气还是不太好', score: 2 },
+      { text: '把气撒在家人身上，为小事发火', score: 1 }
+    ] },
+  // ── 沟通表达力 ──
+  { id: 'c1', dim: 'communication', dimName: '沟通表达力', text: '你不同意同事的方案，但他的方案已经被大部分人认可。你会？',
+    options: [
+      { text: '先肯定方案的价值，再提出补充建议"我觉得还可以考虑……"', score: 3 },
+      { text: '私下跟同事说"你这个方案我觉得有风险"', score: 2 },
+      { text: '既然大家都同意了，我就不说了', score: 1 }
+    ] },
+  { id: 'c2', dim: 'communication', dimName: '沟通表达力', text: '朋友找你倾诉烦恼，说了20分钟。你听了半天，觉得他其实自己也知道该怎么解决。你会？',
+    options: [
+      { text: '先共情"听起来你挺不容易的"，再问"你打算怎么办？"', score: 3 },
+      { text: '直接告诉他"我觉得你应该这样做……"', score: 2 },
+      { text: '不知道怎么回应，就说"别想太多了"', score: 1 }
+    ] },
+  { id: 'c3', dim: 'communication', dimName: '沟通表达力', text: '你要向领导汇报一个复杂项目的进展，但时间只有5分钟。你会？',
+    options: [
+      { text: '提炼三点核心进展，每点配一个关键数据', score: 3 },
+      { text: '按时间顺序把什么事都讲一遍', score: 2 },
+      { text: '想到哪说到哪，没提前准备', score: 1 }
+    ] },
+  // ── 人际交往力 ──
+  { id: 'i1', dim: 'interpersonal', dimName: '人际交往力', text: '公司聚餐，你发现一个新同事独自坐在角落没人聊天。你会？',
+    options: [
+      { text: '主动过去坐他旁边，聊一些轻松的话题', score: 3 },
+      { text: '对他笑一下示意，但继续跟熟人聊天', score: 2 },
+      { text: '没注意到他，或者觉得不熟就算了', score: 1 }
+    ] },
+  { id: 'i2', dim: 'interpersonal', dimName: '人际交往力', text: '你帮了同事一个大忙，但他连句谢谢都没说。你会？',
+    options: [
+      { text: '下次找个轻松的方式说"上次的事费了我不少功夫，下次可要请我喝咖啡哦"', score: 3 },
+      { text: '心里不舒服，但算了，以后少帮他', score: 2 },
+      { text: '很生气，以后再也不帮他了', score: 1 }
+    ] },
+  { id: 'i3', dim: 'interpersonal', dimName: '人际交往力', text: '一个很久没联系的朋友突然发消息找你帮忙。你会？',
+    options: [
+      { text: '如果力所能及就帮，同时借机聊聊近况恢复联系', score: 3 },
+      { text: '看是什么忙，不太麻烦就帮一下', score: 2 },
+      { text: '平时不联系，有事才找我，不帮', score: 1 }
+    ] },
+  // ── 抗压韧性 ──
+  { id: 'r1', dim: 'resilience', dimName: '抗压韧性', text: '你连续加班一周，项目最后一天系统崩溃了，可能需要延期。你会？',
+    options: [
+      { text: '先冷静评估修复时间，同时跟相关方沟通预期', score: 3 },
+      { text: '很焦虑，但继续硬着头皮干', score: 2 },
+      { text: '崩溃，觉得完蛋了', score: 1 }
+    ] },
+  { id: 'r2', dim: 'resilience', dimName: '抗压韧性', text: '你参加一个比赛/考核，第一次尝试失败了。你会？',
+    options: [
+      { text: '分析失败原因，制定改进计划再试一次', score: 3 },
+      { text: '心情低落一段时间，然后再考虑要不要继续', score: 2 },
+      { text: '放弃了，觉得自己不适合', score: 1 }
+    ] },
+  { id: 'r3', dim: 'resilience', dimName: '抗压韧性', text: '同时收到多个紧急任务，时间都不够用。你会？',
+    options: [
+      { text: '列出所有任务，按紧急重要排序，逐个沟通时间预期', score: 3 },
+      { text: '很焦虑但不知道该先做哪个，随便开始做一个', score: 2 },
+      { text: '烦躁，什么都不想做', score: 1 }
+    ] },
+  // ── 自我驱动力 ──
+  { id: 'd1', dim: 'motivation', dimName: '自我驱动力', text: '你给自己定了一个学习目标，坚持了两周开始松懈。你会？',
+    options: [
+      { text: '检查目标是否太大，拆成更小的步骤继续', score: 3 },
+      { text: '强迫自己再坚持一下', score: 2 },
+      { text: '算了，反正也没人逼我', score: 1 }
+    ] },
+  { id: 'd2', dim: 'motivation', dimName: '自我驱动力', text: '你工作中有一个想法，但需要额外花时间自学才能实现。你会？',
+    options: [
+      { text: '制定学习计划，每天抽30分钟自学', score: 3 },
+      { text: '想法很好，但太忙了没时间学', score: 2 },
+      { text: '想想而已，太麻烦了', score: 1 }
+    ] },
+  { id: 'd3', dim: 'motivation', dimName: '自我驱动力', text: '看到身边人都在进步，自己似乎原地踏步。你会？',
+    options: [
+      { text: '列出一个具体的行动计划，从今天开始做第一件事', score: 3 },
+      { text: '有点焦虑，但不知道怎么改变', score: 2 },
+      { text: '躺平了，觉得差距太大追不上', score: 1 }
+    ] },
+]
+
+// 能力等级定义（小学→博士）
+const ABILITY_LEVELS = [
+  { level: 1, name: '小学', scoreMin: 0, desc: '刚接触这个能力，需要从头学起' },
+  { level: 2, name: '中学', scoreMin: 40, desc: '有基本认识，但还不太稳定' },
+  { level: 3, name: '大学', scoreMin: 55, desc: '掌握了核心方法，能应对常见场景' },
+  { level: 4, name: '硕士', scoreMin: 70, desc: '能熟练运用，开始形成自己的体系' },
+  { level: 5, name: '博士', scoreMin: 85, desc: '已经达到较高水平，可以指导他人' },
+]
+
+// 能力维度信息
+const ABILITY_DIMS = {
+  awareness:     { name: '情绪觉察力', color: '#4facfe', emoji: '👁️', icon: '🔍' },
+  management:    { name: '情绪管理力', color: '#f5576c', emoji: '🧘', icon: '⚖️' },
+  communication: { name: '沟通表达力', color: '#43e97b', emoji: '💬', icon: '📢' },
+  interpersonal: { name: '人际交往力', color: '#ff9a44', emoji: '🤝', icon: '👥' },
+  resilience:    { name: '抗压韧性',   color: '#667eea', emoji: '💪', icon: '🛡️' },
+  motivation:    { name: '自我驱动力', color: '#e84393', emoji: '🚀', icon: '🎯' },
+}
+
+// 能力维度 → 推荐关键词
+const ABILITY_KEYWORDS = {
+  'awareness':     ['情绪', '觉察', '自我', '情绪管理', '认识自己'],
+  'management':    ['情绪管理', '愤怒', '调节', '冷静', '情绪'],
+  'communication': ['沟通', '表达', '倾听', '情商', '沟通表达'],
+  'interpersonal': ['人际', '社交', '关系', '沟通', '团队'],
+  'resilience':    ['抗挫折', '逆商', '压力', '韧性', '意志力'],
+  'motivation':    ['自我激励', '目标', '动力', '成长', '习惯'],
+}
+
 Page({
   data: {
     paramTool: '',
@@ -143,6 +293,16 @@ Page({
     valueStep: 1,
     valueSelected: [],
     valueResult: null,
+    // 能力评估表
+    abilityStep: 0,        // 0=首页 1=答题 2=结果
+    abilityQuestions: [],
+    abilityQIndex: 0,
+    abilityAnswers: [],
+    abilityResult: null,
+    abilityPrevResult: null,  // 上次评测结果，用于对比
+    abilityHistory: [],
+    abilityDims: ABILITY_DIMS,
+    abilityDimList: Object.values(ABILITY_DIMS),
   },
 
   onLoad(options) {
@@ -194,6 +354,11 @@ Page({
         valueSelected: [],
         valueResult: null,
       })
+    }
+    
+    // 能力评估表：初始化
+    if (id === 'ability_assess') {
+      this.initAbility()
     }
   },
 
@@ -576,6 +741,200 @@ Page({
 
   resetValue() {
     this.setData({ valueStep: 1, valueSelected: [], valueResult: null })
+  },
+
+  // ===== 能力评估表 =====
+  initAbility() {
+    const history = wx.getStorageSync('abilityHistory') || []
+    const prevResult = history.length > 0 ? {
+      ...history[0],
+      dims: history[0].dims.map(d => ({
+        ...d,
+        name: (ABILITY_DIMS[d.key] || {}).name || d.key,
+        emoji: (ABILITY_DIMS[d.key] || {}).emoji || '',
+      })),
+    } : null
+    // 把维度信息(颜色/emoji)合并到每道题中
+    const questions = shuffleArray(ABILITY_QUESTIONS).map(q => ({
+      ...q,
+      dimColor: ABILITY_DIMS[q.dim].color,
+      dimEmoji: ABILITY_DIMS[q.dim].emoji,
+      dimName: ABILITY_DIMS[q.dim].name,
+    }))
+    this.setData({
+      abilityStep: 0,
+      abilityQuestions: questions,
+      abilityQIndex: 0,
+      abilityAnswers: [],
+      abilityResult: null,
+      abilityPrevResult: prevResult,
+      abilityHistory: history,
+    })
+  },
+
+  startAbility() {
+    this.setData({ abilityStep: 1, abilityQIndex: 0, abilityAnswers: [] })
+  },
+
+  selectAbilityOption(e) {
+    const { qid, score, dim } = e.currentTarget.dataset
+    const answers = [...this.data.abilityAnswers]
+    const idx = answers.findIndex(a => a.qid === qid)
+    const item = { qid, dim, score: parseInt(score) }
+    if (idx > -1) answers[idx] = item
+    else answers.push(item)
+    this.setData({ abilityAnswers: answers })
+  },
+
+  nextAbilityQ() {
+    const idx = this.data.abilityQIndex
+    if (idx < 17) {
+      this.setData({ abilityQIndex: idx + 1 })
+    }
+  },
+
+  prevAbilityQ() {
+    const idx = this.data.abilityQIndex
+    if (idx > 0) {
+      this.setData({ abilityQIndex: idx - 1 })
+    }
+  },
+
+  submitAbility() {
+    const answers = this.data.abilityAnswers
+    const totalQ = ABILITY_QUESTIONS.length
+    if (answers.length < totalQ) {
+      wx.showToast({ title: `请完成全部${totalQ}题`, icon: 'none' })
+      return
+    }
+
+    // 计算每个维度的得分
+    const dimScores = {}
+    answers.forEach(a => {
+      if (!dimScores[a.dim]) dimScores[a.dim] = { total: 0, count: 0 }
+      dimScores[a.dim].total += a.score
+      dimScores[a.dim].count += 1
+    })
+
+    // 各维度满分 = 3题 × 3分 = 9分，换算为百分制
+    const dimensions = []
+    let overallSum = 0
+    const dimKeys = Object.keys(ABILITY_DIMS)
+    dimKeys.forEach(key => {
+      const d = dimScores[key] || { total: 0, count: 3 }
+      const rawScore = d.total
+      const maxScore = d.count * 3
+      const pct = Math.round(rawScore / maxScore * 100)
+      const capped = Math.min(pct, 100)
+      const level = this.calcAbilityLevel(capped)
+      dimensions.push({
+        key,
+        name: ABILITY_DIMS[key].name,
+        score: capped,
+        rawScore,
+        maxScore,
+        level: level.level,
+        levelName: level.name,
+        desc: level.desc,
+        color: ABILITY_DIMS[key].color,
+        emoji: ABILITY_DIMS[key].emoji,
+        // 对比上次
+        change: this.data.abilityPrevResult
+          ? capped - (this.data.abilityPrevResult.dims.find(d => d.key === key)?.score || capped)
+          : null,
+      })
+      overallSum += capped
+    })
+
+    const overall = Math.round(overallSum / dimKeys.length)
+    const weakest = dimensions.reduce((a, b) => a.score < b.score ? a : b)
+    const strongest = dimensions.reduce((a, b) => a.score > b.score ? a : b)
+
+    // 综合画像
+    const profileMap = {
+      'high_all': '全面型：你的六项情商能力均衡发展，是一个综合素质很强的人。',
+      'high_awareness_low_management': '敏感型：你能敏锐察觉情绪，但在管理自身情绪方面还有提升空间。',
+      'high_management_low_awareness': '克制型：你善于控制情绪，但在觉察他人感受上可以更细腻一些。',
+      'high_communication_low_interpersonal': '能说会道型：你善于表达，但深层关系建立方面还有空间。',
+      'high_interpersonal_low_resilience': '社交型：你人际关系很好，但抗压能力可以再锻炼一下。',
+      'low_motivation': '潜力型：你有不错的基础，但需要更多的自我驱动力来推动自己前进。',
+    }
+    let profileKey = 'high_all'
+    if (dimensions.find(d => d.key === 'awareness').score >= 60 && dimensions.find(d => d.key === 'management').score < 50) profileKey = 'high_awareness_low_management'
+    else if (dimensions.find(d => d.key === 'management').score >= 60 && dimensions.find(d => d.key === 'awareness').score < 50) profileKey = 'high_management_low_awareness'
+    else if (dimensions.find(d => d.key === 'communication').score >= 60 && dimensions.find(d => d.key === 'interpersonal').score < 50) profileKey = 'high_communication_low_interpersonal'
+    else if (dimensions.find(d => d.key === 'interpersonal').score >= 60 && dimensions.find(d => d.key === 'resilience').score < 50) profileKey = 'high_interpersonal_low_resilience'
+    else if (dimensions.find(d => d.key === 'motivation').score < 50) profileKey = 'low_motivation'
+
+    // 推荐知识
+    const weakKey = weakest.key
+    const articles = this.getAbilityArticles(weakKey)
+
+    const result = {
+      overall,
+      dimensions,
+      weakest: weakest.key,
+      strongest: strongest.key,
+      weakestName: weakest.name,
+      weakestScore: weakest.score,
+      strongestName: strongest.name,
+      strongestScore: strongest.score,
+      profile: profileMap[profileKey] || profileMap['high_all'],
+      articles,
+      date: new Date().toLocaleDateString(),
+      level: this.getOverallLevel(overall),
+    }
+
+    // 保存历史
+    const history = wx.getStorageSync('abilityHistory') || []
+    history.unshift({
+      date: result.date,
+      overall: result.overall,
+      dims: dimensions.map(d => ({ key: d.key, score: d.score, levelName: d.levelName })),
+    })
+    wx.setStorageSync('abilityHistory', history.slice(0, 10))
+
+    this.setData({ abilityResult: result, abilityStep: 2 })
+  },
+
+  calcAbilityLevel(score) {
+    for (let i = ABILITY_LEVELS.length - 1; i >= 0; i--) {
+      if (score >= ABILITY_LEVELS[i].scoreMin) return ABILITY_LEVELS[i]
+    }
+    return ABILITY_LEVELS[0]
+  },
+
+  getOverallLevel(score) {
+    if (score >= 85) return '博士'
+    if (score >= 70) return '硕士'
+    if (score >= 55) return '大学'
+    if (score >= 40) return '中学'
+    return '小学'
+  },
+
+  getAbilityArticles(dimKey) {
+    const kws = ABILITY_KEYWORDS[dimKey] || ['情商']
+    const items = getApp().globalData.items || []
+    if (!items.length) return []
+    const matched = new Set()
+    const result = []
+    for (const kw of kws) {
+      for (const item of items) {
+        if (matched.has(item.id)) continue
+        const text = (item.t + ' ' + (item.tg || []).join(' ') + ' ' + (item.moduleName || '')).toLowerCase()
+        if (text.includes(kw.toLowerCase())) {
+          matched.add(item.id)
+          result.push({ id: item.id, title: item.t, module: item.moduleName || '' })
+          if (result.length >= 4) break
+        }
+      }
+      if (result.length >= 4) break
+    }
+    return result.slice(0, 4)
+  },
+
+  abilityRetest() {
+    this.initAbility()
   },
 
   // 跳转知识详情

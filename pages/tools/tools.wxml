@@ -410,8 +410,146 @@
     </view>
   </view>
 
-  <!-- 其他简单提示工具（未开发的功能） -->
-  <view class="tool-panel" wx:if="{{currentTool === 'ability_assess' || currentTool === 'goal_setting'}}">
+  <!-- 能力评估表 -->
+  <view class="tool-panel" wx:if="{{currentTool === 'ability_assess'}}">
+    <view class="panel-header">
+      <text class="panel-title">📊 能力评估表</text>
+      <text class="panel-close" bindtap="closeTool">✕</text>
+    </view>
+    <view class="panel-body">
+
+      <!-- 首页：开始评估 -->
+      <view wx:if="{{abilityStep === 0}}">
+        <view class="ability-intro">
+          <text class="ability-intro-title">🧭 全面了解你的情商能力</text>
+          <text class="ability-intro-desc">通过18道情景题，评估你在大大维度上的水平，获得专业评测报告和专属提升建议。</text>
+          <view class="ability-intro-meta">
+            <text>📝 18道情景选择题</text>
+            <text>⏱ 约5分钟</text>
+            <text>📊 生成六维雷达报告</text>
+          </view>
+          <view class="ability-intro-dims">
+            <text class="ability-dim-tag" wx:for="{{abilityDimList}}" wx:key="name" style="background:{{item.color}}20;color:{{item.color}};border-color:{{item.color}}40">
+              {{item.emoji}} {{item.name}}
+            </text>
+          </view>
+          <button class="save-btn primary" bindtap="startAbility" wx:if="{{!abilityPrevResult}}">🚀 开始评估</button>
+          <button class="save-btn primary" bindtap="startAbility" wx:if="{{abilityPrevResult}}">🔄 重新评估</button>
+        </view>
+        <!-- 上次结果摘要 -->
+        <view class="ability-prev" wx:if="{{abilityPrevResult}}">
+          <text class="ability-prev-title">📋 上次评估结果</text>
+          <text class="ability-prev-score">综合评分: {{abilityPrevResult.overall}}分</text>
+          <view class="ability-prev-dims">
+            <text wx:for="{{abilityPrevResult.dims}}" wx:key="key" wx:for-item="d" class="ability-prev-dim">
+              {{d.name}}: {{d.score}}分 ({{d.levelName}})
+            </text>
+          </view>
+        </view>
+        <!-- 历史记录 -->
+        <view class="ability-history" wx:if="{{abilityHistory.length > 0}}">
+          <text class="ability-history-title">📈 评估记录</text>
+          <text class="ability-history-item" wx:for="{{abilityHistory}}" wx:key="date">
+            第{{index + 1}}次 ({{item.date}}): {{item.overall}}分
+          </text>
+        </view>
+      </view>
+
+      <!-- 答题页 -->
+      <view wx:if="{{abilityStep === 1}}">
+        <view class="ability-progress">
+          <view class="ability-progress-bar">
+            <view class="ability-progress-fill" style="width:{{(abilityQIndex + 1) / 18 * 100}}%"></view>
+          </view>
+          <text class="ability-progress-text">{{abilityQIndex + 1}}/18</text>
+        </view>
+
+        <view class="ability-q-card" wx:for="{{abilityQuestions}}" wx:for-item="q" wx:key="id">
+          <view wx:if="{{abilityQIndex === index}}">
+            <view class="ability-q-header">
+              <text class="ability-q-dim" style="color:{{q.dimColor}}">
+                {{q.dimEmoji}} {{q.dimName}}
+              </text>
+            </view>
+            <text class="ability-q-text">{{q.text}}</text>
+            <view class="ability-q-options">
+              <view class="ability-q-option {{abilityAnswers.find(a => a.qid === q.id)?.score === opt.score ? 'selected' : ''}}"
+                wx:for="{{q.options}}" wx:for-item="opt" wx:key="opt.text"
+                bindtap="selectAbilityOption" data-qid="{{q.id}}" data-score="{{opt.score}}" data-dim="{{q.dim}}">
+                <text class="ability-opt-text">{{opt.text}}</text>
+              </view>
+            </view>
+            <view class="ability-q-nav">
+              <button class="ability-nav-btn" bindtap="prevAbilityQ" wx:if="{{abilityQIndex > 0}}">‹ 上一题</button>
+              <button class="ability-nav-btn" bindtap="nextAbilityQ" wx:if="{{abilityQIndex < 17}}">下一题 ›</button>
+              <button class="ability-nav-btn primary" bindtap="submitAbility" wx:if="{{abilityQIndex === 17}}">📊 查看报告</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 结果页 -->
+      <view wx:if="{{abilityStep === 2 && abilityResult}}">
+        <!-- 综合评分 -->
+        <view class="ability-report-header">
+          <text class="ability-report-title">🧭 综合情商评分</text>
+          <view class="ability-report-score">
+            <text class="ability-report-score-num">{{abilityResult.overall}}</text>
+            <text class="ability-report-score-unit">分</text>
+          </view>
+          <text class="ability-report-level">当前等级: {{abilityResult.level}}</text>
+        </view>
+
+        <!-- 综合画像 -->
+        <view class="ability-report-profile">
+          <text class="ability-profile-text">{{abilityResult.profile}}</text>
+        </view>
+
+        <!-- 六维雷达图（用柱状代替） -->
+        <view class="ability-chart-section">
+          <text class="ability-chart-title">📊 六维雷达</text>
+          <view class="ability-chart-list">
+            <view class="ability-chart-item" wx:for="{{abilityResult.dimensions}}" wx:key="key">
+              <view class="ability-chart-label">
+                <text style="color:{{item.color}}">{{item.emoji}}</text>
+                <text class="ability-chart-name">{{item.name}}</text>
+              </view>
+              <view class="ability-chart-bar-bg">
+                <view class="ability-chart-bar" style="width:{{item.score}}%;background:{{item.color}}"></view>
+              </view>
+              <text class="ability-chart-score">{{item.score}}</text>
+              <text class="ability-chart-level">{{item.levelName}}</text>
+              <text class="ability-chart-change" wx:if="{{item.change !== null}}">
+                {{item.change > 0 ? '↑+' + item.change : (item.change < 0 ? '↓' + item.change : '—')}}
+              </text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 最强/最弱 -->
+        <view class="ability-report-highlight">
+          <text class="ability-highlight-item">🏆 最强: {{abilityResult.strongestName}} ({{abilityResult.strongestScore}}分)</text>
+          <text class="ability-highlight-item">🎯 待提升: {{abilityResult.weakestName}} ({{abilityResult.weakestScore}}分)</text>
+        </view>
+
+        <!-- 推荐知识 -->
+        <view class="ability-recommend" wx:if="{{abilityResult.articles && abilityResult.articles.length > 0}}">
+          <text class="ability-recommend-title">📖 针对弱项推荐阅读</text>
+          <view class="ability-recommend-list">
+            <view class="ability-recommend-item" wx:for="{{abilityResult.articles}}" wx:for-item="art" wx:key="id" bindtap="goArticle" data-id="{{art.id}}">
+              <text class="ability-recommend-name">{{art.title}}</text>
+              <text class="ability-recommend-module">{{art.module}}</text>
+            </view>
+          </view>
+        </view>
+
+        <button class="save-btn" bindtap="abilityRetest">🔄 重新评估</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未开发功能（占位符） -->
+  <view class="tool-panel" wx:if="{{currentTool === 'goal_setting'}}">
     <view class="panel-header">
       <text class="panel-title">{{toolMeta.emoji}} {{toolMeta.name}}</text>
       <text class="panel-close" bindtap="closeTool">✕</text>
