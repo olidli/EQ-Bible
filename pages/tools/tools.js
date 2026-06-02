@@ -406,7 +406,7 @@ Page({
   },
 
   goTest() {
-    wx.switchTab({ url: '/pages/test/test' })
+    wx.navigateTo({ url: '/pages/test/test' })
   },
 
   // 查看情绪日记完整统计
