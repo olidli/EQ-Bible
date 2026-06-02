@@ -21,6 +21,7 @@ Page({
     // 树状导航
     treeTabs: TREE_STRUCT.map(t => ({ ...t, expanded: false, count: 0 })),
     currentTreeTab: '情绪管理',
+    currentExpanded: false,  // 当前标签是否展开
     // 二级目录列表
     subCategories: [],
     currentSub: '',
@@ -103,7 +104,7 @@ Page({
       const treeTabs = this.data.treeTabs.map(t =>
         t.id === id ? { ...t, expanded } : { ...t, expanded: false }
       )
-      this.setData({ treeTabs, currentSub: '', items: [], itemCount: 0, hasMore: false })
+      this.setData({ treeTabs, currentExpanded: expanded, currentSub: '', items: [], itemCount: 0, hasMore: false })
     } else {
       this.expandTopTab(id)
     }
@@ -130,6 +131,7 @@ Page({
     this.setData({
       treeTabs,
       currentTreeTab: id,
+      currentExpanded: true,
       subCategories: subList,
       currentSub: '',
       items: [],

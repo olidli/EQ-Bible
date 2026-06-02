@@ -10,7 +10,7 @@
   </scroll-view>
 
   <!-- 展开的子目录（折叠区域） -->
-  <view class="tree-section" wx:if="{{treeTabs.find(t => t.id === currentTreeTab)?.expanded}}">
+  <view class="tree-section" wx:if="{{currentExpanded}}">
     <view class="sub-list">
       <view class="sub-item {{s.isActive ? 'active' : ''}}"
         wx:for="{{subCategories}}" wx:key="name"
