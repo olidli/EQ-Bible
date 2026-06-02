@@ -1,79 +1,88 @@
-<!-- pages/category/category.wxml -->
 <view class="container">
-  <!-- 二级导航 - 横向滚动标签 -->
-  <scroll-view class="sub-nav" scroll-x enable-flex>
-    <view class="sub-nav-item {{currentTab === item.id ? 'active' : ''}}"
-      wx:for="{{categories}}" wx:key="id" bindtap="switchTab" data-id="{{item.id}}">
-      <text>{{item.emoji}} {{item.name}}</text>
+  <!-- 顶部一级标签（横向滑动） -->
+  <scroll-view class="sub-nav" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view class="sub-nav-item {{currentTreeTab === item.id ? 'active' : ''}}"
+      wx:for="{{treeTabs}}" wx:key="id"
+      bindtap="toggleTopTab" data-id="{{item.id}}">
+      <text>{{item.emoji}} {{item.id}}</text>
+      <text class="nav-count">{{item.count}}</text>
     </view>
   </scroll-view>
 
-  <!-- 紧凑横幅 - 模块信息 -->
-  <view class="module-banner" wx:if="{{currentModule}}">
-    <view class="banner-left">
-      <view class="banner-emoji">{{currentModule.emoji}}</view>
-      <view class="banner-info">
-        <text class="banner-name">{{currentModule.name}}</text>
-        <text class="banner-count">{{itemCount}} 篇内容</text>
+  <!-- 展开的子目录（折叠区域） -->
+  <view class="tree-section" wx:if="{{treeTabs.find(t => t.id === currentTreeTab)?.expanded}}">
+    <view class="sub-list">
+      <view class="sub-item {{s.isActive ? 'active' : ''}}"
+        wx:for="{{subCategories}}" wx:key="name"
+        bindtap="selectSub" data-path="{{s.path}}">
+        <view class="sub-item-left">
+          <text class="sub-name">{{s.name}}</text>
+          <text class="sub-count">{{s.count}}篇</text>
+        </view>
+        <text class="sub-arrow">{{s.isActive ? '▼' : '›'}}</text>
       </view>
     </view>
-    <text class="banner-desc">{{currentModule.desc}}</text>
   </view>
 
-  <!-- 内容列表 - 主体区域 -->
-  <view class="content-area">
+  <!-- 内容区域 -->
+  <view class="content-area" wx:if="{{currentSub}}">
     <view class="content-header">
-      <text class="content-title">全部内容</text>
-      <text class="content-total">共 {{itemCount}} 条</text>
+      <text class="content-title">📄 全部内容</text>
+      <text class="content-count">{{itemCount}}篇</text>
     </view>
 
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{items.length === 0}}">
+      <text>暂无内容，先去其他分类看看吧</text>
+    </view>
+
+    <!-- 内容卡片列表 -->
     <view class="item-list" wx:if="{{items.length > 0}}">
       <view class="item-card" wx:for="{{items}}" wx:key="_id" bindtap="goDetail" data-id="{{item._id}}">
         <view class="item-top">
-          <view class="item-type-badge" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
-          <view class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</view>
+          <text class="item-type-badge" style="background:{{item.typeColor}}">{{item.typeLabel}}</text>
+          <text class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</text>
         </view>
         <text class="item-title">{{item.title}}</text>
         <text class="item-desc" wx:if="{{item.description}}">{{item.description}}</text>
         <view class="item-meta">
           <view class="item-tags" wx:if="{{item.tags.length > 0}}">
-            <text class="item-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" wx:if="{{index < 3}}">{{tag}}</text>
+            <text class="item-tag" wx:for="{{item.tags}}" wx:key="*this" wx:if="{{index < 3}}">{{item}}</text>
           </view>
           <text class="item-reading" wx:if="{{item.readTime}}">{{item.readTime}}</text>
         </view>
       </view>
     </view>
 
-    <!-- 空状态 -->
-    <view class="empty" wx:else>
-      <text class="empty-icon">📭</text>
-      <text class="empty-text">暂无内容</text>
-      <text class="empty-hint">换个模块看看？</text>
-    </view>
-
     <!-- 加载更多 -->
-    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
-      <text class="load-more-text">加载更多</text>
-    </view>
-    <view class="no-more" wx:elif="{{items.length > 0 && !hasMore}}">
-      <text class="no-more-text">已加载全部 {{itemCount}} 条内容</text>
-    </view>
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">加载更多</view>
+    <view class="no-more" wx:elif="{{items.length > 0 && !hasMore}}">已加载全部</view>
   </view>
 
-  <!-- 工具条 - 横向滚动 -->
-  <view class="tools-strip" wx:if="{{moduleTools.length > 0}}">
+  <!-- 推荐工具 -->
+  <view class="tools-strip">
     <view class="content-header">
-      <text class="content-title">实用工具</text>
+      <text class="content-title">🔧 实用工具</text>
     </view>
-    <scroll-view class="tools-scroll" scroll-x enable-flex>
-      <view class="tool-capsule" wx:for="{{moduleTools}}" wx:key="*this"
-        bindtap="openTool" data-tool="{{item.id}}">
-        <text class="tool-capsule-emoji">{{item.emoji}}</text>
-        <text class="tool-capsule-name">{{item.name}}</text>
+    <scroll-view class="tools-scroll" scroll-x enable-flex show-scrollbar="{{false}}">
+      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_diary">
+        <text class="tool-capsule-emoji">📝</text>
+        <text class="tool-capsule-name">情绪日记</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_recognition">
+        <text class="tool-capsule-emoji">🎭</text>
+        <text class="tool-capsule-name">情绪识别</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="value_clarify">
+        <text class="tool-capsule-emoji">💎</text>
+        <text class="tool-capsule-name">价值观澄清</text>
+      </view>
+      <view class="tool-capsule" bindtap="openTool" data-tool="ability_assess">
+        <text class="tool-capsule-emoji">📊</text>
+        <text class="tool-capsule-name">能力评估</text>
       </view>
     </scroll-view>
   </view>
 
-  <!-- 底部安全区 -->
   <view class="bottom-safe"></view>
 </view>

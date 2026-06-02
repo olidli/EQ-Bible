@@ -34,6 +34,12 @@
   font-weight: 600;
   box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.25);
 }
+.nav-count {
+  font-size: 20rpx;
+  color: #c0c4cc;
+  margin-left: 4rpx;
+}
+.sub-nav-item.active .nav-count { color: rgba(255,255,255,0.7); }
 
 /* ===== 紧凑横幅 ===== */
 .module-banner {
@@ -302,4 +308,65 @@
 /* ===== 底部安全区 ===== */
 .bottom-safe {
   height: 40rpx;
+}
+
+/* ===== 树状子目录区域 ===== */
+.tree-section {
+  padding: 16rpx 20rpx;
+}
+.sub-list {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(102,126,234,0.06);
+}
+.sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid #f0f2f5;
+  transition: background 0.2s;
+}
+.sub-item:last-child { border-bottom: none; }
+.sub-item:active { background: #f5f7ff; }
+.sub-item.active {
+  background: linear-gradient(135deg, rgba(102,126,234,0.06), rgba(118,75,162,0.06));
+  position: relative;
+}
+.sub-item.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rpx;
+  height: 40rpx;
+  background: #667eea;
+  border-radius: 0 4rpx 4rpx 0;
+}
+.sub-item-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.sub-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #303133;
+}
+.sub-item.active .sub-name {
+  color: #667eea;
+  font-weight: 600;
+}
+.sub-count {
+  font-size: 22rpx;
+  color: #c0c4cc;
+}
+.sub-arrow {
+  font-size: 28rpx;
+  color: #c0c4cc;
+}
+.sub-item.active .sub-arrow {
+  color: #667eea;
 }
