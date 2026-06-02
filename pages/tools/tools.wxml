@@ -547,20 +547,4 @@
       </view>
     </view>
   </view>
-
-  <!-- 未开发功能（占位符） -->
-  <view class="tool-panel" wx:if="{{currentTool === 'goal_setting'}}">
-    <view class="panel-header">
-      <text class="panel-title">{{toolMeta.emoji}} {{toolMeta.name}}</text>
-      <text class="panel-close" bindtap="closeTool">✕</text>
-    </view>
-    <view class="panel-body">
-      <text class="tool-intro">{{toolMeta.desc}}</text>
-      <view class="tool-tip">
-        <text wx:if="{{currentTool === 'ability_assess'}}">📊 建议使用"压力评估"工具，或前往"情商测评"进行完整测试。</text>
-        <text wx:if="{{currentTool === 'goal_setting'}}">🎯 建议使用"学习路径生成"工具，制定并追踪你的学习目标。</text>
-      </view>
-      <button class="go-btn" wx:if="{{currentTool === 'ability_assess'}}" bindtap="goTest">去情商测评</button>
-    </view>
-  </view>
 </view>

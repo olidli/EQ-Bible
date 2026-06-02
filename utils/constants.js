@@ -98,7 +98,6 @@ const TOOL_META = {
   self_reflection:     { name: '自我反思日记', emoji: '📝', desc: '深入自我探索和反思' },
   value_clarify:       { name: '价值观澄清练习', emoji: '💎', desc: '明确核心价值观' },
   ability_assess:      { name: '能力评估表',   emoji: '📊', desc: '评估个人能力优势' },
-  goal_setting:        { name: '人生目标设定', emoji: '🎯', desc: '设定长期和短期目标' },
   character_test:      { name: '性格测试',     emoji: '🔍', desc: '了解自己的性格类型' },
   stress_assess:       { name: '压力评估',     emoji: '📊', desc: '评估当前压力水平' },
   learning_path:       { name: '学习路径生成', emoji: '🗺', desc: '根据目标生成个性化学习计划' },
