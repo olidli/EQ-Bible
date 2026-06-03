@@ -1,87 +1,65 @@
 <view class="container">
-  <!-- 顶部一级标签（横向滑动） -->
-  <scroll-view class="sub-nav" scroll-x enable-flex show-scrollbar="{{false}}">
-    <view class="sub-nav-item {{currentTreeTab === item.id ? 'active' : ''}}"
-      wx:for="{{treeTabs}}" wx:key="id"
-      bindtap="toggleTopTab" data-id="{{item.id}}">
-      <text>{{item.emoji}} {{item.id}}</text>
-      <text class="nav-count">{{item.count}}</text>
-    </view>
-  </scroll-view>
-
-  <!-- 展开的子目录（折叠区域） -->
-  <view class="tree-section" wx:if="{{currentExpanded}}">
-    <view class="sub-list">
-      <view class="sub-item {{s.isActive ? 'active' : ''}}"
-        wx:for="{{subCategories}}" wx:key="name"
-        bindtap="selectSub" data-path="{{s.path}}">
-        <view class="sub-item-left">
-          <text class="sub-name">{{s.name}}</text>
-          <text class="sub-count">{{s.count}}篇</text>
-        </view>
-        <text class="sub-arrow">{{s.isActive ? '▼' : '›'}}</text>
-      </view>
-    </view>
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">📖 知识库</text>
+    <text class="page-subtitle">六大模块 · 共 {{totalCount}} 篇内容</text>
   </view>
 
-  <!-- 内容区域 -->
-  <view class="content-area" wx:if="{{currentSub}}">
-    <view class="content-header">
-      <text class="content-title">📄 全部内容</text>
-      <text class="content-count">{{itemCount}}篇</text>
-    </view>
+  <!-- 六个模块平铺 -->
+  <view class="module-list">
+    <view class="module-card" wx:for="{{modules}}" wx:for-index="modIndex" wx:key="id" wx:for-item="mod" style="border-left: 8rpx solid {{mod.color}};">
 
-    <!-- 空状态 -->
-    <view class="empty" wx:if="{{items.length === 0}}">
-      <text>暂无内容，先去其他分类看看吧</text>
-    </view>
-
-    <!-- 内容卡片列表 -->
-    <view class="item-list" wx:if="{{items.length > 0}}">
-      <view class="item-card" wx:for="{{items}}" wx:key="_id" bindtap="goDetail" data-id="{{item._id}}">
-        <view class="item-top">
-          <text class="item-type-badge" style="background:{{item.typeColor}}">{{item.typeLabel}}</text>
-          <text class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</text>
+      <!-- 模块头部 -->
+      <view class="mod-header" style="background: {{mod.bg}};">
+        <view class="mod-avatar" style="background: {{mod.color}};">
+          <text class="mod-emoji">{{mod.emoji}}</text>
         </view>
-        <text class="item-title">{{item.title}}</text>
-        <text class="item-desc" wx:if="{{item.description}}">{{item.description}}</text>
-        <view class="item-meta">
-          <view class="item-tags" wx:if="{{item.tags.length > 0}}">
-            <text class="item-tag" wx:for="{{item.tags}}" wx:key="*this" wx:if="{{index < 3}}">{{item}}</text>
+        <view class="mod-info">
+          <text class="mod-name">{{mod.id}}</text>
+          <text class="mod-count">{{mod.totalCount}} 篇</text>
+        </view>
+      </view>
+
+      <!-- 子目录列表 -->
+      <view class="child-list">
+        <view wx:for="{{mod.children}}" wx:for-index="ci" wx:key="name" wx:for-item="child">
+          <view class="child-item"
+            bindtap="toggleChild" data-mi="{{modIndex}}" data-ci="{{ci}}">
+            <view class="child-left">
+              <view class="child-dot" style="background: {{child.expanded ? mod.color : '#e0e0e0'}};"></view>
+              <text class="child-name" style="color: {{child.expanded ? mod.color : '#303133'}};">{{child.name}}</text>
+              <text class="child-count">{{child.count}}篇</text>
+            </view>
+            <text class="child-arrow {{child.expanded ? 'arrow-up' : ''}}" style="color: {{child.expanded ? mod.color : '#c0c4cc'}};">›</text>
           </view>
-          <text class="item-reading" wx:if="{{item.readTime}}">{{item.readTime}}</text>
+
+          <!-- 展开内容区（现在在 wx:for 作用域内） -->
+          <view class="child-items" wx:if="{{child.expandedData}}">
+            <view class="item-card" wx:for="{{child.expandedData.items}}" wx:key="_id" wx:for-item="item"
+              bindtap="goDetail" data-id="{{item._id}}">
+          <view class="item-top">
+              <text class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</text>
+            </view>
+              <text class="item-title">{{item.title}}</text>
+              <text class="item-desc" wx:if="{{item.description}}">{{item.description}}</text>
+              <view class="item-meta" wx:if="{{item.tags.length > 0 || item.readTime}}">
+                <view class="item-tags">
+                  <text class="item-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+                </view>
+                <text class="item-reading" wx:if="{{item.readTime}}">{{item.readTime}}</text>
+              </view>
+            </view>
+
+            <view class="load-more" wx:if="{{child.expandedData.hasMore}}" bindtap="loadMore" data-mi="{{modIndex}}" data-ci="{{ci}}">
+              <text class="load-more-text" style="background: {{mod.color}}22; color: {{mod.color}};">加载更多</text>
+            </view>
+            <view class="no-more" wx:elif="{{child.expandedData.showNoMore}}">
+              <text class="no-more-text">— 已加载全部 —</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>
-
-    <!-- 加载更多 -->
-    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">加载更多</view>
-    <view class="no-more" wx:elif="{{items.length > 0 && !hasMore}}">已加载全部</view>
-  </view>
-
-  <!-- 推荐工具 -->
-  <view class="tools-strip">
-    <view class="content-header">
-      <text class="content-title">🔧 实用工具</text>
-    </view>
-    <scroll-view class="tools-scroll" scroll-x enable-flex show-scrollbar="{{false}}">
-      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_diary">
-        <text class="tool-capsule-emoji">📝</text>
-        <text class="tool-capsule-name">情绪日记</text>
-      </view>
-      <view class="tool-capsule" bindtap="openTool" data-tool="emotion_recognition">
-        <text class="tool-capsule-emoji">🎭</text>
-        <text class="tool-capsule-name">情绪识别</text>
-      </view>
-      <view class="tool-capsule" bindtap="openTool" data-tool="value_clarify">
-        <text class="tool-capsule-emoji">💎</text>
-        <text class="tool-capsule-name">价值观澄清</text>
-      </view>
-      <view class="tool-capsule" bindtap="openTool" data-tool="ability_assess">
-        <text class="tool-capsule-emoji">📊</text>
-        <text class="tool-capsule-name">能力评估</text>
-      </view>
-    </scroll-view>
   </view>
 
   <view class="bottom-safe"></view>

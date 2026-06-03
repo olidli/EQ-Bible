@@ -8,7 +8,6 @@
 
   <view class="list" wx:if="{{learnedList.length > 0}}">
     <view class="item" wx:for="{{learnedList}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
-      <view class="item-type" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
       <text class="item-title">{{item.title}}</text>
       <text class="item-arrow">›</text>
     </view>

@@ -7,8 +7,7 @@
     "pages/profile/profile",
     "pages/game/game",
     "pages/game-play/game-play",
-    "pages/game-result/game-result",
-    "pages/game-rank/game-rank"
+    "pages/game-result/game-result"
   ],
   "subpackages": [
     {

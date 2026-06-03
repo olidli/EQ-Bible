@@ -88,10 +88,4 @@
       <view class="stat-label">最佳段位</view>
     </view>
   </view>
-
-  <!-- 排行榜入口 -->
-  <view class="rank-entry" bindtap="goRank">
-    <text>🏆 好友排行榜</text>
-    <text class="rank-arrow">›</text>
-  </view>
 </view>

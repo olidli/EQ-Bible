@@ -108,13 +108,6 @@ Page({
     });
   },
 
-  // 排行榜
-  goRank() {
-    wx.navigateTo({
-      url: '/pages/game-rank/game-rank'
-    });
-  },
-
   // 福格·Motivation：分享标题改为挑战式
   onShareAppMessage() {
     return {

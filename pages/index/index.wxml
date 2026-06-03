@@ -154,7 +154,6 @@
       <view class="recommend-item" wx:for="{{dailyItems}}" wx:key="id"
         wx:if="{{index > 0 && index < 4}}"
         bindtap="goDetail" data-id="{{item.id}}">
-        <view class="recommend-type">{{item.typeLabel}}</view>
         <text class="recommend-title">{{item.title}}</text>
         <view class="recommend-tags" wx:if="{{item.tags && item.tags.length > 0}}">
           <text class="recommend-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>

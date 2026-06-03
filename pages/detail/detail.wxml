@@ -3,7 +3,6 @@
   <block wx:if="{{!loading}}">
     <!-- 标题区 -->
     <view class="header">
-      <view class="type-badge" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
       <text class="title">{{item.title}}</text>
       <view class="tags">
         <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
@@ -21,7 +20,7 @@
       <!-- 无结构化内容时，显示资源提示 -->
       <block wx:if="{{!item.contentType || !item.hasStructuredContent}}">
         <view class="section resource-tip">
-          <text class="resource-icon">{{item.typeLabel === 'PDF' ? '📄' : item.typeLabel === '文档' ? '📝' : item.typeLabel === '科普' ? '🔗' : '📚'}}</text>
+          <text class="resource-icon">📚</text>
           <text class="resource-hint">{{item.typeHint}}</text>
         </view>
 
@@ -205,7 +204,6 @@
         </text>
         <block wx:if="{{showSource}}">
           <view class="source-info">
-            <text class="source-item">类型：{{item.typeLabel}}</text>
             <text class="source-item">编号：{{item.serial}}</text>
             <text class="source-item" wx:if="{{item.originalFile}}">来源：{{item.originalFile}}</text>
           </view>

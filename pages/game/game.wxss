@@ -192,20 +192,3 @@
   color: #8892b0;
   font-size: 22rpx;
 }
-
-/* 排行榜入口 */
-.rank-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #1f2940;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  color: #fff;
-  font-size: 30rpx;
-}
-
-.rank-arrow {
-  color: #8892b0;
-  font-size: 40rpx;
-}

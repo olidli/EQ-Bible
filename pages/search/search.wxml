@@ -70,7 +70,6 @@
           bindtap="goDetail"
           data-id="{{item._id}}">
           <view class="item-top">
-            <view class="result-type-badge" style="background: {{item.typeColor}};">{{item.typeLabel}}</view>
             <view class="item-status-badge status-learned" wx:if="{{item.isLearned}}">已学</view>
             <view class="item-status-badge status-fav" wx:if="{{item.isFav}}">❤ 收藏</view>
           </view>
