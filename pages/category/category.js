@@ -1,6 +1,6 @@
 // pages/category/category.js - 知识库首页（六个分类平铺）
 const app = getApp()
-const { getTypeInfo } = require('../../utils/constants')
+const { getTypeInfo, MODULE_NAMES } = require('../../utils/constants')
 // 直接加载数据，不依赖 app.globalData 的加载时序
 const _knowledgeItems = require('../../data/knowledge_structured.js')
 
@@ -28,6 +28,14 @@ Page({
   },
 
   onShow() {
+    // 首页模块跳转：每次显示都检查
+    const filterId = app.globalData && app.globalData.categoryFilter
+    if (filterId) {
+      app.globalData.categoryFilter = null
+      this.jumpToModule(filterId)
+      return
+    }
+    // 保持上次展开状态
     const oldPath = this.data.expandedPath
     this.buildModules()
     if (oldPath && this._cacheBySub[oldPath]) {
@@ -152,6 +160,33 @@ Page({
     modules[mi].children[ci].expandedData = { items, hasMore, showNoMore: items.length > 0 && !hasMore }
 
     this.setData({ modules })
+  },
+
+  /** 首页指定模块跳转：定位到对应模块，展开第一个子目录 */
+  jumpToModule(filterId) {
+    this.buildModules()
+    const moduleName = MODULE_NAMES[filterId]
+    if (!moduleName) return
+
+    // 硬编码映射：首页 filterId -> 模块索引 mi
+    const miMap = {
+      'self_aware': 1,     // 自我认知
+      'emotion': 2,        // 情绪管理
+      'communication': 3,  // 沟通表达
+      'relation': 4,       // 人际关系
+      'growth': 5,         // 个人成长
+    }
+    const mi = miMap[filterId]
+    if (mi === undefined) return
+
+    const child = this.data.modules[mi] && this.data.modules[mi].children[0]
+    if (child && child.count > 0) {
+      this.expandChild(mi, 0, child.path)
+    }
+
+    setTimeout(() => {
+      wx.pageScrollTo({ selector: '#mod-' + mi, offsetTop: -60, duration: 300 })
+    }, 300)
   },
 
   mapItems(items) {

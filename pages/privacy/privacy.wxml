@@ -1,42 +1,46 @@
 <view class="container">
   <view class="header">
     <text class="title">隐私保护指引</text>
-    <text class="update-time">更新日期：2026年4月22日</text>
+    <text class="update-time">更新日期：2026年6月3日</text>
   </view>
 
   <view class="content">
     <view class="section">
       <text class="section-title">一、我们收集的信息</text>
       <text class="section-text">
-        1. 用户信息：微信昵称、头像（用于展示个人中心）
-        2. 使用数据：学习进度、收藏记录、测评结果（用于提供个性化服务）
-        3. 日记数据：情绪记录内容（仅存储在本地，不上传服务器）
+        1. 学习数据：阅读进度、收藏记录、已学标记（用于记录学习轨迹）
+        2. 工具数据：情绪日记记录、能力评估结果、价值观选择（用于提供练习功能）
+        3. 游戏数据：社死模拟器得分、游戏历史记录（用于查看成绩）
+        4. 本小程序不收集任何个人信息（微信昵称、头像、手机号等）
+        5. 所有数据均存储在您的设备本地，不上传服务器
       </text>
     </view>
 
     <view class="section">
       <text class="section-title">二、信息使用方式</text>
       <text class="section-text">
-        1. 学习进度数据用于生成个性化学习路径
+        1. 学习进度数据用于标记已学内容，方便回顾
         2. 收藏记录用于快速访问已保存内容
-        3. 所有数据仅用于改善用户体验，不会用于其他商业用途
+        3. 工具数据仅用于功能运行，不会用于其他用途
+        4. 所有数据仅存储在本地设备，不上传云端
       </text>
     </view>
 
     <view class="section">
       <text class="section-title">三、信息存储与安全</text>
       <text class="section-text">
-        1. 用户数据主要存储在本地设备，保护用户隐私
-        2. 我们采用行业标准的安全措施保护数据
-        3. 未经用户同意，不会向第三方分享个人信息
+        1. 所有数据仅存储在您的设备本地（微信缓存）
+        2. 清除小程序缓存或卸载小程序后数据将丢失
+        3. 我们不会向任何第三方分享您的数据
+        4. 无需网络连接即可正常使用全部功能
       </text>
     </view>
 
     <view class="section">
       <text class="section-title">四、用户权利</text>
       <text class="section-text">
-        1. 用户可随时查看、修改或删除自己的数据
-        2. 用户可通过「我的」页面清除所有本地数据
+        1. 您可随时在「我的」页面查看学习进度
+        2. 您可通过微信设置清除小程序数据
         3. 如有疑问，可通过小程序反馈功能联系我们
       </text>
     </view>
@@ -50,6 +54,6 @@
   </view>
 
   <view class="footer">
-    <text class="footer-text">EQ情商宝典 尊重并保护您的隐私</text>
+    <text class="footer-text">情商宝典 尊重并保护您的隐私</text>
   </view>
 </view>

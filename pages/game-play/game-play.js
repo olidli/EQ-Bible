@@ -14,7 +14,6 @@ Page({
     feedbackLabel: '',
     feedbackText: '',
     selectedIndex: -1,
-    scores: [],
     sceneList: [],
     isLast: false,
     levelLabels: {
@@ -25,6 +24,7 @@ Page({
   },
 
   onLoad(options) {
+    this._scores = [];
     const mode = options.mode || 'category';
     const category = options.category || 'campus';
     const sceneIndex = options.sceneIndex ? parseInt(options.sceneIndex) : -1;
@@ -98,7 +98,7 @@ Page({
     });
 
     // 记录得分
-    this.data.scores.push(option.score);
+    this._scores.push(option.score);
   },
 
   // 下一题
@@ -107,13 +107,13 @@ Page({
 
     if (nextIndex >= this.data.totalScenes) {
       // 跳转结果页
-      const totalScore = this.data.scores.reduce((a, b) => a + b, 0);
+      const totalScore = this._scores.reduce((a, b) => a + b, 0);
       const sceneCount = this.data.totalScenes;
       const levelInfo = eqCalc.getLevel(totalScore, sceneCount);
 
       // 收集翻车信息：找出得分最低的那一题
-      const minScore = Math.min(...this.data.scores);
-      const failIndex = this.data.scores.indexOf(minScore);
+      const minScore = Math.min(...this._scores);
+      const failIndex = this._scores.indexOf(minScore);
       const failScene = this.data.sceneList[failIndex];
       let failReason = '';
       if (failScene) {

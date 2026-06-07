@@ -4,7 +4,7 @@
 const app = getApp()
 const {
   TOOL_META, CHARACTER_QUESTIONS, CHARACTER_TYPES,
-  EMOTION_OPTIONS, GOAL_OPTIONS, DURATION_OPTIONS,
+  EMOTION_OPTIONS,
   REGULATION_STRATEGIES, REFLECTION_QUESTIONS, STRESS_QUESTIONS
 } = require('../../utils/constants')
 
@@ -271,10 +271,6 @@ Page({
     diaryHistory: [],
     recognitionText: '',
     analysisResult: '',
-    pathForm: { goal: '', duration: '', hoursPerWeek: 3 },
-    goalOptions: GOAL_OPTIONS,
-    durationOptions: DURATION_OPTIONS,
-    generatedPath: null,
     regulationStrategies: REGULATION_STRATEGIES,
     reflectionQuestions: REFLECTION_QUESTIONS,
     reflectionAnswers: {},
@@ -433,48 +429,6 @@ Page({
     }
 
     this.setData({ analysisResult: result })
-  },
-
-  selectGoal(e) {
-    this.setData({ 'pathForm.goal': e.currentTarget.dataset.goal })
-  },
-
-  selectDuration(e) {
-    this.setData({ 'pathForm.duration': e.currentTarget.dataset.dur })
-  },
-
-  setHours(e) {
-    this.setData({ 'pathForm.hoursPerWeek': e.detail.value })
-  },
-
-  generatePath() {
-    const { goal, duration, hoursPerWeek } = this.data.pathForm
-    if (!goal || !duration) {
-      wx.showToast({ title: '请选择目标和时间', icon: 'none' })
-      return
-    }
-    const pathData = {
-      goal,
-      duration,
-      hoursPerWeek,
-      steps: [
-        { title: '自我认知', desc: `了解自己在${goal}方面的现状和基础`, duration: '第1-2周' },
-        { title: '基础知识', desc: '学习情商基础理论和核心概念', duration: '第3-4周' },
-        { title: '技能练习', desc: '通过工具和案例进行实践练习', duration: '第5-8周' },
-        { title: '深度应用', desc: '将所学应用到实际生活场景中', duration: '第9-12周' },
-        { title: '持续提升', desc: '定期反思总结，建立持续成长习惯', duration: '长期' },
-      ]
-    }
-    this.setData({ generatedPath: pathData })
-  },
-
-  savePath() {
-    const path = this.data.generatedPath
-    if (!path) return
-    const saved = wx.getStorageSync('learningPaths') || []
-    saved.unshift({ ...path, savedAt: new Date().toLocaleDateString() })
-    wx.setStorageSync('learningPaths', saved.slice(0, 10))
-    wx.showToast({ title: '路径已保存', icon: 'success' })
   },
 
   selectRegulation(e) {

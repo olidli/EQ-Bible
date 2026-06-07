@@ -34,8 +34,6 @@ Page({
     results: [],
     currentFilter: 'all',
     filterLabel: '全部',
-    _rawResults: [],
-    _rawCount: 0,
   },
 
   // 存储完整搜索结果（筛选时直接复用，不重新搜索）
@@ -61,7 +59,6 @@ Page({
         currentFilter: 'fav',
         filterLabel: '我的收藏',
         hasSearched: true,
-        _rawCount: this._allResults.length,
       })
       this.applyFilter('fav', '我的收藏')
       return
@@ -106,7 +103,6 @@ Page({
 
     this.setData({
       hasSearched: true,
-      _rawCount: this._allResults.length,
     })
 
     this.applyFilter('all', '全部')
@@ -191,8 +187,6 @@ Page({
       keyword: '',
       hasSearched: false,
       results: [],
-      _rawResults: [],
-      _rawCount: 0,
       currentFilter: 'all',
       filterLabel: '全部',
     })

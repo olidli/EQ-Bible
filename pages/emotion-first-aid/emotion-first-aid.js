@@ -106,14 +106,12 @@ Page({
     return {
       title: '情绪急救箱 | EQ情商宝典',
       path: '/pages/emotion-first-aid/emotion-first-aid',
-      imageUrl: '/images/share_emotion_aid.png'
     }
   },
 
   onShareTimeline() {
     return {
       title: '快速缓解负面情绪，试试这个情绪急救箱！',
-      imageUrl: '/images/share_emotion_aid.png'
     }
   },
 })

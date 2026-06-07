@@ -29,7 +29,8 @@ Page({
       wx.setStorageSync('firstUseDate', new Date().toISOString())
     }
 
-    const progress = Math.round((learnedArr.length / 357) * 100)
+    const total = app.globalData.totalItems || 1
+    const progress = Math.round((learnedArr.length / total) * 100)
     const items = app.globalData.items || []
     const learnedIds = learnedSet || new Set(learnedArr)
 
@@ -54,6 +55,7 @@ Page({
       favCount: favArr.length,
       diaryCount: diaryHistory.length,
       progress,
+      totalItems: app.globalData.totalItems || 0,
       moduleProgress,
     })
   },
@@ -69,10 +71,6 @@ Page({
         app.globalData.toolFilter = 'emotion_diary'
         wx.switchTab({ url: '/pages/tools/tools' })
         break
-      case 'paths':
-        app.globalData.toolFilter = 'learning_path'
-        wx.switchTab({ url: '/pages/tools/tools' })
-        break
       case 'tests':
         wx.navigateTo({ url: '/pages/test/test' })
         break
@@ -85,7 +83,7 @@ Page({
   goAbout() {
     wx.showModal({
       title: '关于EQ情商宝典',
-      content: 'EQ情商宝典 - 357项知识库，涵盖心理学理论、情商专项、实用技能。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
+      content: '情商宝典 - 107项知识库，涵盖情绪管理、沟通表达、人际关系、个人成长等六大模块。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
       showCancel: false
     })
   },
@@ -95,17 +93,8 @@ Page({
       itemList: ['问卷反馈（推荐）', '复制开发者邮箱'],
       success(res) {
         if (res.tapIndex === 0) {
-          wx.navigateTo({
-            url: '/pages/privacy/privacy',
-            fail() {
-              wx.setClipboardData({
-                data: 'https://wj.qq.com/s2/eq-bible-feedback',
-                success() { wx.showToast({ title: '链接已复制，请在浏览器打开', icon: 'none' }) }
-              })
-            }
-          })
           wx.setClipboardData({
-            data: 'https://wj.qq.com/s2/eq-bible-feedback',
+            data: 'https://docs.qq.com/form/page/DYnh6bmFCRVNMaWZn?_fid=bxznaBESLifg',
             success() {
               wx.showModal({
                 title: '意见反馈',

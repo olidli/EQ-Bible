@@ -21,11 +21,6 @@
       "pages": ["diary"]
     },
     {
-      "root": "pages/path",
-      "name": "pkg-path",
-      "pages": ["path"]
-    },
-    {
       "root": "pages/test",
       "name": "pkg-test",
       "pages": ["test"]

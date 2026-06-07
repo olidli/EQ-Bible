@@ -211,10 +211,10 @@
   font-weight: 500;
 }
 
-/* 核心模块网格（3列×3行） */
+/* 核心模块网格（3列×3行，flex兼容旧版微信） */
 .module-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 16rpx;
 }
 .module-item {
@@ -224,6 +224,8 @@
   padding: 20rpx 8rpx;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
   border-radius: 16rpx;
+  flex: 0 0 calc(33.33% - 12rpx);
+  box-sizing: border-box;
   border: 1rpx solid rgba(102, 126, 234, 0.08);
   transition: all 0.3s ease;
 }

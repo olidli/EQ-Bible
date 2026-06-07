@@ -110,53 +110,6 @@
     </view>
   </view>
 
-  <!-- 学习路径 -->
-  <view class="tool-panel" wx:if="{{currentTool === 'learning_path' || paramTool === 'learning_path'}}">
-    <view class="panel-header">
-      <text class="panel-title">🗺 学习路径生成</text>
-      <text class="panel-close" bindtap="closeTool">✕</text>
-    </view>
-    <view class="panel-body">
-      <view class="form-item">
-        <text class="form-label">🎯 学习目标</text>
-        <view class="goal-tags">
-          <text class="goal-tag {{pathForm.goal === item ? 'selected' : ''}}" 
-            wx:for="{{goalOptions}}" wx:key="*this" bindtap="selectGoal" data-goal="{{item}}">{{item}}</text>
-        </view>
-      </view>
-      <view class="form-item">
-        <text class="form-label">📅 预计时间</text>
-        <view class="time-tags">
-          <text class="time-tag {{pathForm.duration === item ? 'selected' : ''}}" 
-            wx:for="{{durationOptions}}" wx:key="*this" bindtap="selectDuration" data-dur="{{item}}">{{item}}</text>
-        </view>
-      </view>
-      <view class="form-item">
-        <text class="form-label">📖 每周可学习时间（小时）</text>
-        <slider min="1" max="10" value="{{pathForm.hoursPerWeek}}" bindchange="setHours" show-value/>
-      </view>
-      <button class="save-btn primary" bindtap="generatePath">✨ 生成学习路径</button>
-      
-      <!-- 生成结果 -->
-      <view class="path-result" wx:if="{{generatedPath}}">
-        <text class="result-title">📋 你的学习路径</text>
-        <view class="path-list">
-          <view class="path-item" wx:for="{{generatedPath.steps}}" wx:key="*this">
-            <view class="path-step">
-              <text class="step-num">{{index + 1}}</text>
-              <view class="step-content">
-                <text class="step-title">{{item.title}}</text>
-                <text class="step-desc">{{item.desc}}</text>
-                <text class="step-duration">⏱ {{item.duration}}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-        <button class="save-btn" bindtap="savePath">💾 保存路径</button>
-      </view>
-    </view>
-  </view>
-
   <!-- 情绪调节 -->
   <view class="tool-panel" wx:if="{{currentTool === 'emotion_regulation'}}">
     <view class="panel-header">

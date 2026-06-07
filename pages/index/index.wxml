@@ -80,7 +80,7 @@
       </view>
       <view class="module-item" bindtap="goCategory" data-id="communication" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
         <view class="module-icon" style="background: #4facfe;">💬</view>
-        <text class="module-name">沟通技巧</text>
+        <text class="module-name">沟通表达</text>
         <text class="module-count">{{moduleCounts.communication}}篇</text>
       </view>
       <view class="module-item" bindtap="goCategory" data-id="relation" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
@@ -88,25 +88,10 @@
         <text class="module-name">人际关系</text>
         <text class="module-count">{{moduleCounts.relation}}篇</text>
       </view>
-      <view class="module-item" bindtap="goCategory" data-id="workplace" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
-        <view class="module-icon" style="background: #dda0dd;">💼</view>
-        <text class="module-name">职场情商</text>
-        <text class="module-count">{{moduleCounts.workplace}}篇</text>
-      </view>
-      <view class="module-item" bindtap="goCategory" data-id="psychology" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
-        <view class="module-icon" style="background: #45b7d1;">📚</view>
-        <text class="module-name">心理学</text>
-        <text class="module-count">{{moduleCounts.psychology}}篇</text>
-      </view>
       <view class="module-item" bindtap="goCategory" data-id="growth" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
         <view class="module-icon" style="background: #96ceb4;">🌱</view>
         <text class="module-name">个人成长</text>
         <text class="module-count">{{moduleCounts.growth}}篇</text>
-      </view>
-      <view class="module-item" bindtap="goCategory" data-id="parenting" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
-        <view class="module-icon" style="background: #f7dc6f;">👨‍👩‍👧</view>
-        <text class="module-name">亲子教育</text>
-        <text class="module-count">{{moduleCounts.parenting}}篇</text>
       </view>
       <!-- 全部模块入口 -->
       <view class="module-item module-item-all" bindtap="goTools" hover-class="module-hover" hover-start-time="0" hover-stay-time="200">
@@ -133,13 +118,9 @@
         <text class="tool-cap-emoji">🎭</text>
         <text class="tool-cap-name">情绪识别</text>
       </view>
-      <view class="tool-capsule" bindtap="openTool" data-tool="self_test">
+      <view class="tool-capsule" bindtap="openTool" data-tool="ability_assess">
         <text class="tool-cap-emoji">📊</text>
         <text class="tool-cap-name">能力测评</text>
-      </view>
-      <view class="tool-capsule" bindtap="openTool" data-tool="learning_path">
-        <text class="tool-cap-emoji">🗺</text>
-        <text class="tool-cap-name">学习路径</text>
       </view>
     </scroll-view>
   </view>

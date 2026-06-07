@@ -7,7 +7,7 @@
 
   <!-- 六个模块平铺 -->
   <view class="module-list">
-    <view class="module-card" wx:for="{{modules}}" wx:for-index="modIndex" wx:key="id" wx:for-item="mod" style="border-left: 8rpx solid {{mod.color}};">
+    <view class="module-card" id="mod-{{modIndex}}" wx:for="{{modules}}" wx:for-index="modIndex" wx:key="id" wx:for-item="mod" style="border-left: 8rpx solid {{mod.color}};">
 
       <!-- 模块头部 -->
       <view class="mod-header" style="background: {{mod.bg}};">

@@ -4,32 +4,14 @@ var items = []
 
 // 加载知识库
 function loadKnowledge() {
-  // 优先结构化知识库
   try {
     var s = require('./data/knowledge_structured.js')
-    var arr = null
-    if (s && s.K && s.K.length > 0) arr = s.K
-    else if (Array.isArray(s) && s.length > 0) arr = s
-    if (arr) {
-      items = arr
+    if (Array.isArray(s) && s.length > 0) {
+      items = s
       console.log('[app] Loaded knowledge_structured:', items.length)
-      return
     }
   } catch (e) {
     console.log('[app] knowledge_structured load failed:', e.message || e)
-  }
-  // 降级到普通知识库
-  try {
-    var s = require('./data/knowledge.js')
-    var arr = null
-    if (s && s.K && s.K.length > 0) arr = s.K
-    else if (Array.isArray(s) && s.length > 0) arr = s
-    if (arr) {
-      items = arr
-      console.log('[app] Loaded knowledge.js:', items.length)
-    }
-  } catch (e) {
-    console.log('[app] knowledge.js failed:', e.message || e)
   }
 }
 
