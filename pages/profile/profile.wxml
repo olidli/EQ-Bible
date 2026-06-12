@@ -86,5 +86,5 @@
     </view>
   </view>
 
-  <text class="version">EQ情商宝典 v1.0.7 | 107项知识库</text>
+  <text class="version">EQ情商宝典 v1.0.7 | {{totalItems}}项知识库</text>
 </view>

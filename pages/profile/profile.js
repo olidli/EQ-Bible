@@ -81,9 +81,10 @@ Page({
   },
 
   goAbout() {
+    const totalItems = this.data.totalItems || 0
     wx.showModal({
       title: '关于EQ情商宝典',
-      content: '情商宝典 - 107项知识库，涵盖情绪管理、沟通表达、人际关系、个人成长等六大模块。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
+      content: '情商宝典 - ' + totalItems + '项知识库，涵盖情绪管理、沟通表达、人际关系、个人成长等六大模块。\n\n目标：建设强大心理，保持内在平衡，掌控沟通艺术，冷静应对挑战，构建和谐关系，成就健康人生！',
       showCancel: false
     })
   },

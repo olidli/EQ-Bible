@@ -5,41 +5,66 @@
     <text class="page-subtitle">六大模块 · 共 {{totalCount}} 篇内容</text>
   </view>
 
+  <!-- 学习进度卡片 -->
+  <view class="today-card">
+    <view class="today-header">
+      <view class="today-left">
+        <text class="today-greeting">📈 学习进度</text>
+        <text class="today-stats">已学 {{learnedCount}} 篇 · 共 {{totalCount}} 篇</text>
+      </view>
+      <view class="today-pct">
+        <text class="today-pct-num">{{progress}}</text>
+        <text class="today-pct-sym">%</text>
+      </view>
+    </view>
+    <view class="today-progress-wrap">
+      <view class="today-progress-fill" style="width: {{progress}}%;"></view>
+    </view>
+  </view>
+
   <!-- 六个模块平铺 -->
   <view class="module-list">
     <view class="module-card" id="mod-{{modIndex}}" wx:for="{{modules}}" wx:for-index="modIndex" wx:key="id" wx:for-item="mod" style="border-left: 8rpx solid {{mod.color}};">
 
       <!-- 模块头部 -->
       <view class="mod-header" style="background: {{mod.bg}};">
-        <view class="mod-avatar" style="background: {{mod.color}};">
-          <text class="mod-emoji">{{mod.emoji}}</text>
+        <view class="mod-header-left">
+          <view class="mod-avatar" style="background: {{mod.color}};">
+            <text class="mod-emoji">{{mod.emoji}}</text>
+          </view>
+          <view class="mod-info">
+            <text class="mod-name">{{mod.id}}</text>
+            <text class="mod-count">{{mod.totalCount}} 篇</text>
+          </view>
         </view>
-        <view class="mod-info">
-          <text class="mod-name">{{mod.id}}</text>
-          <text class="mod-count">{{mod.totalCount}} 篇</text>
+        <view class="mod-header-badge" style="background: {{mod.color}}15; color: {{mod.color}};">
+          <text class="mod-badge-num">{{mod.totalCount}}</text>
+          <text class="mod-badge-unit">篇</text>
         </view>
       </view>
 
       <!-- 子目录列表 -->
       <view class="child-list">
-        <view wx:for="{{mod.children}}" wx:for-index="ci" wx:key="name" wx:for-item="child">
-          <view class="child-item"
+        <!-- 子分类双列网格 -->
+        <view class="child-grid">
+          <view class="child-grid-item {{child.expanded ? 'grid-active' : ''}}" wx:for="{{mod.children}}" wx:for-index="ci" wx:key="name" wx:for-item="child"
             bindtap="toggleChild" data-mi="{{modIndex}}" data-ci="{{ci}}">
-            <view class="child-left">
+            <view class="child-grid-main">
               <view class="child-dot" style="background: {{child.expanded ? mod.color : '#e0e0e0'}};"></view>
-              <text class="child-name" style="color: {{child.expanded ? mod.color : '#303133'}};">{{child.name}}</text>
-              <text class="child-count">{{child.count}}篇</text>
+              <text class="child-grid-name" style="color: {{child.expanded ? mod.color : '#303133'}};">{{child.name}}</text>
             </view>
-            <text class="child-arrow {{child.expanded ? 'arrow-up' : ''}}" style="color: {{child.expanded ? mod.color : '#c0c4cc'}};">›</text>
+            <text class="child-grid-count">{{child.count}}篇</text>
           </view>
+        </view>
 
-          <!-- 展开内容区（现在在 wx:for 作用域内） -->
+        <!-- 展开内容区（全宽，在网格下方） -->
+        <view wx:for="{{mod.children}}" wx:for-index="ci" wx:key="name" wx:for-item="child">
           <view class="child-items" wx:if="{{child.expandedData}}">
             <view class="item-card" wx:for="{{child.expandedData.items}}" wx:key="_id" wx:for-item="item"
               bindtap="goDetail" data-id="{{item._id}}">
-          <view class="item-top">
-              <text class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</text>
-            </view>
+              <view class="item-top">
+                <text class="item-learned" wx:if="{{item.hasLearned}}">✓ 已学</text>
+              </view>
               <text class="item-title">{{item.title}}</text>
               <text class="item-desc" wx:if="{{item.description}}">{{item.description}}</text>
               <view class="item-meta" wx:if="{{item.tags.length > 0 || item.readTime}}">

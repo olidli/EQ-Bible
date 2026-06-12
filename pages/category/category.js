@@ -5,29 +5,119 @@ const { getTypeInfo, MODULE_NAMES } = require('../../utils/constants')
 const _knowledgeItems = require('../../data/knowledge_structured.js')
 
 const MODULE_DEFS = [
-  { id: '情商基础',   emoji: '📚', color: '#f5a623', bg: '#fff8ed', children: ['什么是情商', '情绪的基本规律'] },
-  { id: '自我认知',   emoji: '🧠', color: '#4ecdc4', bg: '#f0fffe', children: ['认识自己', '自信与价值', '自我激励'] },
-  { id: '情绪管理',   emoji: '😊', color: '#e84393', bg: '#fef0f7', children: ['觉察与识别', '调节与释放', '情绪急救'] },
-  { id: '沟通表达',   emoji: '💬', color: '#3498db', bg: '#f0f8ff', children: ['表达技巧', '倾听与共情', '识人术'] },
-  { id: '人际关系',   emoji: '🤝', color: '#6c5ce7', bg: '#f5f3ff', children: ['社交技巧', '职场关系'] },
-  { id: '个人成长',   emoji: '🌱', color: '#00b894', bg: '#f0faf5', children: ['阳光心态', '逆商与韧性', '快乐修炼', '专注与意志力'] },
+  { id: '自我认知',   emoji: '🧠', color: '#4ecdc4', bg: '#f0fffe', children: ['情商基础', '自我觉察', '性格与特质'] },
+  { id: '情绪管理',   emoji: '😊', color: '#e84393', bg: '#fef0f7', children: ['情绪觉察', '情绪命名', '情绪调节', '情绪表达', '情绪溯源', '专项情绪'] },
+  { id: '沟通表达',   emoji: '💬', color: '#3498db', bg: '#f0f8ff', children: ['基础沟通', '高难度沟通', '说服与影响'] },
+  { id: '人际关系',   emoji: '🤝', color: '#6c5ce7', bg: '#f5f3ff', children: ['自我关系', '亲密关系', '群体关系'] },
+  { id: '个人成长',   emoji: '🌱', color: '#00b894', bg: '#f0faf5', children: ['学习力', '习惯养成', '应用实践'] },
 ]
+
+// 子目录关键词映射：用于 path 不匹配时的自动归位
+const SUBDIR_KEYWORDS = {
+  '自我认知': {
+    '情商基础': ['情商', '智力', '模型', '框架'],
+    '自我觉察': ['觉察', '认知', '意识', '内省', '元认知', '格式塔'],
+    '性格与特质': ['性格', '特质', 'MBTI', '优势', '劣势']
+  },
+  '情绪管理': {
+    '情绪觉察': ['觉察', '认知', '识别', '命名', '觉察'],
+    '情绪命名': ['命名', '标签', '词汇'],
+    '情绪调节': ['调节', '管理', '控制', '应对', '调节'],
+    '情绪表达': ['表达', '倾诉', '沟通', '说出来'],
+    '情绪溯源': ['溯源', '原因', '来源', '根因', '分析'],
+    '专项情绪': ['焦虑', '压力', '愤怒', '抑郁', '嫉妒', '专项', '恐惧']
+  },
+  '沟通表达': {
+    '基础沟通': ['基础', '倾听', '表达', '反馈', '提问', '聊天', '赞美', '感谢', '道歉', '沟通'],
+    '高难度沟通': ['高难度', '冲突', '批评', '拒绝', '谈判', '尴尬', '敏感'],
+    '说服与影响': ['说服', '影响', '演讲', '激励', '领导力', '非语言']
+  },
+  '人际关系': {
+    '自我关系': ['自我', '独处', '内在', '自己'],
+    '亲密关系': ['亲密', '恋爱', '伴侣', '夫妻', '家庭', '信任'],
+    '群体关系': ['群体', '职场', '社交', '圈子', '团队']
+  },
+  '个人成长': {
+    '学习力': ['学习', '认知', '思维', '知识', '阅读', '智力', '理解'],
+    '习惯养成': ['习惯', '自律', '拖延', '时间管理', '养成'],
+    '应用实践': ['实践', '应用', '勇气', '自信', '行动', '能量', '姿势']
+  }
+}
+
+// 为每个模块定义默认子目录（兜底）
+const DEFAULT_SUBDIR = {
+  '自我认知': '自我觉察',
+  '情绪管理': '情绪调节',
+  '沟通表达': '基础沟通',
+  '人际关系': '亲密关系',
+  '个人成长': '学习力'
+}
+
+/** 根据 item 的 path/moduleName/t 自动归位到正确的子目录 */
+function resolveGroupKey(item) {
+  const p = item.path || ''
+  const moduleName = item.moduleName || ''
+  const title = item.t || ''
+
+  // 1. 如果 path 格式正确，直接用
+  if (p) {
+    const parts = p.split('/')
+    if (parts.length >= 2) {
+      const mod = parts[0]
+      const sub = parts[1]
+      const def = MODULE_DEFS.find(d => d.id === mod)
+      if (def && def.children.includes(sub)) {
+        return mod + '/' + sub
+      }
+    }
+  }
+
+  // 2. path 不匹配或为空，根据 moduleName 和关键词匹配
+  const def = MODULE_DEFS.find(d => d.id === moduleName)
+  if (!def) return null
+
+  const keywords = SUBDIR_KEYWORDS[moduleName]
+  if (keywords) {
+    // 尝试用 path 的第二级、title、description 匹配关键词
+    const textToMatch = (p.split('/')[1] || '') + ' ' + title + ' ' + (item.description || '')
+    for (const subDir of def.children) {
+      const kwList = keywords[subDir] || []
+      if (kwList.some(kw => textToMatch.includes(kw))) {
+        return moduleName + '/' + subDir
+      }
+    }
+  }
+
+  // 3. 兜底：用默认子目录
+  const fallback = DEFAULT_SUBDIR[moduleName]
+  if (fallback && def.children.includes(fallback)) {
+    return moduleName + '/' + fallback
+  }
+
+  // 4. 最后兜底：第一个子目录
+  return moduleName + '/' + def.children[0]
+}
 
 Page({
   data: {
     modules: [],
     totalCount: 0,
     expandedPath: '',
+    progress: 0,
+    learnedCount: 0,
   },
 
   _cacheBySub: {},
 
   onLoad() {
     this.buildModules()
+    this.loadProgress()
     wx.showShareMenu({ withShareTicket: true, menus: ['shareAppMessage', 'shareTimeline'] })
   },
 
   onShow() {
+    // 刷新学习进度
+    this.loadProgress()
     // 首页模块跳转：每次显示都检查
     const filterId = app.globalData && app.globalData.categoryFilter
     if (filterId) {
@@ -48,11 +138,12 @@ Page({
     const pathCount = {}
     const pathItems = {}
     items.forEach(item => {
-      const p = item.path || ''
-      if (!p) return
-      pathCount[p] = (pathCount[p] || 0) + 1
-      if (!pathItems[p]) pathItems[p] = []
-      pathItems[p].push(item)
+      // 使用 resolveGroupKey 自动归位（支持空 path 或不匹配 path 的兜底）
+      const groupKey = resolveGroupKey(item)
+      if (!groupKey) return
+      pathCount[groupKey] = (pathCount[groupKey] || 0) + 1
+      if (!pathItems[groupKey]) pathItems[groupKey] = []
+      pathItems[groupKey].push(item)
     })
     this._cacheBySub = pathItems
 
@@ -209,6 +300,15 @@ Page({
   goDetail(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: '/pages/detail/detail?id=' + id })
+  },
+
+  loadProgress: function () {
+    var learned = wx.getStorageSync('learnedItems') || []
+    var total = this.data.totalCount || 0
+    this.setData({
+      learnedCount: learned.length,
+      progress: total > 0 ? Math.round(learned.length / total * 100) : 0
+    })
   },
 
   onShareAppMessage() {
