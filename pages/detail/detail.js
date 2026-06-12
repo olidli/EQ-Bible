@@ -12,6 +12,8 @@ Page({
     loading: true,
     id: '',
     item: null,
+    conceptGroups: [],
+    conceptItems: [],
     isLearned: false,
     isFav: false,
     relatedItems: [],
@@ -40,7 +42,30 @@ Page({
     // 是否有结构化内容
     const hasStructuredContent = contentType && Object.keys(content).length > 0
 
+    // 核心概念分组（有 group 字段时按 group 聚合）
+    let conceptGroups = []
+    let conceptItems = [] // 无分组时的渲染数组，预标记类型
+    if (content.core_concepts && content.core_concepts.length > 0) {
+      if (content.core_concepts[0].group) {
+        const groupMap = {}
+        content.core_concepts.forEach(c => {
+          const g = c.group || '其他'
+          if (!groupMap[g]) groupMap[g] = []
+          groupMap[g].push(c)
+        })
+        conceptGroups = Object.keys(groupMap).map((name, idx) => ({ name, items: groupMap[name], colorIdx: idx }))
+      } else {
+        // 无分组：预标记每项是否为字符串
+        conceptItems = content.core_concepts.map(c => ({
+          isString: typeof c === 'string',
+          value: c, // string 时直接是值，object 时是 {name,explanation}
+        }))
+      }
+    }
+
     this.setData({
+      conceptGroups,
+      conceptItems,
       item: {
         _id: raw.id,
         title: raw.t,

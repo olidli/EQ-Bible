@@ -372,6 +372,83 @@
   line-height: 1.6;
 }
 
+/* 核心概念分组样式 */
+.concept-group {
+  margin-bottom: 24rpx;
+}
+
+.concept-group:last-child {
+  margin-bottom: 0;
+}
+
+.concept-group-label {
+  display: inline-block;
+  font-size: 24rpx;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+/* 分组颜色：0-总分类/根节点 */
+.group-color-0 {
+  color: #1abc9c;
+  background: linear-gradient(135deg, rgba(26, 188, 156, 0.12), rgba(46, 204, 113, 0.12));
+}
+
+/* 分组颜色：1-子维度/分支 */
+.group-color-1 {
+  color: #e67e22;
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(243, 156, 18, 0.12));
+}
+
+/* 分组颜色：2-整合/模型 */
+.group-color-2 {
+  color: #8e44ad;
+  background: linear-gradient(135deg, rgba(142, 68, 173, 0.12), rgba(155, 89, 182, 0.12));
+}
+
+/* 分组颜色：3-扩展 */
+.group-color-3 {
+  color: #2980b9;
+  background: linear-gradient(135deg, rgba(41, 128, 185, 0.12), rgba(52, 152, 219, 0.12));
+}
+
+/* 分组颜色：4-扩展 */
+.group-color-4 {
+  color: #c0392b;
+  background: linear-gradient(135deg, rgba(192, 57, 43, 0.12), rgba(231, 76, 60, 0.12));
+}
+
+.concept-group-items {
+  padding-left: 20rpx;
+  border-left: 4rpx solid rgba(0, 0, 0, 0.06);
+}
+
+.concept-grouped-item {
+  display: flex;
+  align-items: baseline;
+  padding: 10rpx 0;
+  gap: 12rpx;
+}
+
+.concept-grouped-tag {
+  flex-shrink: 0;
+  padding: 6rpx 18rpx;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #667eea;
+  font-weight: 500;
+  border: 1rpx solid rgba(102, 126, 234, 0.15);
+}
+
+.concept-grouped-exp {
+  font-size: 24rpx;
+  color: #888;
+  line-height: 1.5;
+}
+
 /* 实践技巧场景框 */
 .tip-scenario-box {
   margin-bottom: 8rpx;

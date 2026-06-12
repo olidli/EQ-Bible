@@ -120,15 +120,28 @@
           </view>
         </view>
 
-        <!-- 核心概念（兼容字符串数组和对象数组 {name, explanation}） -->
+        <!-- 核心概念（兼容字符串数组 / 对象数组 {name, explanation, group}） -->
         <view class="section" wx:if="{{item.content.core_concepts}}">
           <text class="section-title">💡 核心概念</text>
-          <view class="concept-list">
-            <view class="concept-item" wx:for="{{item.content.core_concepts}}" wx:for-item="c" wx:key="index">
-              <text wx:if="{{!c.name}}" class="concept-tag">{{c}}</text>
+          <!-- 有分组：按 group 渲染 -->
+          <block wx:if="{{conceptGroups.length > 0}}">
+            <view class="concept-group" wx:for="{{conceptGroups}}" wx:for-item="grp" wx:key="name">
+              <text class="concept-group-label group-color-{{grp.colorIdx}}">{{grp.name}}</text>
+              <view class="concept-group-items">
+                <view class="concept-grouped-item" wx:for="{{grp.items}}" wx:for-item="c" wx:key="name">
+                  <text class="concept-grouped-tag">{{c.name}}</text>
+                  <text class="concept-grouped-exp">{{c.explanation}}</text>
+                </view>
+              </view>
+            </view>
+          </block>
+          <!-- 无分组：兼容旧格式 -->
+          <view class="concept-tags" wx:else>
+            <view class="concept-item" wx:for="{{conceptItems}}" wx:for-item="c" wx:key="index">
+              <text wx:if="{{c.isString}}" class="concept-tag">{{c.value}}</text>
               <view wx:else class="concept-block">
-                <text class="concept-name">{{c.name}}</text>
-                <text class="concept-explanation">{{c.explanation}}</text>
+                <text class="concept-name">{{c.value.name}}</text>
+                <text class="concept-explanation" wx:if="{{c.value.explanation}}">{{c.value.explanation}}</text>
               </view>
             </view>
           </view>

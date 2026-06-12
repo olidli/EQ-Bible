@@ -7,25 +7,38 @@
     <text class="search-placeholder">搜索情商知识、工具、技巧...</text>
   </view>
 
-  <!-- 今日打卡卡片（合并原 Banner + 学习进度） -->
-  <view class="today-card">
-    <view class="today-header">
-      <view class="today-left">
-        <text class="today-greeting">📈 学习进度</text>
-        <text class="today-stats">已学 {{learnedCount}} 篇 · 共 {{totalCount}} 篇</text>
+  <!-- 每日情商小课堂（沉浸式深色卡片） -->
+  <view class="daily-card-wrap" wx:if="{{dailyCard}}">
+    <view class="daily-card">
+      <view class="daily-card-inner">
+        <!-- 背景装饰圆环 -->
+        <view class="daily-card-glow"></view>
+        <view class="daily-card-ring"></view>
+
+        <!-- 顶部：日期日历样式 + 标签 -->
+        <view class="daily-card-header">
+          <view class="daily-calendar">
+            <text class="daily-cal-month">{{dailyCard.month}}</text>
+            <text class="daily-cal-day">{{dailyCard.day}}</text>
+          </view>
+          <view class="daily-card-meta">
+            <text class="daily-meta-label">每日小课堂</text>
+            <text class="daily-meta-no" wx:if="{{dailyCard.no}}">NO.{{dailyCard.no}}</text>
+          </view>
+        </view>
+
+        <!-- 中间：艺术引号 + 金句 -->
+        <view class="daily-card-quote">
+          <text class="daily-quote-mark">"</text>
+          <text class="daily-quote-text">{{dailyCard.quote}}</text>
+        </view>
+
+        <!-- 底部：来源 + 装饰线 -->
+        <view class="daily-card-footer" wx:if="{{dailyCard.source}}">
+          <view class="daily-footer-line"></view>
+          <text class="daily-source">{{dailyCard.source}}</text>
+        </view>
       </view>
-      <view class="today-pct">
-        <text class="today-pct-num">{{progress}}</text>
-        <text class="today-pct-sym">%</text>
-      </view>
-    </view>
-    <view class="today-progress-wrap">
-      <view class="today-progress-fill" style="width: {{progress}}%;"></view>
-    </view>
-    <!-- 今日推荐单条 -->
-    <view class="today-recommend" wx:if="{{dailyItems.length > 0}}" bindtap="goDetail" data-id="{{dailyItems[0].id}}">
-      <view class="today-rec-label">📖 今日推荐</view>
-      <text class="today-rec-title">{{dailyItems[0].title}}</text>
     </view>
   </view>
 
