@@ -33,10 +33,18 @@
           <text class="daily-quote-text">{{dailyCard.quote}}</text>
         </view>
 
-        <!-- 底部：来源 + 装饰线 -->
-        <view class="daily-card-footer" wx:if="{{dailyCard.source}}">
+        <!-- 底部：来源 + 订阅按钮 + 装饰线 -->
+        <view class="daily-card-footer" wx:if="{{dailyCard.source || !subscribed}}">
           <view class="daily-footer-line"></view>
-          <text class="daily-source">{{dailyCard.source}}</text>
+          <text class="daily-source" wx:if="{{dailyCard.source}}">{{dailyCard.source}}</text>
+          <view class="daily-subscribe-btn" bindtap="subscribeDaily" wx:if="{{!subscribed}}">
+            <text class="daily-sub-icon">🔔</text>
+            <text class="daily-sub-text">订阅提醒</text>
+          </view>
+          <view class="daily-subscribe-btn subscribed" wx:if="{{subscribed}}">
+            <text class="daily-sub-icon">✅</text>
+            <text class="daily-sub-text">已订阅</text>
+          </view>
         </view>
       </view>
     </view>

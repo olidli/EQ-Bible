@@ -13,12 +13,14 @@ Page({
   data: {
     dailyItems: [],
     dailyCard: null,
+    subscribed: false,
     toolCount: Object.keys(TOOL_META).length
   },
 
   onLoad: function () {
     this.loadDaily()
     this.loadDailyCard()
+    this.checkSubscription()
     wx.showShareMenu({ withShareTicket: true, menus: ['shareAppMessage', 'shareTimeline'] })
   },
 
@@ -123,6 +125,89 @@ Page({
 
   goGame: function () {
     wx.navigateTo({ url: '/pages/game/game' })
+  },
+
+  // 检查订阅状态
+  checkSubscription: function () {
+    var self = this
+    var openid = wx.getStorageSync('openid')
+    if (!openid) {
+      // 尝试从后端获取 openid
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            wx.request({
+              url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe/check',
+              method: 'GET',
+              data: { code: res.code },
+              success: function (resp) {
+                if (resp.data && resp.data.subscribed) {
+                  self.setData({ subscribed: true })
+                  wx.setStorageSync('subscribed', true)
+                }
+              }
+            })
+          }
+        }
+      })
+      return
+    }
+    // 已缓存 openid，直接检查
+    wx.request({
+      url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe/check',
+      method: 'GET',
+      data: { openid: openid },
+      success: function (resp) {
+        if (resp.data && resp.data.subscribed) {
+          self.setData({ subscribed: true })
+        }
+      }
+    })
+  },
+
+  // 订阅每日推送
+  subscribeDaily: function () {
+    var self = this
+    // 先请求订阅授权
+    wx.requestSubscribeMessage({
+      tmplIds: ['JcPecgM-vbaNtVekA_bK_6F9Kxg9PFgUvAoyvyI9R7A'],
+      success: function (res) {
+        if (res['JcPecgM-vbaNtVekA_bK_6F9Kxg9PFgUvAoyvyI9R7A'] === 'accept') {
+          // 用户同意，上报到后端
+          wx.login({
+            success: function (loginRes) {
+              if (loginRes.code) {
+                wx.request({
+                  url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe',
+                  method: 'POST',
+                  data: {
+                    code: loginRes.code,
+                    template_id: 'JcPecgM-vbaNtVekA_bK_6F9Kxg9PFgUvAoyvyI9R7A'
+                  },
+                  success: function (resp) {
+                    if (resp.data && resp.data.success) {
+                      self.setData({ subscribed: true })
+                      wx.setStorageSync('subscribed', true)
+                      wx.showToast({ title: '订阅成功！每天8点推送', icon: 'success' })
+                    } else {
+                      wx.showToast({ title: '订阅失败，请重试', icon: 'none' })
+                    }
+                  },
+                  fail: function () {
+                    wx.showToast({ title: '网络错误', icon: 'none' })
+                  }
+                })
+              }
+            }
+          })
+        } else {
+          wx.showToast({ title: '需要授权才能订阅', icon: 'none' })
+        }
+      },
+      fail: function (err) {
+        wx.showToast({ title: '授权失败', icon: 'none' })
+      }
+    })
   },
 
   onShareAppMessage: function () {
