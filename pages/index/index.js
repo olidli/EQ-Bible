@@ -137,7 +137,7 @@ Page({
         success: function (res) {
           if (res.code) {
             wx.request({
-              url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe/check',
+              url: 'https://eq-backend-270106-9-1302038298.sh.run.tcloudbase.com/subscribe/check',
               method: 'GET',
               data: { code: res.code },
               success: function (resp) {
@@ -154,7 +154,7 @@ Page({
     }
     // 已缓存 openid，直接检查
     wx.request({
-      url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe/check',
+      url: 'https://eq-backend-270106-9-1302038298.sh.run.tcloudbase.com/subscribe/check',
       method: 'GET',
       data: { openid: openid },
       success: function (resp) {
@@ -178,7 +178,7 @@ Page({
             success: function (loginRes) {
               if (loginRes.code) {
                 wx.request({
-                  url: 'https://eq-master-d4gwot87r97b31183.ap-shanghai.service.tcloudbase.com/subscribe',
+                  url: 'https://eq-backend-270106-9-1302038298.sh.run.tcloudbase.com/subscribe',
                   method: 'POST',
                   data: {
                     code: loginRes.code,
